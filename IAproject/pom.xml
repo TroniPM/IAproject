@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.pmateus</groupId>
+    <artifactId>IAProject</artifactId>
+    <version>2.0.0.0</version>
+    <packaging>jar</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+    </properties>
+    <dependencies>
+        <!-- http://mvnrepository.com/artifact/edu.stanford.nlp/stanford-corenlp -->
+        <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>3.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.owlapi</groupId>
+            <artifactId>pellet-owlapi-ignazio1977</artifactId>
+            <version>2.4.0-ignazio1977</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.hp.hpl.jena</groupId>
+            <artifactId>jena</artifactId>
+            <version>2.6.4</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.owlapi</groupId>
+            <artifactId>owlapi-compatibility</artifactId>
+            <version>5.0.2</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+    <name>IAProject</name>
+</project>

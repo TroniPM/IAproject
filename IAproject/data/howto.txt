@@ -1,0 +1,56 @@
+﻿Para inserir uma relação com OR, AND ou NOT
+NOME_ENTIDADE= some/all{PROPRIEDADE, and(entidade1,...,entidaden), or(entidade10,...,entidaden)}
+	OBS:
+		Observar o uso do {}, ou seja some{} ou all{}
+		Observar o uso do (), ou seja and(), or()
+		Não importa a ordem de or e and.
+
+Para inserir uma ENTIDADE você deve utilizar a seguinte sitaxe:
+ent=NOME_ENTIDADE;
+ent=NOME_ENTIDADE, NOME_ENTIDADE2, ..., NOME_ENTIDADEn;
+
+Para inserir uma PROPRIEDADE você deve utilizar a seguinte sitaxe:
+pro=NOME_PROPRIEDADE;
+pro=NOME_PROPRIEDADE, NOME_PROPRIEDADE2, ..., NOME_PROPRIEDADEn;
+
+Para inserir uma SUBCLASSE você deve utilizar a seguinte sitaxe:
+subc=ENTIDADE_CHILDREN > ENTIDADE_PARENT;
+subc=ENTIDADE_CHILDREN > ENT_PARENT1, ENT_PARENT2, ..., ENT_PARENTn;
+
+Para inserir uma EQUIVALENCIA você deve utilizar a seguinte sitaxe:
+equiv=ENTIDADE_CHILDREN > ENTIDADE_PARENT;
+equiv=ENTIDADE_CHILDREN > ENT_PARENT1, ENT_PARENT2, ..., ENT_PARENTn;
+
+Para inserir uma DISJUNÇÃO você deve utilizar a seguinte sitaxe:
+not=ENTIDADE_CHILDREN > ENTIDADE_PARENT;
+not=ENTIDADE_CHILDREN > ENT_PARENT1, ENT_PARENT2, ..., ENT_PARENTn;
+
+Para inserir um axioma AND(Interseção) você deve utilizar a seguinte sintaxe:
+and=ENT_CHILDREN > ENT_PARENT;
+and=ENT_CHILDREN > ENT_PARENT1, ENT_PARENT2, ..., ENT_PARENTn;
+
+Para inserir um axioma OR(União) você deve utilizar a seguinte sintaxe:
+or=ENT_CHILDREN > ENT_PARENT;
+or=ENT_CHILDREN > ENT_PARENT1, ENT_PARENT2, ..., ENT_PARENTn;
+
+Para inserir uma RELAÇÃO você deve utilizar a seguinte sintaxe:
+    Quantificadores:
+        Universal:
+            rs=ENT_CHILDREN >* LABEL > ENT_PARENT;
+            rs=ENT_CHILDREN >* LABEL > ENT_PARENT1, ENT_PARENT2, ..., ENT_PARENTn;
+        Existencial:
+            rs=ENT_CHILDREN >+ LABEL > ENT_PARENT;
+            rs=ENT_CHILDREN >+ LABEL > ENT_PARENT1, ENT_PARENT2, ..., ENT_PARENTn;
+
+OBS.: 
+1 - ";" é o caracter que finaliza o comando. 
+2 - A criação/edição/remoção das classes é case-sensitive;
+3 - Para criar relações, subclasses, interseções ou uniões, não é necessário declarar
+anteriormente a classe/entidade.
+4 - Palavras reservadas:
+      ent
+      pro
+      and
+      or
+      subc
+      rs

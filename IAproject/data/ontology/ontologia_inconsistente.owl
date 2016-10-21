@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://com.iaproject.edu#"
+     xml:base="http://com.iaproject.edu"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://com.iaproject.edu"/>
+    <owl:Class rdf:about="http://com.iaproject.edu#Animal">
+        <rdfs:subClassOf rdf:resource="http://com.iaproject.edu#Irracional"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://com.iaproject.edu#Cachorro">
+        <rdfs:subClassOf rdf:resource="http://com.iaproject.edu#Animal"/>
+	</owl:Class>
+    <owl:Class rdf:about="http://com.iaproject.edu#Irracional">
+        <rdfs:subClassOf rdf:resource="http://com.iaproject.edu#SerVivo"/>
+        <owl:disjointWith rdf:resource="http://com.iaproject.edu#Racional"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://com.iaproject.edu#Macaco">
+        <owl:equivalentClass rdf:resource="http://com.iaproject.edu#SerHumano"/>
+        <rdfs:subClassOf rdf:resource="http://com.iaproject.edu#Animal"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://com.iaproject.edu#Racional">
+        <rdfs:subClassOf rdf:resource="http://com.iaproject.edu#SerVivo"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://com.iaproject.edu#SerHumano">
+        <rdfs:subClassOf rdf:resource="http://com.iaproject.edu#Racional"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://com.iaproject.edu#SerVivo">
+	</owl:Class>
+</rdf:RDF>

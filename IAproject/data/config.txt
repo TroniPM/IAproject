@@ -1,0 +1,5 @@
+##to comment
+##./to_relative_path
+
+ontology_to_load_at_start_patch = ./data/ontology/knowledge_base.owl
+save_current_ontology_path = ./data/ontology/knowledge_base.owl
