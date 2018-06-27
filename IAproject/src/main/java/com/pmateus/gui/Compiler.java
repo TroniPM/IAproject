@@ -311,7 +311,7 @@ public class Compiler extends javax.swing.JPanel {
                     .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 454, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 446, Short.MAX_VALUE)
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
