@@ -333,27 +333,44 @@ public class InsertionAnalyser {
     }
 
     public void addEntityInterface(String fullCommand) {
-
+        if (Session.isDebbug) {
+            System.out.println(InsertionAnalyser.class + " addEntityInterface(): " + fullCommand);
+        }
         coreApp.owlRepository.addEntity(fullCommand);
     }
 
     public void addPropertyInterface(String fullCommand) {
+        if (Session.isDebbug) {
+            System.out.println(InsertionAnalyser.class + " addPropertyInterface(): " + fullCommand);
+        }
         coreApp.owlRepository.addProperty(fullCommand);
     }
 
     public void addIntersectionInterface(String fullCommand) {
+        if (Session.isDebbug) {
+            System.out.println(InsertionAnalyser.class + " addIntersectionInterface(): " + fullCommand);
+        }
         coreApp.owlRepository.addIntersection(fullCommand);
     }
 
     public void addUnionInterface(String fullCommand) {
+        if (Session.isDebbug) {
+            System.out.println(InsertionAnalyser.class + " addUnionInterface(): " + fullCommand);
+        }
         coreApp.owlRepository.addUnion(fullCommand);
     }
 
     public void addSubclassInterface(String fullCommand) {
+        if (Session.isDebbug) {
+            System.out.println(InsertionAnalyser.class + " addSubclassInterface(): " + fullCommand);
+        }
         coreApp.owlRepository.addSubclass(fullCommand);
     }
 
     public void addRelationshipInterface(String fullCommand) {
+        if (Session.isDebbug) {
+            System.out.println(InsertionAnalyser.class + " addRelationshipInterface(): " + fullCommand);
+        }
         coreApp.owlRepository.addRelationship(fullCommand);
     }
 

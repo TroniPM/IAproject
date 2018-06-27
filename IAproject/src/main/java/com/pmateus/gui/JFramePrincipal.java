@@ -519,7 +519,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
         //about
         String myLicense = "Apache License 2.0";
-        String txt = "Developed by:\nPaulo Mateus <Federal Rural de Pernambuco University> [paulomatew@gmail.com]\n\n2016\n\nThis software is released under " + myLicense + ".\n\nWebVOWL and OWL2VOWL is under the MIT license at this time (19/05/2016).";
+        String txt = "Developed by:\nPaulo Mateus <Federal Rural de Pernambuco University> [paulomatew@gmail.com]\n\n2016\n\nThis software is released under " + myLicense + ".\n\nWebVOWL and OWL2VOWL is under the MIT license at this time (19/05/2016).\n\nBig thanks to http://www.ldf.fi/service/owl-converter/";
         JTextArea textArea = new JTextArea(txt);
         JScrollPane scrollPane = new JScrollPane(textArea);
         textArea.setLineWrap(true);

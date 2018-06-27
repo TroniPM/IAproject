@@ -72,6 +72,8 @@ public class Ontology extends javax.swing.JPanel {
         jButton2 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPane1 = new XmlTextPane();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextPane2 = new XmlTextPane();
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/pmateus/gui/Bundle"); // NOI18N
         jButton1.setText(bundle.getString("Ontology.jButton1.text")); // NOI18N
@@ -92,6 +94,10 @@ public class Ontology extends javax.swing.JPanel {
         jTextPane1.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         jScrollPane2.setViewportView(jTextPane1);
 
+        jTextPane2.setEditable(false);
+        jTextPane2.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        jScrollPane3.setViewportView(jTextPane2);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -103,7 +109,8 @@ public class Ontology extends javax.swing.JPanel {
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 425, Short.MAX_VALUE)
                         .addComponent(jButton2))
-                    .addComponent(jScrollPane2))
+                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane3))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -114,7 +121,9 @@ public class Ontology extends javax.swing.JPanel {
                     .addComponent(jButton1)
                     .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -135,8 +144,11 @@ public class Ontology extends javax.swing.JPanel {
         }
         try {
             jFrameMain.coreApp.owlRepository.saveOntologyToOutputStream();
-            String aString = new String(jFrameMain.coreApp.owlRepository.currentOutputStreamOntology.toString()).trim().replaceAll("\n+", "\n");
-            jTextPane1.setText(aString);
+            String aString1 = new String(jFrameMain.coreApp.owlRepository.currentOutputStreamOntology.toString()).trim().replaceAll("\n+", "\n");
+            jTextPane1.setText(aString1);
+
+            String aString2 = new String(jFrameMain.coreApp.owlRepository.currentOutputStreamOntologyManchester.toString()).trim().replaceAll("\n+", "\n");
+            jTextPane2.setText(aString2);
         } catch (Exception e) {
         }
 
@@ -204,7 +216,9 @@ public class Ontology extends javax.swing.JPanel {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     public javax.swing.JEditorPane jTextPane1;
+    public javax.swing.JEditorPane jTextPane2;
     // End of variables declaration//GEN-END:variables
 
 }

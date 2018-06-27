@@ -20,6 +20,7 @@ public class OntologyBundle {
     private OWLOntology ontology = null;
     private OWLDataFactory dataFactory = null;
     private StringOutputStream outputStreamOntology = null;
+    private StringOutputStream outputStreamOntologyManchester = null;
 
     public OntologyBundle() {
 
@@ -83,4 +84,18 @@ public class OntologyBundle {
         this.outputStreamOntology = outputStreamOntology;
     }
 
+    /**
+     * @return the outputStreamOntologyManchester
+     */
+    public StringOutputStream getOutputStreamOntologyManchester() {
+        return outputStreamOntologyManchester;
+    }
+
+    /**
+     * @param outputStreamOntologyManchester the outputStreamOntologyManchester
+     * to set
+     */
+    public void setOutputStreamOntologyManchester(StringOutputStream outputStreamOntologyManchester) {
+        this.outputStreamOntologyManchester = outputStreamOntologyManchester;
+    }
 }

@@ -125,7 +125,7 @@ public class CoreApplication {
     }
 
     public void atualizarTelas() {
-        
+
         frame.tabOntology.atualizar();
         frame.tabReasoner.atualizar();
     }

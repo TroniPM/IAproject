@@ -18,5 +18,5 @@ package com.pmateus.util;
 public class Session {
 
     //Main worker
-    public static final boolean isDebbug = false;
+    public static final boolean isDebbug = true;
 }
