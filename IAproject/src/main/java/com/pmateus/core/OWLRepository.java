@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.ManchesterSyntaxDocumentFormat;
 import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
+import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
 import org.semanticweb.owlapi.io.StringDocumentSource;
 import org.semanticweb.owlapi.io.StringDocumentTarget;
 import org.semanticweb.owlapi.model.*;
@@ -45,7 +46,6 @@ public class OWLRepository {
     public OWLOntology currentOntology = null;
     public OWLDataFactory currentDataFactory = null;
     public StringOutputStream currentOutputStreamOntology = null;
-    public StringOutputStream currentOutputStreamOntologyManchester = null;
     public int ontologyCurrendPosition = 0;
     public Process aProcess;
 
@@ -64,7 +64,7 @@ public class OWLRepository {
         currentOutputStreamOntology = null;
     }
 
-    OWLRepository(CoreApplication aThis) {
+    public OWLRepository(CoreApplication aThis) {
         this.coreApp = aThis;
 
         undoRedoOntologyManager = new UndoRedoManager();
@@ -80,10 +80,8 @@ public class OWLRepository {
         OWLOntology clone = m.loadOntologyFromOntologyDocument(new StringDocumentSource(currentOutputStreamOntology.toString()));
         OWLDataFactory df_clone = m.getOWLDataFactory();
         StringOutputStream output = new StringOutputStream();
-        StringOutputStream outputManchester = new StringOutputStream();
         try {
             m.saveOntology(clone, output);
-            m.saveOntology(clone, new ManchesterSyntaxDocumentFormat(), outputManchester);
         } catch (OWLOntologyStorageException ex) {
             Logger.getLogger(OWLRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -98,7 +96,6 @@ public class OWLRepository {
         bundle.setOntology(clone);
         bundle.setDataFactory(df_clone);
         bundle.setOutputStreamOntology(output);
-        bundle.setOutputStreamOntologyManchester(outputManchester);
 
         undoRedoOntologyManager.insert(bundle);
 
@@ -115,7 +112,6 @@ public class OWLRepository {
         currentOntology = bundle.getOntology();
         currentDataFactory = bundle.getDataFactory();
         currentOutputStreamOntology = bundle.getOutputStreamOntology();
-        currentOutputStreamOntologyManchester = bundle.getOutputStreamOntologyManchester();
 
         coreApp.atualizarTelas();
     }
@@ -191,15 +187,19 @@ public class OWLRepository {
         currentOntologyManager.saveOntology(coreApp.pelletRepository.ontology_INFERRED_, target);
     }
 
-    public void saveOntologyToOutputStream(/*OWLOntologyManager currentOntologyManager, OWLOntology currentOntology, String path*/)
+    public void saveOntologyToOutputStream() throws Exception {
+        saveOntologyToOutputStream(null);
+    }
+
+    public void saveOntologyToOutputStream(OWLDocumentFormat format)
             throws Exception {
 
+        if (format == null) {
+            format = new RDFXMLDocumentFormat();
+        }
+
         currentOutputStreamOntology = new StringOutputStream();
-        currentOutputStreamOntologyManchester = new StringOutputStream();
-
-        currentOntologyManager.saveOntology(currentOntology, currentOutputStreamOntology);
-        currentOntologyManager.saveOntology(currentOntology, new ManchesterSyntaxDocumentFormat(), currentOutputStreamOntologyManchester);
-
+        currentOntologyManager.saveOntology(currentOntology, format, currentOutputStreamOntology);
     }
 
     public Object[] loadOntologyFromFile(String path)

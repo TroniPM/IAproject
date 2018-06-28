@@ -23,7 +23,16 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import org.semanticweb.owlapi.formats.FunctionalSyntaxDocumentFormat;
+import org.semanticweb.owlapi.formats.KRSS2DocumentFormat;
+import org.semanticweb.owlapi.formats.LatexDocumentFormat;
+import org.semanticweb.owlapi.formats.ManchesterSyntaxDocumentFormat;
+import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
+import org.semanticweb.owlapi.formats.TurtleDocumentFormat;
+import org.semanticweb.owlapi.model.OWLDocumentFormat;
 
 public class Ontology extends javax.swing.JPanel {
 
@@ -35,7 +44,9 @@ public class Ontology extends javax.swing.JPanel {
     private String deleteBatFile = "delete.bat";//File name
     private String converterBatFile = "conversor.bat";//file name
     private String outputFileNameToConversor = "foaf.owl";//file name
+    private ComboBoxModel outputModels = new DefaultComboBoxModel(new String[]{"RDF/XML", "KRSS2", "Latex", "Manchester OWL Syntax", "OWL/XML", "OWL Functional Syntax", "Turtle"});
 
+    ;
     /**
      * Creates new form Compiler
      */
@@ -72,8 +83,8 @@ public class Ontology extends javax.swing.JPanel {
         jButton2 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPane1 = new XmlTextPane();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTextPane2 = new XmlTextPane();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/pmateus/gui/Bundle"); // NOI18N
         jButton1.setText(bundle.getString("Ontology.jButton1.text")); // NOI18N
@@ -94,9 +105,14 @@ public class Ontology extends javax.swing.JPanel {
         jTextPane1.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         jScrollPane2.setViewportView(jTextPane1);
 
-        jTextPane2.setEditable(false);
-        jTextPane2.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
-        jScrollPane3.setViewportView(jTextPane2);
+        jComboBox1.setModel(outputModels);
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
+
+        jLabel1.setText(bundle.getString("Ontology.jLabel1.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -105,12 +121,15 @@ public class Ontology extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 425, Short.MAX_VALUE)
-                        .addComponent(jButton2))
-                    .addComponent(jScrollPane2)
-                    .addComponent(jScrollPane3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 174, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -119,11 +138,11 @@ public class Ontology extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -138,17 +157,56 @@ public class Ontology extends javax.swing.JPanel {
         UtilMethods.copyToClipboard(myString);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+        if (evt.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
+            //{"RDF/XML", "KRSS2", "Latex", "Manchester OWL Syntax", "OWL/XML", "OWL Functional Syntax", "Turtle"});
+            int i = jComboBox1.getSelectedIndex();
+            OWLDocumentFormat format = null;
+            switch (i) {
+//                case 0: {
+//                }
+//                break;
+                case 1: {
+                    format = (new KRSS2DocumentFormat());
+                }
+                break;
+                case 2: {
+                    format = (new LatexDocumentFormat());
+                }
+                break;
+                case 3: {
+                    format = (new ManchesterSyntaxDocumentFormat());
+                }
+                break;
+                case 4: {
+                    format = (new OWLXMLDocumentFormat());
+                }
+                break;
+                case 5: {
+                    format = (new FunctionalSyntaxDocumentFormat());
+                }
+                break;
+                case 6: {
+                    format = (new TurtleDocumentFormat());
+                }
+                break;
+            }
+            refreshOntologyTextViewer(format);
+        }
+    }//GEN-LAST:event_jComboBox1ItemStateChanged
     public void refreshOntologyTextViewer() {
+        refreshOntologyTextViewer(null);
+    }
+
+    public void refreshOntologyTextViewer(OWLDocumentFormat format) {
         if (Session.isDebbug) {
             System.out.println(Compiler.class + " refreshOntologyTextViewer()");
         }
         try {
-            jFrameMain.coreApp.owlRepository.saveOntologyToOutputStream();
+            jFrameMain.coreApp.owlRepository.saveOntologyToOutputStream(format);
             String aString1 = new String(jFrameMain.coreApp.owlRepository.currentOutputStreamOntology.toString()).trim().replaceAll("\n+", "\n");
             jTextPane1.setText(aString1);
 
-            String aString2 = new String(jFrameMain.coreApp.owlRepository.currentOutputStreamOntologyManchester.toString()).trim().replaceAll("\n+", "\n");
-            jTextPane2.setText(aString2);
         } catch (Exception e) {
         }
 
@@ -215,10 +273,10 @@ public class Ontology extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     public javax.swing.JEditorPane jTextPane1;
-    public javax.swing.JEditorPane jTextPane2;
     // End of variables declaration//GEN-END:variables
 
 }
