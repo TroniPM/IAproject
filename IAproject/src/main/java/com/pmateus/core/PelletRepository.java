@@ -15,6 +15,8 @@
  */
 package com.pmateus.core;
 
+//import openllet.jena.*;
+//import openllet.jena.PelletReasonerFactory;
 import com.clarkparsia.pellet.owlapiv3.PelletReasoner;
 import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
 import edu.stanford.nlp.io.StringOutputStream;
@@ -79,6 +81,7 @@ public class PelletRepository {
     public void atualizandoReferencia() {
         this.ontology = coreApp.owlRepository.currentOntology;
         this.reasoner = PelletReasonerFactory.getInstance().createReasoner(ontology);
+//        this.reasoner = PelletReasonerFactory.theInstance().createReasoner(ontology);
         //reasoner.flush();//getKB().realize();
 
         reasoner.precomputeInferences();
