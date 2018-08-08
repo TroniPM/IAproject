@@ -90,7 +90,6 @@ public class OntologyBundle {
 //    public StringOutputStream getOutputStreamOntologyManchester() {
 //        return outputStreamOntologyManchester;
 //    }
-
     /**
      * @param outputStreamOntologyManchester the outputStreamOntologyManchester
      * to set

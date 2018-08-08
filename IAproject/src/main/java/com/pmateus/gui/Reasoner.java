@@ -27,7 +27,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
 public class Reasoner extends javax.swing.JPanel {
 
