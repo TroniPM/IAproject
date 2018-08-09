@@ -15,6 +15,7 @@
  */
 package com.pmateus.gui;
 
+import com.google.common.base.Joiner;
 import com.pmateus.gui.util.LinePainter;
 import com.pmateus.gui.util.TextLineNumber;
 import com.pmateus.gui.util.popupmenu.PopUpMenuAtRightClickNormalEditorListener;
@@ -40,6 +41,8 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Compiler extends javax.swing.JPanel {
 
@@ -48,6 +51,8 @@ public class Compiler extends javax.swing.JPanel {
 
     public javax.swing.JTextPane editor;
     private DefaultStyledDocument doc;
+
+    private final Logger LOG = LoggerFactory.getLogger(Compiler.class);
 
     public void destroy() {
         jFrameMain = null;
@@ -131,8 +136,11 @@ public class Compiler extends javax.swing.JPanel {
 
         final StyleContext cont = StyleContext.getDefaultStyleContext();
         final AttributeSet attr_blue = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.BLUE);
-        //final AttributeSet attr_green = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.GREEN);
+        final AttributeSet attr_green = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.GREEN);
         final AttributeSet attrBlack = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.BLACK);
+
+        final String joined = Joiner.on("|").skipNulls().join(InsertionAnalyser.commands_list);
+
         doc = new DefaultStyledDocument() {
             @Override
             public void insertString(int offset, String str, AttributeSet a) throws BadLocationException {
@@ -148,29 +156,18 @@ public class Compiler extends javax.swing.JPanel {
                 int wordR = before;
 
                 while (wordR <= after) {
+
+                    System.out.println("insertString<<>> " + text.substring(wordL, wordR));
+
                     if (wordR == after || String.valueOf(text.charAt(wordR)).matches("\\W")) {
-                        if (text.substring(wordL, wordR).matches(
-                                "(\\W)*("
-                                + InsertionAnalyser.command_declare_property + "|"
-                                + InsertionAnalyser.command_intersection + "|"
-                                + InsertionAnalyser.command_subclass + "|"
-                                + InsertionAnalyser.command_not + "|"
-                                + InsertionAnalyser.command_equiv + "|"
-                                + InsertionAnalyser.command_relationship + "|"
-                                + InsertionAnalyser.command_NEW_qtf_existencial + "|"
-                                + InsertionAnalyser.command_NEW_qtf_universal + "|"
-                                + InsertionAnalyser.command_declare_entity + "|"
-                                + InsertionAnalyser.command_union + ")"
-                        )) {
+                        if (text.substring(wordL, wordR).toLowerCase().matches("(\\W)*(" + joined + ")")) {
+                            System.out.println("insertString>> text.substring(wordL, wordR).toLowerCase().matches(\"(\\\\W)*(\" + joined + \")\"");
                             setCharacterAttributes(wordL, wordR - wordL, attr_blue, false);
-                        } /*else if (text.substring(wordL, wordR).matches(
-                         "(\\W)*("
-                         + "\\" + InsertionAnalyser.command_qtf_existencial + "|" //adiciono scape
-                         + "\\" + InsertionAnalyser.command_qtf_universal + "|"
-                         + ">)"//Adiciono manualmente o > e o scape
-                         )) {
-                         setCharacterAttributes(wordL, wordR - wordL, attr_green, false);
-                         } */ else {
+                        } else if (text.substring(wordL, wordR).matches("[0-9]+")) {
+                            System.out.println("insertString>> text.substring(wordL, wordR).matches(\"[0-9]+\")");
+                            setCharacterAttributes(wordL, wordR - wordL, attr_green, false);
+                        } else {
+                            System.out.println("insertString<<>> else");
                             setCharacterAttributes(wordL, wordR - wordL, attrBlack, false);
                         }
                         wordL = wordR;
@@ -189,28 +186,16 @@ public class Compiler extends javax.swing.JPanel {
                 }
                 int after = findFirstNonWordChar(text, offs);
 
-                if (text.substring(before, after).matches(
-                        "(\\W)*("
-                        + InsertionAnalyser.command_declare_property + "|"
-                        + InsertionAnalyser.command_intersection + "|"
-                        + InsertionAnalyser.command_subclass + "|"
-                        + InsertionAnalyser.command_not + "|"
-                        + InsertionAnalyser.command_equiv + "|"
-                        + InsertionAnalyser.command_relationship + "|"
-                        + InsertionAnalyser.command_NEW_qtf_existencial + "|"
-                        + InsertionAnalyser.command_NEW_qtf_universal + "|"
-                        + InsertionAnalyser.command_declare_entity + "|"
-                        + InsertionAnalyser.command_union + ")"
-                )) {
+                System.out.println("REMOVE>> " + text.substring(before, after));
+
+                if (text.substring(before, after).toLowerCase().matches("(\\W)*(" + joined + ")")) {
+                    System.out.println("REMOVE>> text.substring(before, after).toLowerCase().matches(\"(\\\\W)*(\" + joined + \")\")");
                     setCharacterAttributes(before, after - before, attr_blue, false);
-                } /*else if (text.substring(before, after).matches(
-                 "(\\W)*("
-                 + "\\" + InsertionAnalyser.command_qtf_existencial + "|" //adiciono scape
-                 + "\\" + InsertionAnalyser.command_qtf_universal + "|"
-                 + ">)"//Adiciono manualmente o > e o scape
-                 )) {
-                 setCharacterAttributes(before, after - before, attr_green, false);
-                 } */ else {
+                } else if (text.substring(before, after).matches("[0-9]+")) {
+                    System.out.println("REMOVE>> text.substring(before, after).matches(\"[0-9]+\")");
+                    setCharacterAttributes(before, after - before, attr_green, false);
+                } else {
+                    System.out.println("REMOVE>> else");
                     setCharacterAttributes(before, after - before, attrBlack, false);
                 }
             }

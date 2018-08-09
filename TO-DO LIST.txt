@@ -1,5 +1,7 @@
-Adicionar batchfile para que outros sistemas operacionais possam utilizar o programa. (ainda não compatível com unix e mac)
-
 Alterar sintaxe de entrada para ser compatível com "Consideracoes_Numero_1.pdf" (manchester owl sintaxe)
 
 Se abrir um arquivo owl, converter para manchester owl sintaxe e jogar no editor.
+
+Adicionar batchfile para que outros sistemas operacionais possam utilizar o programa. (ainda não compatível com unix e mac)
+
+Se texto for número, colocar cor verde.

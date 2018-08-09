@@ -40,6 +40,12 @@ public class InsertionAnalyser {
     public static String command_NEW_qtf_existencial = "some";
     public static String command_NEW_qtf_universal = "all";
 
+    /*
+    * TODO alterar isso aqui caso adicione palavras reservadas novas
+    */
+    public static String[] commands_list = new String[]{"some", "all", "value",
+        "min", "max", "exactly", "that", "not", "and", "or", "only"};
+
     public String[] all_commands = null;
 
     public ArrayList<String> declaration_commands = new ArrayList<String>();
