@@ -16,6 +16,7 @@
 package com.pmateus.gui;
 
 import com.google.common.base.Joiner;
+import com.pmateus.compiler.Lexical;
 import com.pmateus.gui.util.LinePainter;
 import com.pmateus.gui.util.TextLineNumber;
 import com.pmateus.gui.util.popupmenu.PopUpMenuAtRightClickNormalEditorListener;
@@ -26,6 +27,7 @@ import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.logging.Level;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -156,18 +158,12 @@ public class Compiler extends javax.swing.JPanel {
                 int wordR = before;
 
                 while (wordR <= after) {
-
-                    System.out.println("insertString<<>> " + text.substring(wordL, wordR));
-
                     if (wordR == after || String.valueOf(text.charAt(wordR)).matches("\\W")) {
                         if (text.substring(wordL, wordR).toLowerCase().matches("(\\W)*(" + joined + ")")) {
-                            System.out.println("insertString>> text.substring(wordL, wordR).toLowerCase().matches(\"(\\\\W)*(\" + joined + \")\"");
                             setCharacterAttributes(wordL, wordR - wordL, attr_blue, false);
                         } else if (text.substring(wordL, wordR).matches("[0-9]+")) {
-                            System.out.println("insertString>> text.substring(wordL, wordR).matches(\"[0-9]+\")");
                             setCharacterAttributes(wordL, wordR - wordL, attr_green, false);
                         } else {
-                            System.out.println("insertString<<>> else");
                             setCharacterAttributes(wordL, wordR - wordL, attrBlack, false);
                         }
                         wordL = wordR;
@@ -185,17 +181,11 @@ public class Compiler extends javax.swing.JPanel {
                     before = 0;
                 }
                 int after = findFirstNonWordChar(text, offs);
-
-                System.out.println("REMOVE>> " + text.substring(before, after));
-
                 if (text.substring(before, after).toLowerCase().matches("(\\W)*(" + joined + ")")) {
-                    System.out.println("REMOVE>> text.substring(before, after).toLowerCase().matches(\"(\\\\W)*(\" + joined + \")\")");
                     setCharacterAttributes(before, after - before, attr_blue, false);
                 } else if (text.substring(before, after).matches("[0-9]+")) {
-                    System.out.println("REMOVE>> text.substring(before, after).matches(\"[0-9]+\")");
                     setCharacterAttributes(before, after - before, attr_green, false);
                 } else {
-                    System.out.println("REMOVE>> else");
                     setCharacterAttributes(before, after - before, attrBlack, false);
                 }
             }
@@ -340,16 +330,26 @@ public class Compiler extends javax.swing.JPanel {
             System.out.println(Compiler.class + " jButton1ActionPerformed()");
         }
         String current_command = replaceLineBreaker(jTextPane1.getText());
+
+        try {
+            Lexical.getInstance().init(jTextPane1.getText());
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(Compiler.class.getName()).log(Level.SEVERE, null, ex);
+        }
         /*
-         int countCommands = current_command.length() - current_command.replace(";", "").length();
-         String[] commands = current_command.split(";");
-         for (String in : commands) {
-         System.out.println(in);
-         System.out.println("--");
-         }*/
-        jFrameMain.coreApp.onSubmitted(current_command);
-        attLogPanel();
-        //attOntologyViewer();
+            int countCommands = current_command.length() - current_command.replace(";", "").length();
+            String[] commands = current_command.split(";");
+            for (String in : commands) {
+            System.out.println(in);
+            System.out.println("--");
+            }*/
+
+        /**
+         * FLUXO ANTIGO
+         */
+//        jFrameMain.coreApp.onSubmitted(current_command);
+//        attLogPanel();
+//attOntologyViewer();
 
     }//GEN-LAST:event_jButton1ActionPerformed
 

@@ -1,4 +1,4 @@
-Alterar sintaxe de entrada para ser compatível com "Consideracoes_Numero_1.pdf" (manchester owl sintaxe)
+Corrigir ordem de resolução no Sintatic.java (qual modificador prevalece sobre outro AND, OR,  SOME, etc [qual terá q ser resolvido primeiro])
 
 Se abrir um arquivo owl, converter para manchester owl sintaxe e jogar no editor.
 

@@ -1,0 +1,9 @@
+subc = racional>serVivo;
+subc = irracional>serVivo;
+not  = racional > irracional;
+subc = animal>irracional;
+subc = serHumano>racional;
+subc = macaco>animal;
+subc = antonio>serHumano;
+#equiv= macaco>antonio;
+and = antonio>atomo, celula;

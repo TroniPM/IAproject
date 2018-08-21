@@ -53,15 +53,16 @@ public class ReadManchesterString {
         final OWLParser parser = new ManchesterOWLSyntaxParserFactory().createParser(manager);
 
         // A small OWL ontology in the Manchester syntax.
-        final String content = ""
+        String content = ""
                 + "Prefix: so: <http://stackoverflow.com/q/21005908/1281433/>\n"
-                + "Class: so:Person\n"
-                + "Class: so:Young\n"
-                + "\n"
-                + "Class: so:Teenager\n"
-                + "  SubClassOf: (so:Person and so:Young)\n"
+//                + "Class: so:Person\n"
+//                + "Class: so:Young\n"
+//                + "\n"
+//                + "Class: so:Teenager\n"
+//                + "  SubClassOf: (so:Person and so:Young)\n"
                 + "";
 
+        content += "Person AND hasChild SOME (Person AND (hasChild ONLY Man) AND (hasChild SOME Person))";
         // Create an input stream from the ontology, and use the parser to read its 
         // contents into the ontology.
         final InputStream in = new ByteArrayInputStream(content.getBytes());
