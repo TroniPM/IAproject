@@ -16,6 +16,7 @@
 package com.pmateus.compiler;
 
 import com.pmateus.compiler.classes.CompiladorToken;
+import com.pmateus.compiler.exception.SintaticAnalyzerException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.StringTokenizer;
@@ -47,21 +48,21 @@ public class Sintatic {
             System.out.println(source);
             boolean bb = Sintatic.getInstance().init(source);
             System.out.println("Sintatic: " + bb);
-        } catch (Exception ex) {
+        } catch (SintaticAnalyzerException ex) {
             Logger.getLogger(Sintatic.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public boolean init(String source) throws Exception {
+    public boolean init(String source) throws SintaticAnalyzerException {
         String newSource = spaces(source);
 
         int open = source.length() - newSource.replace("(", "").length();
         int close = source.length() - newSource.replace(")", "").length();
         if (open != close) {
             if (open > close) {
-                throw new Exception("Source code has more '(' than ')'. ");
+                throw new SintaticAnalyzerException("Source code has more '(' than ')'. ");
             } else {
-                throw new Exception("Source code has more ')' than '('. ");
+                throw new SintaticAnalyzerException("Source code has more ')' than '('. ");
             }
         }
 
@@ -79,7 +80,7 @@ public class Sintatic {
                     isNotParenteses = 0;
                 } else {
                     if (isNotParenteses == 3) {
-                        throw new Exception("There is no parentheses before '" + s + "' at command '" + cmd[linha].trim() + "', starting at line " + (linha + 1) + ".");
+                        throw new SintaticAnalyzerException("There is no parentheses before '" + s + "' at command '" + cmd[linha].trim() + "', starting at line " + (linha + 1) + ".");
                     }
                     isNotParenteses++;
                 }

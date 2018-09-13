@@ -17,6 +17,9 @@ package com.pmateus.gui;
 
 import com.google.common.base.Joiner;
 import com.pmateus.compiler.Lexical;
+import com.pmateus.compiler.Sintatic;
+import com.pmateus.compiler.exception.LexicalAnalyzerException;
+import com.pmateus.compiler.exception.SintaticAnalyzerException;
 import com.pmateus.gui.util.LinePainter;
 import com.pmateus.gui.util.TextLineNumber;
 import com.pmateus.gui.util.popupmenu.PopUpMenuAtRightClickNormalEditorListener;
@@ -327,13 +330,17 @@ public class Compiler extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (Session.isDebbug) {
-            System.out.println(Compiler.class + " jButton1ActionPerformed()");
+            java.util.logging.Logger.getLogger(Compiler.class.getName()).log(Level.INFO, "COMPILE BUTTON()");
         }
-        String current_command = replaceLineBreaker(jTextPane1.getText());
 
         try {
-            Lexical.getInstance().init(jTextPane1.getText());
-        } catch (Exception ex) {
+            boolean lexical = Lexical.getInstance().init(jTextPane1.getText());
+            if (lexical) {
+                boolean sintatic = Sintatic.getInstance().init(jTextPane1.getText());
+            } else {
+                throw new LexicalAnalyzerException("Lexical analyzer can't verify the code.");
+            }
+        } catch (LexicalAnalyzerException | SintaticAnalyzerException ex) {
             java.util.logging.Logger.getLogger(Compiler.class.getName()).log(Level.SEVERE, null, ex);
         }
         /*

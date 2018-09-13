@@ -15,12 +15,11 @@
  */
 package com.pmateus.compiler;
 
-import com.pmateus.compiler.classes.CompiladorToken;
-import java.util.ArrayList;
+import com.pmateus.compiler.exception.LexicalAnalyzerException;
+import com.pmateus.compiler.exception.SintaticAnalyzerException;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -45,31 +44,34 @@ public class Lexical {
             boolean aa = Lexical.getInstance().init(source);
             Sintatic.getInstance().init(source);
             System.out.println("Lexical: " + aa);
-        } catch (Exception ex) {
+        } catch (LexicalAnalyzerException | SintaticAnalyzerException ex) {
             Logger.getLogger(Lexical.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public boolean init(String source) throws Exception {
+    public boolean init(String source) throws LexicalAnalyzerException {
         String newSource = spaces(source);
         String[] cmd = newSource.split(";");
 
-        for (int linha = 0; linha < cmd.length; linha++) {
-            if (cmd[linha].trim().isEmpty()) {
+        for (int cm = 0; cm < cmd.length; cm++) {
+            if (cmd[cm].trim().isEmpty()) {
                 continue;
             }
-            StringTokenizer st = new StringTokenizer(cmd[linha]);
-            while (st.hasMoreTokens()) {
-                String s = st.nextToken();
 
-                if (Character.isDigit(s.charAt(0))) {
-                    //Começa com digito mas tem LETRA (1EEEE)
-                    if (s.matches(".*[a-zA-Z]+.*")) {
-                        throw new Exception("Unknow token '" + s + "' at command '" + cmd[linha].trim() + "', starting at line " + (linha + 1) + ".");
+            String[] linha = cmd[cm].replace("\r\n", "\n").replace("\r", "\n").split("\n");
+            for (int l = 0; l < linha.length; l++) {
+                StringTokenizer st = new StringTokenizer(linha[l]);
+                while (st.hasMoreTokens()) {
+                    String s = st.nextToken();
+
+                    if (Character.isDigit(s.charAt(0))) {
+                        //Começa com digito mas tem LETRA (1EEEE)
+                        if (s.matches(".*[a-zA-Z]+.*")) {
+                            throw new LexicalAnalyzerException("Unknow token '" + s + "' at command '" + linha[l].replaceAll(" +", " ").trim() + "', at line " + (cm + l + 1) + ".");
+                        }
                     }
                 }
             }
-
         }
 
 //        System.out.println(Arrays.toString(cmd));
@@ -77,19 +79,19 @@ public class Lexical {
     }
 
     private String spaces(String source) {
-        String a = source.replace("\r\n", " ")
-                .replace("\r", " ")
-                .replace("\n", " ")
+        String a = source//.replace("\r\n", " ")
+                //.replace("\r", " ")
+                //.replace("\n", " ")
                 .replace(")", " ) ")
                 .replace("(", " ( ")
-                .replace(";", " ; ")
-                .trim().replaceAll(" +", " ");
+                .replace(";", " ; ");
+        //.trim().replaceAll(" +", " ");
 
         //Todas as palavras reservadas para lower case
         for (String in : a.split(" ")) {
             for (String out : Util.commands_list) {
                 if (in.equalsIgnoreCase(out)) {
-                    a = a.replace(" " + in + " ", " " + out + " ");
+                    a = a.replace(in, " " + out + " ");
                 }
             }
         }
