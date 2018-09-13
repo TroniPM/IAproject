@@ -101,7 +101,7 @@ public class SwingFXWebView extends JPanel {
                 // Set up the embedded browser:
                 browser = new WebView();
                 webEngine = browser.getEngine();
-                //D:\Documentos\NetBeansProjects\IAProject\viewer\data\foaf.json
+                //D:\Documentos\NetBeansProjects\Gauufpe\viewer\data\foaf.json
                 webEngine.load("file:///" + System.getProperty("user.dir") + pathToIndex);
                 //System.out.println("file:///" + System.getProperty("user.dir") + "\\viewer\\index.html");
 

@@ -11,7 +11,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 /**
- * @project IAProject 2016 Apache License 2.0
+ * @project Gauufpe 2016 Apache License 2.0
  * @author Paulo Mateus [UFRPE-UAG] <paulomatew@gmail.com>
  */
 public class OntologyBundle {

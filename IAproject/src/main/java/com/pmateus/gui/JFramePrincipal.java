@@ -525,7 +525,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         scrollPane.setPreferredSize(new Dimension(400, 300));
-        JOptionPane.showMessageDialog(null, scrollPane, "About",
+        JOptionPane.showMessageDialog(null, scrollPane, "About | Gauufpe - version " + version,
                 JOptionPane.YES_NO_OPTION);
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
@@ -749,7 +749,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
     }
 
     private void setDocumentName(String pathAndName) {
-        setTitle("IAProject: v" + version + " | document: " + pathAndName);
+        setTitle("Gauufpe | document: " + pathAndName);
     }
 
     private void closeScheme() {
