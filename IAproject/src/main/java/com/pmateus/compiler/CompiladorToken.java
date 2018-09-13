@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.pmateus.compiler.classes;
+package com.pmateus.compiler;
 
+import com.pmateus.compiler.classes.AtomoCompilador;
 import com.pmateus.util.RandomString;
 
 /**
@@ -48,7 +49,7 @@ public class CompiladorToken extends AtomoCompilador {
 
     @Override
     public String toString() {
-        String a = "";
+        String a = "id: " + id + " | ";
         a += "   line: " + line + CRLF;
         a += "   column: " + column + CRLF;
         a += "   label: " + (isNegacao ? "NOT> " : "") + label + CRLF;
@@ -57,9 +58,9 @@ public class CompiladorToken extends AtomoCompilador {
     }
 
     public String string() {
-        String a = "";
-        a += "line: " + line + " | ";
-        a += "column: " + column + " | ";
+        String a = "id: " + id + " | ";
+//        a += "line: " + line + " | ";
+//        a += "column: " + column + " | ";
         a += "label: " + (isNegacao ? "NOT> " : "") + label;
         return a;
     }

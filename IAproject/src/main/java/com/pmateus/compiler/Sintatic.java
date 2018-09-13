@@ -15,7 +15,6 @@
  */
 package com.pmateus.compiler;
 
-import com.pmateus.compiler.classes.CompiladorToken;
 import com.pmateus.compiler.exception.SintaticAnalyzerException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -161,14 +160,42 @@ public class Sintatic {
         cmd = substituir3(cmd, Util.THAT);
         System.out.println(Arrays.toString(cmd));
         System.out.println("*******************************************");
-        StringBuilder sb = new StringBuilder();
-        for (CompiladorToken s : tokens) {
-            sb.append(s.string());
-            sb.append(" | ");
-            sb.append(s.id);
-            sb.append("\r\n");
+
+        StringBuilder toPrint = new StringBuilder();
+        for (CompiladorToken token : tokens) {
+
+            StringTokenizer st = new StringTokenizer(token.label.replaceAll(" +", " ").trim());
+
+            boolean isNOT = false;
+            while (st.hasMoreTokens()) {
+                String str = st.nextToken();
+
+                if (str.equals("(") || str.equals(")")) {
+                    continue;
+                }
+
+                if (str.equalsIgnoreCase(Util.NOT)) {
+                    isNOT = true;
+                    continue;
+                }
+
+                boolean reserved = false;
+                for (String out : Util.COMMANDS_LIST) {
+                    if (str.equalsIgnoreCase(out)) {
+                        reserved = true;
+                    }
+                }
+
+                if (reserved && isNOT) {//Se for uma NEGACAO, não pode vir palavra reservada depois, apenas classes/relação
+                    throw new SintaticAnalyzerException("'NOT' operator can only be used with classes and properties at command '" + token.label.replaceAll(" +", " ").trim() + "', at line " + token.line + ".");
+                }
+            }
+
+            //----------------------------
+            toPrint.append(token.string());
+            toPrint.append("\r\n");
         }
-        System.out.println(sb.toString());
+        System.out.println(toPrint.toString());
 
         return true;
     }
@@ -250,7 +277,7 @@ public class Sintatic {
 
         //Todas as palavras reservadas para lower case
         for (String in : a.split(" ")) {
-            for (String out : Util.commands_list) {
+            for (String out : Util.COMMANDS_LIST) {
                 if (in.equalsIgnoreCase(out)) {
                     a = a.replace(in, " " + out + " ");
                 }

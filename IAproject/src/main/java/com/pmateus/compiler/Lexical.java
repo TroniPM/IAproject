@@ -92,7 +92,7 @@ public class Lexical {
 
         //Todas as palavras reservadas para lower case
         for (String in : a.split(" ")) {
-            for (String out : Util.commands_list) {
+            for (String out : Util.COMMANDS_LIST) {
                 if (in.equalsIgnoreCase(out)) {
                     a = a.replace(in, " " + out + " ");
                 }
