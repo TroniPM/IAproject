@@ -165,12 +165,15 @@ public class Sintatic {
         for (CompiladorToken token : tokens) {
 
             StringTokenizer st = new StringTokenizer(token.label.replaceAll(" +", " ").trim());
-
+            String last = "";
             boolean isNOT = false;
+            boolean primeiro = true;
+            boolean lastReservado = false;
             while (st.hasMoreTokens()) {
                 String str = st.nextToken();
+                boolean reservado = false;
 
-                if (str.equals("(") || str.equals(")")) {
+                if (str.equals("(") || str.equals(")")) {//Verificação já foi feita anteriormente
                     continue;
                 }
 
@@ -179,16 +182,30 @@ public class Sintatic {
                     continue;
                 }
 
-                boolean reserved = false;
                 for (String out : Util.COMMANDS_LIST) {
                     if (str.equalsIgnoreCase(out)) {
-                        reserved = true;
+                        reservado = true;
+                        break;
                     }
                 }
 
-                if (reserved && isNOT) {//Se for uma NEGACAO, não pode vir palavra reservada depois, apenas classes/relação
+                if ((reservado || Character.isDigit(str.charAt(0))) && isNOT) {//Se for uma NEGACAO, não pode vir palavra-reservada/numero depois, apenas classes/propriedade
                     throw new SintaticAnalyzerException("'NOT' operator can only be used with classes and properties at command '" + token.label.replaceAll(" +", " ").trim() + "', at line " + token.line + ".");
                 }
+
+                if (lastReservado && reservado) {
+                    throw new SintaticAnalyzerException("Unexpected tokens at '" + last + " " + str + "', command '" + token.label.replaceAll(" +", " ").trim() + "', at line " + token.line + ".");
+                } else if (!lastReservado && !reservado && !primeiro) {
+                    throw new SintaticAnalyzerException("Unexpected tokens at '" + last + " " + str + "', command '" + token.label.replaceAll(" +", " ").trim() + "', at line " + token.line + ".");
+                }
+
+                if (reservado) {
+                    lastReservado = true;
+                } else {
+                    lastReservado = false;
+                }
+                last = str;
+                primeiro = false;
             }
 
             //----------------------------
