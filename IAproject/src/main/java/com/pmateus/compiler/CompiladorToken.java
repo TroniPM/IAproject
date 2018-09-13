@@ -15,21 +15,22 @@
  */
 package com.pmateus.compiler;
 
-import com.pmateus.compiler.classes.AtomoCompilador;
 import com.pmateus.util.RandomString;
 
 /**
  *
  * @author Matt
  */
-public class CompiladorToken extends AtomoCompilador {
+public class CompiladorToken {
 
+    public int line, column;
     public String label;
     public String id;
     public boolean isNegacao = false;
 
     public CompiladorToken(int line, int column, String label) {
-        super(line, column);
+        this.line = line;
+        this.column = column;
         this.label = label;
 
 //        this.id = new RandomString(label.length(), label.replace(")", "").replace("(", "").replace(" ", "")).nextString();
@@ -37,22 +38,19 @@ public class CompiladorToken extends AtomoCompilador {
     }
 
     public CompiladorToken(int line, int column, String label, boolean isNegacao) {
-        super(line, column);
+        this.line = line;
+        this.column = column;
         this.label = label;
         this.isNegacao = isNegacao;
         this.id = new RandomString(label.length()).nextString();
     }
 
-    public CompiladorToken(int line, int column) {
-        super(line, column);
-    }
-
     @Override
     public String toString() {
         String a = "id: " + id + " | ";
-        a += "   line: " + line + CRLF;
-        a += "   column: " + column + CRLF;
-        a += "   label: " + (isNegacao ? "NOT> " : "") + label + CRLF;
+        a += "   line: " + line + "\r\n";
+        a += "   column: " + column + "\r\n";
+        a += "   label: " + (isNegacao ? "NOT> " : "") + label + "\r\n";
         a += "------------------------";
         return a;
     }

@@ -13,23 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.pmateus.compiler.classes;
+package com.pmateus.compiler.exception;
 
 /**
  *
  * @author Matt
  */
-public abstract class AtomoCompilador {
+public class ConversorException extends Exception {
 
-    public final String CRLF = "\r\n";
-    public int line, column;
-    
-
-    public AtomoCompilador(int line, int column) {
-        this.line = line;
-        this.column = column;
+    public ConversorException(String message) {
+        super(message);
     }
-
-    @Override
-    public abstract String toString();
 }
