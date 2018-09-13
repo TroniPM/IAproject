@@ -54,6 +54,7 @@ public class Sintatic {
     }
 
     public boolean init(String source) throws SintaticAnalyzerException {
+        tokens = new ArrayList<>();
         String newSource = spaces(source);
 
         int open = source.length() - newSource.replace("(", "").length();
@@ -68,27 +69,54 @@ public class Sintatic {
 
         String[] cmd = newSource.split(";");
 
-        for (int linha = 0; linha < cmd.length; linha++) {
-            if (cmd[linha].trim().isEmpty()) {
+        for (int cm = 0; cm < cmd.length; cm++) {
+            if (cmd[cm].trim().isEmpty()) {
                 continue;
             }
-            StringTokenizer st = new StringTokenizer(cmd[linha]);
-            int isNotParenteses = 0;
-            while (st.hasMoreTokens()) {
-                String s = st.nextToken();
-                if (s.equals("(") || s.equals(")")) {
-                    isNotParenteses = 0;
-                } else {
-                    if (isNotParenteses == 3) {
-                        throw new SintaticAnalyzerException("There is no parentheses before '" + s + "' at command '" + cmd[linha].trim() + "', starting at line " + (linha + 1) + ".");
+            String[] linha = cmd[cm].replace("\r\n", "\n").replace("\r", "\n").split("\n");
+            for (int l = 0; l < linha.length; l++) {
+                if (linha[l].startsWith("#")) {
+                    continue;
+                }
+
+                StringTokenizer st = new StringTokenizer(linha[l].split("#")[0]);
+                int isNotParenteses = 0;
+
+                boolean lastWasNotOperator = false;
+                boolean isOpened = false;
+                while (st.hasMoreTokens()) {
+                    String s = st.nextToken();
+
+                    //Verificação por NOT juntos
+                    if (lastWasNotOperator && s.equalsIgnoreCase(Util.NOT)) {
+                        throw new SintaticAnalyzerException("'NOT' operator can't be user twice in row at command '" + linha[l].replaceAll(" +", " ").trim() + "', at line " + (cm + l + 1) + ".");
+                    } else if (s.equalsIgnoreCase(Util.NOT)) {
+                        lastWasNotOperator = true;
+                        isNotParenteses--;
+                    } else {
+                        lastWasNotOperator = false;
                     }
-                    isNotParenteses++;
+
+//                    if (s.equals("(")) {
+//                        isNotParenteses = 0;
+//                        isOpened = true;
+//                    } else if (s.equals(")")) {
+//                        isNotParenteses = 0;
+//                        isOpened = false;
+//                    } else {
+//                        if (isNotParenteses == 3) {
+//                            throw new SintaticAnalyzerException("There is no parentheses before '" + s + "' at command '" + linha[l].replaceAll(" +", " ").trim() + "', at line " + (cm + l + 1) + ".");
+//                        }
+//                        isNotParenteses++;
+//                    }
                 }
             }
         }
 
-        for (int linha = 0; linha < cmd.length; linha++) {
-            char[] itens = cmd[linha].toCharArray();
+        cmd = spaces(cmd);
+
+        for (int cm = 0; cm < cmd.length; cm++) {
+            char[] itens = cmd[cm].toCharArray();
             for (int i = 0; i < itens.length; i++) {
                 boolean flag = false;
                 if (itens[i] == ')') {
@@ -96,18 +124,18 @@ public class Sintatic {
                     for (int j = i - 1; j >= 0; j--) {
                         if (itens[j] == '(') {
                             //(...) encontrado
-                            String particula = cmd[linha].substring(j, i + 1);
+                            String particula = cmd[cm].substring(j, i + 1);
                             CompiladorToken token = new CompiladorToken(0, 0, particula);
                             tokens.add(token);
-                            System.out.println("VAI TROCAR: " + token.label + " >> " + token.id);
-                            cmd[linha] = cmd[linha].replace(token.label, token.id);
+//                            System.out.println("VAI TROCAR: " + token.label + " >> " + token.id);
+                            cmd[cm] = cmd[cm].replace(token.label, token.id);
                             flag = true;
                             break inner;
                         }
                     }
-                    System.out.println("ATUAL > " + cmd[linha]);
+//                    System.out.println("ATUAL > " + cmd[cm]);
                     if (flag) {
-                        itens = cmd[linha].toCharArray();
+                        itens = cmd[cm].toCharArray();
                         i = -1;//RESETANDO
                     }
                 }
@@ -117,10 +145,20 @@ public class Sintatic {
         cmd = substituir2(cmd, Util.NOT);
 
         /**
-         * TODO ordem de resolução
+         * TODO ordem de resolução. Adicionar campos abaixo
          */
+//    public static final String VALUE = "value";
+//    public static final String MIN = "min";
+//    public static final String MAX = "max";
+//    public static final String EXACTLY = "exactly";
         cmd = substituir3(cmd, Util.AND);
         cmd = substituir3(cmd, Util.OR);
+        cmd = substituir3(cmd, Util.SOME);
+        cmd = substituir3(cmd, Util.ALL);
+        cmd = substituir3(cmd, Util.ONLY);
+        cmd = substituir3(cmd, Util.ISA);
+        cmd = substituir3(cmd, Util.EQUIVALENT);
+        cmd = substituir3(cmd, Util.THAT);
         System.out.println(Arrays.toString(cmd));
         System.out.println("*******************************************");
         StringBuilder sb = new StringBuilder();
@@ -142,7 +180,6 @@ public class Sintatic {
             }
             StringTokenizer st = new StringTokenizer(cmd[linha]);
 
-            String last = null;
             boolean operador = false;
             while (st.hasMoreTokens()) {
                 String s = st.nextToken();
@@ -155,7 +192,7 @@ public class Sintatic {
                     String particula = PATTERN + " " + s;
                     CompiladorToken token = new CompiladorToken(0, 0, particula);
                     tokens.add(token);
-                    System.out.println("VAI TROCAR: " + token.label + " >> " + token.id);
+//                    System.out.println("VAI TROCAR: " + token.label + " >> " + token.id);
                     cmd[linha] = cmd[linha].replace(token.label, token.id);
 
                     operador = false;
@@ -173,13 +210,13 @@ public class Sintatic {
             }
             StringTokenizer st = new StringTokenizer(cmd[linha]);
 
-            String last = null;
+            String last = "";
             boolean operador = false;
             while (st.hasMoreTokens()) {
                 String s = st.nextToken();
                 boolean flag = false;
                 if (s.equals(PATTERN)) {
-                    flag = true;
+                    flag = true;//mudo para true apenas para não entrar nos 2 ifs seguintes nessa iteração
                     operador = true;
                 }
 
@@ -187,9 +224,9 @@ public class Sintatic {
                     String particula = last + " " + PATTERN + " " + s;
                     CompiladorToken token = new CompiladorToken(0, 0, particula);
                     tokens.add(token);
-                    System.out.println("VAI TROCAR: " + token.label + " >> " + token.id);
+//                    System.out.println("VAI TROCAR: " + token.label + " >> " + token.id);
                     cmd[linha] = cmd[linha].replace(token.label, token.id);
-                    return substituir3(cmd, PATTERN);
+//                    return substituir3(cmd, PATTERN);
                 }
 
                 if (!flag) {
@@ -203,23 +240,31 @@ public class Sintatic {
     }
 
     private String spaces(String source) {
-        String a = source.replace("\r\n", " ")
-                .replace("\r", " ")
-                .replace("\n", " ")
+        String a = source//.replace("\r\n", " ")
+                //.replace("\r", " ")
+                //.replace("\n", " ")
                 .replace(")", " ) ")
                 .replace("(", " ( ")
-                .replace(";", " ; ")
-                .trim().replaceAll(" +", " ");
+                .replace(";", " ; ");
+        //.trim().replaceAll(" +", " ");
 
         //Todas as palavras reservadas para lower case
         for (String in : a.split(" ")) {
             for (String out : Util.commands_list) {
                 if (in.equalsIgnoreCase(out)) {
-                    a = a.replace(" " + in + " ", " " + out + " ");
+                    a = a.replace(in, " " + out + " ");
                 }
             }
         }
 
         return a;
+    }
+
+    private String[] spaces(String[] cmd) {
+        for (int i = 0; i < cmd.length; i++) {
+            cmd[i] = cmd[i].replaceAll(" +", " ").trim();
+        }
+
+        return cmd;
     }
 }

@@ -60,9 +60,12 @@ public class Lexical {
 
             String[] linha = cmd[cm].replace("\r\n", "\n").replace("\r", "\n").split("\n");
             for (int l = 0; l < linha.length; l++) {
-                StringTokenizer st = new StringTokenizer(linha[l]);
+                if (linha[l].startsWith("#")) {
+                    continue;
+                }
+                StringTokenizer st = new StringTokenizer(linha[l].split("#")[0]);
                 while (st.hasMoreTokens()) {
-                    String s = st.nextToken();
+                    String s = st.nextToken();//IGNORA A DIREITA DO COMENTARIO
 
                     if (Character.isDigit(s.charAt(0))) {
                         //Começa com digito mas tem LETRA (1EEEE)
