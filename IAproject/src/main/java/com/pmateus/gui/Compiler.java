@@ -16,8 +16,10 @@
 package com.pmateus.gui;
 
 import com.google.common.base.Joiner;
+import com.pmateus.compiler.Conversor;
 import com.pmateus.compiler.Lexical;
 import com.pmateus.compiler.Sintatic;
+import com.pmateus.compiler.exception.ConversorException;
 import com.pmateus.compiler.exception.LexicalAnalyzerException;
 import com.pmateus.compiler.exception.SintaticAnalyzerException;
 import com.pmateus.gui.util.LinePainter;
@@ -46,6 +48,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -289,7 +292,7 @@ public class Compiler extends javax.swing.JPanel {
                     .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 446, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -334,15 +337,64 @@ public class Compiler extends javax.swing.JPanel {
         }
 
         try {
-            boolean lexical = Lexical.getInstance().init(jTextPane1.getText());
+            boolean lexical = Lexical.getInstance().init(jTextPane1.getText(), jFrameMain);
             if (lexical) {
-                boolean sintatic = Sintatic.getInstance().init(jTextPane1.getText());
+                boolean sintatic = Sintatic.getInstance().init(jTextPane1.getText(), jFrameMain);
+
+                if (sintatic) {
+                    boolean conversor = Conversor.getInstance().init(Sintatic.getInstance().tokens, jFrameMain);
+                } else {
+                    throw new SintaticAnalyzerException("Sintatic analyzer can't verify the code.");
+                }
             } else {
                 throw new LexicalAnalyzerException("Lexical analyzer can't verify the code.");
             }
-        } catch (LexicalAnalyzerException | SintaticAnalyzerException ex) {
+        } catch (LexicalAnalyzerException | SintaticAnalyzerException | ConversorException | OWLOntologyCreationException ex) {
             java.util.logging.Logger.getLogger(Compiler.class.getName()).log(Level.SEVERE, null, ex);
         }
+        jFrameMain.coreApp.atualizarTelas();
+
+        /*
+        int countCommands = current_command.length() - current_command.replace(";", "").length();
+        String[] commands = current_command.split(";");
+        for (String in : commands) {
+        System.out.println(in);
+        System.out.println("--");
+        }*/
+        /**
+         * FLUXO ANTIGO
+         */
+//        jFrameMain.coreApp.onSubmitted(current_command);
+//        attLogPanel();
+//attOntologyViewer();
+        /*
+        int countCommands = current_command.length() - current_command.replace(";", "").length();
+        String[] commands = current_command.split(";");
+        for (String in : commands) {
+        System.out.println(in);
+        System.out.println("--");
+        }*/
+        /**
+         * FLUXO ANTIGO
+         */
+//        jFrameMain.coreApp.onSubmitted(current_command);
+//        attLogPanel();
+//attOntologyViewer();
+
+        /*
+        int countCommands = current_command.length() - current_command.replace(";", "").length();
+        String[] commands = current_command.split(";");
+        for (String in : commands) {
+        System.out.println(in);
+        System.out.println("--");
+        }*/
+        /**
+         * FLUXO ANTIGO
+         */
+//        jFrameMain.coreApp.onSubmitted(current_command);
+//        attLogPanel();
+//attOntologyViewer();
+
         /*
             int countCommands = current_command.length() - current_command.replace(";", "").length();
             String[] commands = current_command.split(";");
@@ -350,7 +402,6 @@ public class Compiler extends javax.swing.JPanel {
             System.out.println(in);
             System.out.println("--");
             }*/
-
         /**
          * FLUXO ANTIGO
          */

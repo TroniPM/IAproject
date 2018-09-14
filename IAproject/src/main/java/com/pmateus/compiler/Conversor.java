@@ -15,7 +15,6 @@
  */
 package com.pmateus.compiler;
 
-import com.pmateus.util.RandomString;
 import edu.stanford.nlp.io.StringOutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,6 +23,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.pmateus.compiler.exception.ConversorException;
+import com.pmateus.gui.JFramePrincipal;
 import java.util.StringTokenizer;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
@@ -32,12 +32,12 @@ import org.semanticweb.owlapi.model.OWLObjectUnionOf;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.formats.ManchesterSyntaxDocumentFormat;
 import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
@@ -55,6 +55,8 @@ public class Conversor {
     public OWLDataFactory factory = null;
     public String PROJECT_IRI = null;
 
+    private JFramePrincipal jFrameMain;
+
     public static Conversor getInstance() {
         if (conversor == null) {
             conversor = new Conversor();
@@ -63,17 +65,27 @@ public class Conversor {
         return conversor;
     }
 
-    public boolean init(ArrayList<CompiladorToken> arr) throws ConversorException {
+    public boolean init(ArrayList<CompiladorToken> arr, JFramePrincipal jFrameMain) throws ConversorException, OWLOntologyCreationException {
+        this.jFrameMain = jFrameMain;
 
-        this.PROJECT_IRI = "teste.com";
+        java.util.logging.Logger.getLogger(Conversor.class.getName()).log(Level.INFO, "Size tokens: " + arr.size());
+        this.PROJECT_IRI = "teste.com/#";
         this.manager = OWLManager.createOWLOntologyManager();
-        this.ontology = manager.getOntology(IRI.create(PROJECT_IRI));
+        this.ontology = manager.createOntology(IRI.create(PROJECT_IRI));
         this.factory = manager.getOWLDataFactory();
 
         for (CompiladorToken in : arr) {
-            String str = in.label.replaceAll(" +", "").trim();
-            Set<OWLAxiom> list = null;
+            if (in.used) {
+                continue;
+            }
+
+            String str = in.label.replaceAll(" +", " ").trim();
+
+//            System.out.println(str);
+            Set<OWLAxiom> list = new HashSet<OWLAxiom>();
             StringTokenizer st = new StringTokenizer(str);
+
+            boolean flag = false;
             while (st.hasMoreTokens()) {
                 String s = st.nextToken();
                 if (s.equals("(") || s.equals(")")) {
@@ -82,32 +94,61 @@ public class Conversor {
 
                 for (CompiladorToken out : arr) {
                     if (out.id.equals(s)) {
-                        list = exec(out);
+                        System.out.println(">>>>>>> " + out.string() + " ||||||| " + in.string());
+                        flag = true;
+                        //list = exec(out);
+                        list.addAll(exec(out));
                     }
                 }
             }
+
+            if (!flag) {
+                flag = false;
+                list = exec(in);
+
+                manager.addAxioms(ontology, list);
+
+            } else {
+            }
         }
+        jFrameMain.coreApp.owlRepository.currentOntology = ontology;
+        jFrameMain.coreApp.owlRepository.currentOntologyManager = manager;
+        jFrameMain.coreApp.owlRepository.currentDataFactory = factory;
         return true;
     }
 
     public Set<OWLAxiom> exec(CompiladorToken token) {//PODE SER RECURSIVO
-        if (isEmpty(esq) || isEmpty(operacao) || isEmpty(dir)) {
+        java.util.logging.Logger.getLogger(Conversor.class.getName()).log(Level.INFO, token.string());
+
+        String[] term = token.label.replace("(", "").replace(")", "").replaceAll(" +", " ").trim().split(" ");
+        int size = term.length;
+        if (size != 3) {
+            String aa = "";
+            for (String in : term) {
+                aa += " " + in;
+            }
             try {
-                throw new Exception("Expressões ou operação vazia: " + esq + "|" + operacao + "|" + dir);
+                throw new Exception("Expressão diferente de 3 palavras: " + aa);
             } catch (Exception ex) {
                 Logger.getLogger(Conversor.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        String op = this.operacao.toLowerCase();
+
+        String op = term[1].toLowerCase();
         List<OWLAxiom> list = null;
 
         //Operações permitidas
-        if (op.equals(Util.OR) || op.equals(Util.AND) || op.equals(Util.THAT)
-                || op.equals(Util.ISA) || op.equals(Util.EQUIVALENT)) {
+        if (op.equals(Util.OR)
+                || op.equals(Util.AND)
+                || op.equals(Util.THAT)
+                || op.equals(Util.ISA)
+                || op.equals(Util.EQUIVALENT)
+                || op.equals(Util.ALL)
+                || op.equals(Util.SOME)) {
             list = new ArrayList<>();
 
-            OWLClass esqClass = factory.getOWLClass(IRI.create(PROJECT_IRI + esq));
-            OWLClass dirClass = factory.getOWLClass(IRI.create(PROJECT_IRI + dir));
+            OWLClass esqClass = factory.getOWLClass(IRI.create(PROJECT_IRI + term[0]));
+            OWLClass dirClass = factory.getOWLClass(IRI.create(PROJECT_IRI + term[2]));
 
             switch (op) {
                 case Util.THAT:
@@ -146,7 +187,27 @@ public class Conversor {
 //                    manager.addAxiom(ontology, ax1);
                     break;
                 }
+                case Util.SOME: {
+                    OWLObjectProperty property = factory.getOWLObjectProperty(IRI.create(PROJECT_IRI + term[0]));
+                    OWLClassExpression exp = factory.getOWLObjectSomeValuesFrom(property, dirClass);
+                    OWLSubClassOfAxiom axFinal = factory.getOWLSubClassOfAxiom(dirClass, exp);
+                    list.add(axFinal);
 
+//                    manager.addAxiom(ontology, ax1);
+                    break;
+                }
+                case Util.ALL: {
+                    OWLObjectProperty property = factory.getOWLObjectProperty(IRI.create(PROJECT_IRI + term[0]));
+                    OWLClassExpression exp = factory.getOWLObjectAllValuesFrom(property, dirClass);
+                    OWLSubClassOfAxiom axFinal = factory.getOWLSubClassOfAxiom(dirClass, exp);
+                    list.add(axFinal);
+
+//                    manager.addAxiom(ontology, ax1);
+                    break;
+                }
+                /**
+                 * TODO fazer esses casos abaixo;
+                 */
 //        cmd = substituir3(cmd, Util.SOME);
 //        cmd = substituir3(cmd, Util.ALL);
 //        cmd = substituir3(cmd, Util.ONLY);
@@ -158,6 +219,8 @@ public class Conversor {
                     }
                 }
             }
+            java.util.logging.Logger.getLogger(Conversor.class.getName()).log(Level.INFO, "OK!" + token.string());
+
             return new HashSet<OWLAxiom>(list);
 
         } else {
@@ -167,12 +230,14 @@ public class Conversor {
                 Logger.getLogger(Conversor.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        java.util.logging.Logger.getLogger(Conversor.class.getName()).log(Level.INFO, "NOT OK!!" + token.string());
+
         return null;
     }
 
     public void print() {
-        RDFXMLDocumentFormat format = new RDFXMLDocumentFormat();
-        ManchesterSyntaxDocumentFormat f = new ManchesterSyntaxDocumentFormat();
+        RDFXMLDocumentFormat f = new RDFXMLDocumentFormat();
+//        ManchesterSyntaxDocumentFormat f = new ManchesterSyntaxDocumentFormat();
 
         StringOutputStream stream = new StringOutputStream();
         try {

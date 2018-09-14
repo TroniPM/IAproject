@@ -28,6 +28,8 @@ public class CompiladorToken {
     public String id;
     public boolean isNegacao = false;
 
+    public boolean used = false;
+
     public CompiladorToken(int line, int column, String label) {
         this.line = line;
         this.column = column;

@@ -17,6 +17,7 @@ package com.pmateus.compiler;
 
 import com.pmateus.compiler.exception.LexicalAnalyzerException;
 import com.pmateus.compiler.exception.SintaticAnalyzerException;
+import com.pmateus.gui.JFramePrincipal;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +29,7 @@ import java.util.logging.Logger;
 public class Lexical {
 
     private static Lexical lexical = null;
+    private JFramePrincipal jFrameMain;
 
     public static Lexical getInstance() {
         if (lexical == null) {
@@ -41,15 +43,18 @@ public class Lexical {
         String source = "Person AND hasChild SOME (Person AND (hasChild ONLY Man) AND (hasChild SOME Person));;";
 
         try {
-            boolean aa = Lexical.getInstance().init(source);
-            Sintatic.getInstance().init(source);
+            boolean aa = Lexical.getInstance().init(source, null);
+            Sintatic.getInstance().init(source, null);
             System.out.println("Lexical: " + aa);
         } catch (LexicalAnalyzerException | SintaticAnalyzerException ex) {
             Logger.getLogger(Lexical.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public boolean init(String source) throws LexicalAnalyzerException {
+    public boolean init(String source, JFramePrincipal jFrameMain) throws LexicalAnalyzerException {
+        System.out.println(source);
+        
+        this.jFrameMain = jFrameMain;
         String newSource = spaces(source);
         String[] cmd = newSource.split(";");
 

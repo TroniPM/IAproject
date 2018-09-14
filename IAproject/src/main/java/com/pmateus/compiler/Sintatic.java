@@ -16,6 +16,7 @@
 package com.pmateus.compiler;
 
 import com.pmateus.compiler.exception.SintaticAnalyzerException;
+import com.pmateus.gui.JFramePrincipal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.StringTokenizer;
@@ -30,6 +31,7 @@ public class Sintatic {
 
     private static Sintatic sintatic = null;
     public ArrayList<CompiladorToken> tokens = new ArrayList<>();
+    private JFramePrincipal jFrameMain;
 
     public static Sintatic getInstance() {
         if (sintatic == null) {
@@ -45,14 +47,15 @@ public class Sintatic {
         String source = "Professor IsA not (hasPet some Dog) or not (hasPet only Cat) and not (hasPet some GoldFish) and (hasPet only (not Bird))";
         try {
             System.out.println(source);
-            boolean bb = Sintatic.getInstance().init(source);
+            boolean bb = Sintatic.getInstance().init(source, null);
             System.out.println("Sintatic: " + bb);
         } catch (SintaticAnalyzerException ex) {
             Logger.getLogger(Sintatic.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public boolean init(String source) throws SintaticAnalyzerException {
+    public boolean init(String source, JFramePrincipal jFrameMain) throws SintaticAnalyzerException {
+        this.jFrameMain = jFrameMain;
         tokens = new ArrayList<>();
         String newSource = spaces(source);
 
