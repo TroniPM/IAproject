@@ -75,7 +75,11 @@ public class Conversor {
         this.tokens = arr;
 
         java.util.logging.Logger.getLogger(Conversor.class.getName()).log(Level.INFO, "Size tokens: " + arr.size());
-        this.PROJECT_IRI = "teste.com/#";
+        if (jFrameMain.filename.trim().isEmpty()) {
+            this.PROJECT_IRI = jFrameMain.currentDocument + ".com/#";
+        } else {
+            this.PROJECT_IRI = jFrameMain.filename + ".com/#";
+        }
         this.manager = OWLManager.createOWLOntologyManager();
         this.ontology = manager.createOntology(IRI.create(PROJECT_IRI));
         this.factory = manager.getOWLDataFactory();
@@ -97,15 +101,6 @@ public class Conversor {
                 if (s.equals("(") || s.equals(")")) {
                     continue;
                 }
-
-//                for (CompiladorToken out : arr) {
-//                    if (out.id.equals(s)) {
-//                        System.out.println(">>>>>>> " + out.string() + " ||||||| " + in.string());
-//                        flag = true;
-//                        //list = exec(out);
-//                        list.addAll(exec(out));
-//                    }
-//                }
             }
 
             if (!flag) {
@@ -307,11 +302,11 @@ public class Conversor {
             }
         }
         if (!subs.isEmpty()) {
-            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(classe, factory.getOWLObjectIntersectionOf(subs));
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs), classe);
             list.add(ax1);
         }
         if (!equiv.isEmpty()) {
-            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(classe, factory.getOWLObjectIntersectionOf(equiv));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(equiv), classe);
             list.add(ax2);
         }
 
@@ -395,11 +390,11 @@ public class Conversor {
             }
         }
         if (!subs.isEmpty()) {
-            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(classe, factory.getOWLObjectUnionOf(subs));
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(subs), classe);
             list.add(ax1);
         }
         if (!equiv.isEmpty()) {
-            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(classe, factory.getOWLObjectUnionOf(equiv));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(equiv), classe);
             list.add(ax2);
         }
 
@@ -471,13 +466,13 @@ public class Conversor {
             OWLAxiom objOutter = leftIt.next();
             if (objOutter.getAxiomType() == AxiomType.SUBCLASS_OF) {
                 OWLClassExpression cc = ((OWLSubClassOfAxiom) objOutter).getSubClass();
-                OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(classe, cc);
+                OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(cc, classe);
                 list.add(ax1);
             } else if (objOutter.getAxiomType() == AxiomType.EQUIVALENT_CLASSES) {
                 Set<OWLClass> listaEquivalent = ((OWLEquivalentClassesAxiom) objOutter).getNamedClasses();
                 Iterator<OWLClass> it = listaEquivalent.iterator();
                 while (it.hasNext()) {
-                    OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(classe, it.next());
+                    OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(it.next(), classe);
                     list.add(ax2);
                 }
             }
