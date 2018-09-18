@@ -8,6 +8,7 @@ package com.pmateus.gui;
 import com.sun.javafx.application.PlatformImpl;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.io.File;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
@@ -32,15 +33,15 @@ public class SwingFXWebView extends JPanel {
     private WebEngine webEngine;
     private Ontology ontologyJPanel;
     private String title = "Graph Viewer";
-    private String pathToIndex = "\\data\\viewer\\index.html";//Com \\ no inicio
+    private String pathToIndex2 = "./data/viewer/index.html";//Com \\ no inicio
 
     public SwingFXWebView() {
 
     }
 
-    SwingFXWebView(Ontology aThis) {
+    public SwingFXWebView(Ontology aThis) {
+        System.out.println("SwingFXWebView(Ontology aThis)");
         this.ontologyJPanel = aThis;
-        initComponents();
 
         myJFrame = new JFrame();
         myJFrame.setTitle(title);
@@ -58,11 +59,17 @@ public class SwingFXWebView extends JPanel {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
                 ontologyJPanel.aWebViewer = null;
+                stage = null;
+                browser = null;
+                jfxPanel = null;
                 webEngine = null;
+                ontologyJPanel = null;
+                myJFrame = null;
             }
         });
 
         myJFrame.setIconImage(JFramePrincipal.iconViewer.getImage());
+        initComponents();
     }
 
     public void reloadURL() {
@@ -70,6 +77,7 @@ public class SwingFXWebView extends JPanel {
     }
 
     private void initComponents() {
+        System.out.println("initComponents()");
 
         jfxPanel = new JFXPanel();
         createScene();
@@ -87,9 +95,11 @@ public class SwingFXWebView extends JPanel {
      *
      */
     private void createScene() {
-        PlatformImpl.startup(new Runnable() {
+        System.out.println("createScene()");
+        PlatformImpl.runLater(new Runnable() {
             @Override
             public void run() {
+                System.out.println("run()");
 
                 stage = new Stage();
                 stage.setResizable(true);
@@ -101,9 +111,10 @@ public class SwingFXWebView extends JPanel {
                 // Set up the embedded browser:
                 browser = new WebView();
                 webEngine = browser.getEngine();
-                //D:\Documentos\NetBeansProjects\Gauufpe\viewer\data\foaf.json
-                webEngine.load("file:///" + System.getProperty("user.dir") + pathToIndex);
-                //System.out.println("file:///" + System.getProperty("user.dir") + "\\viewer\\index.html");
+                String absPath = new File(pathToIndex2).getAbsolutePath();
+                String fileToOpen = "file:///" + absPath;
+                System.out.println("FILE WERBVIEW: " + fileToOpen);
+                webEngine.load(fileToOpen);
 
                 ObservableList<Node> children = root.getChildren();
                 children.add(browser);
