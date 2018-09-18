@@ -85,10 +85,9 @@ public class JFramePrincipal extends javax.swing.JFrame {
         tabPreferences = new Preferences(this);
 
         if (!isOpenMode) {
-            setDocumentName("new" + instancia);
-        } else {
-            setDocumentName(currentDocument);
+            currentDocument = "new" + instancia;
         }
+        setDocumentName(currentDocument);
 
         initComponents();
         addIcons();
