@@ -1,4 +1,4 @@
-Corrigir ordem de resolução no Sintatic.java (qual modificador prevalece sobre outro AND, OR,  SOME, etc [qual terá q ser resolvido primeiro])
+BUG: qnd abre o visualizador uma vez, ele não atualiza para que novas compilações mostrem no viewer.
 
 Se abrir um arquivo owl, converter para manchester owl sintaxe e jogar no editor.
 
