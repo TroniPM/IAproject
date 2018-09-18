@@ -221,7 +221,9 @@ public class Ontology extends javax.swing.JPanel {
         Process aProcess = null;
         //Deleting current files...
         try {
-            aProcess = Runtime.getRuntime().exec("cmd /c start /wait " + System.getProperty("user.dir") + pathToIndex + deleteBatFile);
+            String pathDel = System.getProperty("user.dir") + pathToIndex + deleteBatFile;
+            System.out.println("PATH DELETE: " + pathDel);
+            aProcess = Runtime.getRuntime().exec("cmd /c start /wait " + pathDel);
             aProcess.waitFor();
         } catch (IOException ex) {
             if (Session.isDebbug) {
@@ -238,9 +240,13 @@ public class Ontology extends javax.swing.JPanel {
 
         //Creating new files e converting...
         try {
-            jFrameMain.coreApp.owlRepository.saveOntologyToView(System.getProperty("user.dir") + pathToIndex + outputFileNameToConversor);
+            String pathConv = System.getProperty("user.dir") + pathToIndex + outputFileNameToConversor;
+            System.out.println("PATH TO SAVE: " + pathConv);
+            jFrameMain.coreApp.owlRepository.saveOntologyToView(pathConv);
 
-            aProcess = Runtime.getRuntime().exec("cmd /c start /wait " + System.getProperty("user.dir") + pathToIndex + converterBatFile);
+            String pathConverted = System.getProperty("user.dir") + pathToIndex + converterBatFile;
+            System.out.println("PATH CONVERTED: " + pathConverted);
+            aProcess = Runtime.getRuntime().exec("cmd /c start /wait " + pathConverted);
             aProcess.waitFor();
 
         } catch (IOException ex) {
