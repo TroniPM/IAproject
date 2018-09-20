@@ -339,10 +339,23 @@ public class Compiler extends javax.swing.JPanel {
         try {
             boolean lexical = Lexical.getInstance().init(jTextPane1.getText(), jFrameMain);
             if (lexical) {
+                jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#696969\" face=\"\" /><b> Lexical</b> OK</font><br/>";
                 boolean sintatic = Sintatic.getInstance().init(jTextPane1.getText(), jFrameMain);
 
                 if (sintatic) {
+                    jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#696969\" face=\"\" /><b>Sintatic</b> OK</font><br/>";
+
                     boolean conversor = Conversor.getInstance().init(Sintatic.getInstance().tokens, jFrameMain);
+                    if (conversor) {
+                        jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#006400\" face=\"\" /><b> Conversor</b> OK</font><br/><br/>";
+                    } else {
+                        throw new ConversorException("Conversor couldn't finish the job.");
+                    }
+                    try {
+                        jFrameMain.coreApp.owlRepository.saveState();
+                    } catch (OWLOntologyCreationException ex) {
+                        java.util.logging.Logger.getLogger(InsertionAnalyser.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 } else {
                     throw new SintaticAnalyzerException("Sintatic analyzer can't verify the code.");
                 }
@@ -351,64 +364,12 @@ public class Compiler extends javax.swing.JPanel {
             }
         } catch (LexicalAnalyzerException | SintaticAnalyzerException | ConversorException | OWLOntologyCreationException ex) {
             java.util.logging.Logger.getLogger(Compiler.class.getName()).log(Level.SEVERE, null, ex);
+            jFrameMain.coreApp.iAnalyser.erroString += "[<font color=\"#ff0000\" face=\"\" /><b>ERRO:</b> " + ex.getMessage() + "</font>]<br/>";
         }
+
+//        jFrameMain.coreApp.onSubmitted("");
         jFrameMain.coreApp.atualizarTelas();
-
-        /*
-        int countCommands = current_command.length() - current_command.replace(";", "").length();
-        String[] commands = current_command.split(";");
-        for (String in : commands) {
-        System.out.println(in);
-        System.out.println("--");
-        }*/
-        /**
-         * FLUXO ANTIGO
-         */
-//        jFrameMain.coreApp.onSubmitted(current_command);
-//        attLogPanel();
-//attOntologyViewer();
-        /*
-        int countCommands = current_command.length() - current_command.replace(";", "").length();
-        String[] commands = current_command.split(";");
-        for (String in : commands) {
-        System.out.println(in);
-        System.out.println("--");
-        }*/
-        /**
-         * FLUXO ANTIGO
-         */
-//        jFrameMain.coreApp.onSubmitted(current_command);
-//        attLogPanel();
-//attOntologyViewer();
-
-        /*
-        int countCommands = current_command.length() - current_command.replace(";", "").length();
-        String[] commands = current_command.split(";");
-        for (String in : commands) {
-        System.out.println(in);
-        System.out.println("--");
-        }*/
-        /**
-         * FLUXO ANTIGO
-         */
-//        jFrameMain.coreApp.onSubmitted(current_command);
-//        attLogPanel();
-//attOntologyViewer();
-
-        /*
-            int countCommands = current_command.length() - current_command.replace(";", "").length();
-            String[] commands = current_command.split(";");
-            for (String in : commands) {
-            System.out.println(in);
-            System.out.println("--");
-            }*/
-        /**
-         * FLUXO ANTIGO
-         */
-//        jFrameMain.coreApp.onSubmitted(current_command);
-//        attLogPanel();
-//attOntologyViewer();
-
+        attLogPanel();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private String replaceLineBreaker(String old) {

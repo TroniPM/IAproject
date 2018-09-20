@@ -8,7 +8,10 @@ package com.pmateus.gui;
 import com.sun.javafx.application.PlatformImpl;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.WindowEvent;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
@@ -25,31 +28,52 @@ import javax.swing.JPanel;
  */
 public class SwingFXWebView extends JPanel {
 
-    public JFrame myJFrame;
-
     private Stage stage;
+    public JFrame myJFrame;
     private WebView browser;
     private JFXPanel jfxPanel;
     private WebEngine webEngine;
     private Ontology ontologyJPanel;
-    private String title = "Graph Viewer";
-    private String pathToIndex2 = "./data/viewer/index.html";//Com \\ no inicio
+    private final String title = "Graph Viewer";
+    private String file = null;
+    public static final String pathToIndex2 = "./data/viewer/index.html";//Com \\ no inicio
+    public static final String pathToIndex = "./data/viewer/";//Com \\ no inicio
+    private String pathToIndexHTML = "\\data\\viewer\\";//Com \\ no inicio e \\ no fim
 
     public SwingFXWebView() {
 
     }
 
-    public SwingFXWebView(Ontology aThis) {
+    public void close() {
+        System.out.println("close()");
+        try {
+            new File("." + pathToIndexHTML + file + ".html").delete();
+            new File("." + pathToIndexHTML + "\\js\\" + file + ".app.js").delete();
+            new File("." + pathToIndexHTML + "\\data\\" + file + ".bat").delete();
+            new File("." + pathToIndexHTML + "\\data\\" + file + ".owl").delete();
+            new File("." + pathToIndexHTML + "\\data\\" + file + ".json").delete();
+        } catch (Exception e) {
+        }
+
+//        stage = null;
+//        browser = null;
+//        jfxPanel = null;
+//        webEngine = null;
+//        ontologyJPanel = null;
+//        myJFrame = null;
+    }
+
+    public SwingFXWebView(Ontology aThis, final String file) {
         System.out.println("SwingFXWebView(Ontology aThis)");
         this.ontologyJPanel = aThis;
+        this.file = file;
 
         myJFrame = new JFrame();
         myJFrame.setTitle(title);
-        //myJFrame.getContentPane().add(this);
         myJFrame.setLayout(new BorderLayout());
         myJFrame.add(this, BorderLayout.CENTER);
         myJFrame.setSize(new Dimension(800, 625));
-        //frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//        myJFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         myJFrame.setVisible(true);
         myJFrame.setResizable(false);
 
@@ -58,16 +82,9 @@ public class SwingFXWebView extends JPanel {
         myJFrame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                ontologyJPanel.aWebViewer = null;
-                stage = null;
-                browser = null;
-                jfxPanel = null;
-                webEngine = null;
-                ontologyJPanel = null;
-                myJFrame = null;
+                close();
             }
         });
-
         myJFrame.setIconImage(JFramePrincipal.iconViewer.getImage());
         initComponents();
     }
@@ -96,7 +113,7 @@ public class SwingFXWebView extends JPanel {
      */
     private void createScene() {
         System.out.println("createScene()");
-        PlatformImpl.runLater(new Runnable() {
+        PlatformImpl.startup(new Runnable() {
             @Override
             public void run() {
                 System.out.println("run()");
@@ -111,7 +128,7 @@ public class SwingFXWebView extends JPanel {
                 // Set up the embedded browser:
                 browser = new WebView();
                 webEngine = browser.getEngine();
-                String absPath = new File(pathToIndex2).getAbsolutePath();
+                String absPath = new File(pathToIndex + file + ".html").getAbsolutePath();
                 String fileToOpen = "file:///" + absPath;
                 System.out.println("FILE WERBVIEW: " + fileToOpen);
                 webEngine.load(fileToOpen);

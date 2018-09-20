@@ -20,12 +20,22 @@ import com.pmateus.gui.util.xmlpack.XmlTextPane;
 import com.pmateus.util.Session;
 import com.pmateus.util.UtilMethods;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.semanticweb.owlapi.formats.FunctionalSyntaxDocumentFormat;
 import org.semanticweb.owlapi.formats.KRSS2DocumentFormat;
 import org.semanticweb.owlapi.formats.LatexDocumentFormat;
@@ -39,8 +49,11 @@ public class Ontology extends javax.swing.JPanel {
     private JFramePrincipal jFrameMain;
     public SwingFXWebView aWebViewer = null;
 
+    private ArrayList<String> array = new ArrayList<>();
+
     public boolean houveAlteracao = false;
     private String pathToIndex = "\\data\\viewer\\data\\";//Com \\ no inicio e \\ no fim
+    private String pathToIndexHTML = "\\data\\viewer\\";//Com \\ no inicio e \\ no fim
     private String deleteBatFile = "delete.bat";//File name
     private String converterBatFile = "conversor.bat";//file name
     private String outputFileNameToConversor = "foaf.owl";//file name
@@ -218,33 +231,104 @@ public class Ontology extends javax.swing.JPanel {
     }
 
     public void initGraphViewer() {
+        if (aWebViewer != null) {
+            aWebViewer.close();
+
+            /**
+             * Comente essa linha para fazer com que o visualizador grafico abra
+             * em apenas uma janela ou abra uma para cada clique
+             *
+             */
+            aWebViewer.myJFrame.dispatchEvent(new WindowEvent(aWebViewer.myJFrame, WindowEvent.WINDOW_CLOSING));
+            aWebViewer = null;
+        }
+        String temp = new SimpleDateFormat("ddMMyyHHmmssSSS").format(new Date());
+
+        /*FAZER PROCESSAMENTO COM ARQUIVOS*/
+        //Copiando INDEX
+        File source1 = new File("." + pathToIndexHTML + "index.html");
+        File dest1 = new File("." + pathToIndexHTML + temp + ".html");
+        try {
+            FileUtils.copyFile(source1, dest1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Copiando INDEX
+        File source2 = new File("." + pathToIndexHTML + "\\js\\webvowl.app.js");
+        File dest2 = new File("." + pathToIndexHTML + "\\js\\" + temp + ".app.js");
+        try {
+            FileUtils.copyFile(source2, dest2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //Copiando INDEX
+        File source3 = new File("." + pathToIndexHTML + "\\data\\conversor.bat");
+        File dest3 = new File("." + pathToIndexHTML + "\\data\\" + temp + ".bat");
+        try {
+            FileUtils.copyFile(source3, dest3);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Alterando caminho do JS
+        try {
+            String content = IOUtils.toString(new FileInputStream(dest1), StandardCharsets.UTF_8);
+            content = content.replaceAll("js/webvowl.app.js", "js/" + temp + ".app.js");
+            IOUtils.write(content, new FileOutputStream(dest1), StandardCharsets.UTF_8);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Ontology.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Ontology.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        //Alterando caminho do JSON
+        try {
+            String content = IOUtils.toString(new FileInputStream(dest2), StandardCharsets.UTF_8);
+            content = content.replaceAll("foaf", temp);
+            IOUtils.write(content, new FileOutputStream(dest2), StandardCharsets.UTF_8);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Ontology.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Ontology.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //Alterando caminho do JSON
+        try {
+            String content = IOUtils.toString(new FileInputStream(dest3), StandardCharsets.UTF_8);
+            content = content.replaceAll("foaf", temp);//vai trocar o owl e o json
+            IOUtils.write(content, new FileOutputStream(dest3), StandardCharsets.UTF_8);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Ontology.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Ontology.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         Process aProcess = null;
         //Deleting current files...
-        try {
-            String pathDel = System.getProperty("user.dir") + pathToIndex + deleteBatFile;
-            System.out.println("PATH DELETE: " + pathDel);
-            aProcess = Runtime.getRuntime().exec("cmd /c start /wait " + pathDel);
-            aProcess.waitFor();
-        } catch (IOException ex) {
-            if (Session.isDebbug) {
-                Logger.getLogger(Compiler.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            JOptionPane.showMessageDialog(null, "We couldn't execute some scripts. Try to run this programm as Administrator:\n" + ex.getLocalizedMessage(), "Problem to execute script", JOptionPane.ERROR_MESSAGE);
-        } catch (InterruptedException ex) {
-            if (Session.isDebbug) {
-                Logger.getLogger(Compiler.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            JOptionPane.showMessageDialog(null, "We couldn't execute some scripts. Try to run this programm as Administrator:\n" + ex.getLocalizedMessage(), "Problem to execute script", JOptionPane.ERROR_MESSAGE);
-        }
+//        try {
+//            String pathDel = System.getProperty("user.dir") + pathToIndex + deleteBatFile;
+//            System.out.println("PATH DELETE: " + pathDel);
+//            aProcess = Runtime.getRuntime().exec("cmd /c start /wait " + pathDel);
+//            aProcess.waitFor();
+//        } catch (IOException ex) {
+//            if (Session.isDebbug) {
+//                Logger.getLogger(Compiler.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//
+//            JOptionPane.showMessageDialog(null, "We couldn't execute some scripts. Try to run this programm as Administrator:\n" + ex.getLocalizedMessage(), "Problem to execute script", JOptionPane.ERROR_MESSAGE);
+//        } catch (InterruptedException ex) {
+//            if (Session.isDebbug) {
+//                Logger.getLogger(Compiler.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            JOptionPane.showMessageDialog(null, "We couldn't execute some scripts. Try to run this programm as Administrator:\n" + ex.getLocalizedMessage(), "Problem to execute script", JOptionPane.ERROR_MESSAGE);
+//        }
 
         //Creating new files e converting...
         try {
-            String pathConv = System.getProperty("user.dir") + pathToIndex + outputFileNameToConversor;
+            String pathConv = System.getProperty("user.dir") + pathToIndex + temp + ".owl";
             System.out.println("PATH TO SAVE: " + pathConv);
             jFrameMain.coreApp.owlRepository.saveOntologyToView(pathConv);
 
-            String pathConverted = System.getProperty("user.dir") + pathToIndex + converterBatFile;
+            String pathConverted = System.getProperty("user.dir") + pathToIndex + temp + ".bat";
             System.out.println("PATH CONVERTED: " + pathConverted);
             aProcess = Runtime.getRuntime().exec("cmd /c start /wait " + pathConverted);
             aProcess.waitFor();
@@ -266,13 +350,9 @@ public class Ontology extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "We couldn't execute some scripts. Try to run this programm as Administrator:\n" + ex.getLocalizedMessage(), "Problem to execute script", JOptionPane.ERROR_MESSAGE);
         }
 
-        if (aWebViewer != null) {
-            aWebViewer.myJFrame.dispatchEvent(new WindowEvent(aWebViewer.myJFrame, WindowEvent.WINDOW_CLOSING));
-        }
-
-        aWebViewer = new SwingFXWebView(this);
-
-        aWebViewer.requestFocus();
+        SwingFXWebView aaaaa = new SwingFXWebView(this, temp);
+        aaaaa.requestFocus();
+        aWebViewer = aaaaa;
     }
 
 
