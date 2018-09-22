@@ -95,14 +95,19 @@ public class Lexical {
                 .replace(";", " ; ");
         //.trim().replaceAll(" +", " ");
 
-        //Todas as palavras reservadas para lower case
-        for (String in : a.split(" ")) {
+        StringTokenizer st = new StringTokenizer(a);
+        while (st.hasMoreTokens()) {
+            String in = st.nextToken();
             for (String out : Util.COMMANDS_LIST) {
                 if (in.equalsIgnoreCase(out)) {
                     a = a.replace(in, " " + out + " ");
                 }
             }
         }
+        //Todas as palavras reservadas para lower case
+//        for (String in : a.split(" ")) {
+            
+//        }
 
         return a;
     }
