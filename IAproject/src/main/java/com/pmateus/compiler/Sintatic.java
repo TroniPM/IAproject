@@ -197,9 +197,9 @@ public class Sintatic {
                 }
 
                 if (lastReservado && reservado) {
-                    throw new SintaticAnalyzerException("Unexpected tokens at '" + last + " " + str + "', command '" + token.label.replaceAll(" +", " ").trim() + "', at line " + token.line + ".");
+                    throw new SintaticAnalyzerException("Unexpected tokens at '" + last + " " + str + "', command '" + token.label.replaceAll(" +", " ").trim() + "'.");
                 } else if (!lastReservado && !reservado && !primeiro) {
-                    throw new SintaticAnalyzerException("Unexpected tokens at '" + last + " " + str + "', command '" + token.label.replaceAll(" +", " ").trim() + "', at line " + token.line + ".");
+                    throw new SintaticAnalyzerException("Unexpected tokens at '" + last + " " + str + "', command '" + token.label.replaceAll(" +", " ").trim() + "'.");
                 }
 
                 if (reservado) {

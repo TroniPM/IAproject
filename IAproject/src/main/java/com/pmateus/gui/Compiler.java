@@ -339,15 +339,15 @@ public class Compiler extends javax.swing.JPanel {
         try {
             boolean lexical = Lexical.getInstance().init(jTextPane1.getText(), jFrameMain);
             if (lexical) {
-                jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#696969\" face=\"\" /><b> Lexical</b> OK</font><br/>";
+                jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#696969\" face=\"\" /><b> Lexical</b> OK.</font><br/>";
                 boolean sintatic = Sintatic.getInstance().init(jTextPane1.getText(), jFrameMain);
 
                 if (sintatic) {
-                    jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#696969\" face=\"\" /><b>Sintatic</b> OK</font><br/>";
+                    jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#696969\" face=\"\" /><b>Sintatic</b> OK.</font><br/>";
 
                     boolean conversor = Conversor.getInstance().init(Sintatic.getInstance().tokens, jFrameMain);
                     if (conversor) {
-                        jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#006400\" face=\"\" /><b> Conversor</b> OK</font><br/><br/>";
+                        jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#006400\" face=\"\" /><b> Conversor</b> OK.</font><br/><br/>";
                     } else {
                         throw new ConversorException("Conversor couldn't finish the job.");
                     }
@@ -364,7 +364,7 @@ public class Compiler extends javax.swing.JPanel {
             }
         } catch (LexicalAnalyzerException | SintaticAnalyzerException | ConversorException | OWLOntologyCreationException ex) {
             java.util.logging.Logger.getLogger(Compiler.class.getName()).log(Level.SEVERE, null, ex);
-            jFrameMain.coreApp.iAnalyser.erroString += "[<font color=\"#ff0000\" face=\"\" /><b>ERRO:</b> " + ex.getMessage() + "</font>]<br/>";
+            jFrameMain.coreApp.iAnalyser.erroString += "&nbsp;&nbsp;<font color=\"#ff0000\" face=\"\" /><b>" + ex.getClass().getSimpleName() + "</b>: " + ex.getMessage() + "</font><br/>";
         }
 
 //        jFrameMain.coreApp.onSubmitted("");
