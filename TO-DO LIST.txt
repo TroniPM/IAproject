@@ -1,3 +1,5 @@
+Quando usa palavra com OR ta reconhecendo palavra errada. Tipo MORTE, sera compilado como M OR TE
+
 Se abrir um arquivo owl, converter para manchester owl sintaxe e jogar no editor.
 
 Adicionar batchfile para que outros sistemas operacionais possam utilizar o programa. (ainda não compatível com unix e mac)

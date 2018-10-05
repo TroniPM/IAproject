@@ -50,10 +50,9 @@ public class CompiladorToken {
     @Override
     public String toString() {
         String a = "id: " + id + " | ";
-        a += "   line: " + line + "\r\n";
-        a += "   column: " + column + "\r\n";
-        a += "   label: " + (isNegacao ? "NOT> " : "") + label + "\r\n";
-        a += "------------------------";
+        a += "   line: " + line + " | ";
+        a += "   column: " + column + " | ";
+        a += "   label: " + (isNegacao ? "NOT> " : "") + label;
         return a;
     }
 

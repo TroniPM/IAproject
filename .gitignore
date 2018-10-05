@@ -1,3 +1,6 @@
 /IAproject/target/
 *.json
 *.owl
+*.js
+*.html
+*.bat
