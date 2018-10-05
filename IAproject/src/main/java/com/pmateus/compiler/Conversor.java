@@ -160,10 +160,6 @@ public class Conversor {
             OWLClass esqClass = factory.getOWLClass(IRI.create(PROJECT_IRI + term[0]));
             OWLClass dirClass = factory.getOWLClass(IRI.create(PROJECT_IRI + term[2]));
 
-            /**
-             * TODO: FAZER metodos para todos os operadores (list, class) e
-             * (list, list)
-             */
             switch (op) {
                 case Util.THAT:
                 case Util.AND: {
@@ -350,22 +346,41 @@ public class Conversor {
         }
 
         if (!subs1.isEmpty() && !subs2.isEmpty()) {
-            OWLSubClassOfAxiom ax = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs2), factory.getOWLObjectIntersectionOf(subs1));
-            list.add(ax);
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs2), factory.getOWLObjectIntersectionOf(subs1));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs1), factory.getOWLObjectIntersectionOf(subs2));
+            list.add(ax1);
+            list.add(ax2);
         }
-        if (!equiv1.isEmpty() && !equiv2.isEmpty()) {
-            OWLSubClassOfAxiom ax = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(equiv2), factory.getOWLObjectIntersectionOf(equiv1));
-            list.add(ax);
+        if (!subs1.isEmpty() && !equiv1.isEmpty()) {
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs1), factory.getOWLObjectIntersectionOf(equiv1));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(equiv1), factory.getOWLObjectIntersectionOf(subs1));
+            list.add(ax1);
+            list.add(ax2);
+        }
+        if (!subs2.isEmpty() && !equiv1.isEmpty()) {
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs2), factory.getOWLObjectIntersectionOf(equiv1));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(equiv1), factory.getOWLObjectIntersectionOf(subs2));
+            list.add(ax1);
+            list.add(ax2);
         }
         if (!subs1.isEmpty() && !equiv2.isEmpty()) {
-            OWLSubClassOfAxiom ax = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(equiv2), factory.getOWLObjectIntersectionOf(subs1));
-            list.add(ax);
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(equiv2), factory.getOWLObjectIntersectionOf(subs1));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs1), factory.getOWLObjectIntersectionOf(equiv2));
+            list.add(ax1);
+            list.add(ax2);
         }
-        if (!equiv1.isEmpty() && !subs2.isEmpty()) {
-            OWLSubClassOfAxiom ax = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs2), factory.getOWLObjectIntersectionOf(equiv1));
-            list.add(ax);
+        if (!subs2.isEmpty() && !equiv2.isEmpty()) {
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(equiv2), factory.getOWLObjectIntersectionOf(subs2));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs2), factory.getOWLObjectIntersectionOf(equiv2));
+            list.add(ax1);
+            list.add(ax2);
         }
-
+        if (!equiv1.isEmpty() && !equiv2.isEmpty()) {
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(equiv2), factory.getOWLObjectIntersectionOf(equiv1));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(equiv1), factory.getOWLObjectIntersectionOf(equiv2));
+            list.add(ax1);
+            list.add(ax2);
+        }
         return list;
     }
 
@@ -438,20 +453,40 @@ public class Conversor {
         }
 
         if (!subs1.isEmpty() && !subs2.isEmpty()) {
-            OWLSubClassOfAxiom ax = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(subs2), factory.getOWLObjectUnionOf(subs1));
-            list.add(ax);
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(subs2), factory.getOWLObjectUnionOf(subs1));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(subs1), factory.getOWLObjectUnionOf(subs2));
+            list.add(ax1);
+            list.add(ax2);
         }
-        if (!equiv1.isEmpty() && !equiv2.isEmpty()) {
-            OWLSubClassOfAxiom ax = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(equiv2), factory.getOWLObjectUnionOf(equiv1));
-            list.add(ax);
+        if (!subs1.isEmpty() && !equiv1.isEmpty()) {
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(subs1), factory.getOWLObjectUnionOf(equiv1));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(equiv1), factory.getOWLObjectUnionOf(subs1));
+            list.add(ax1);
+            list.add(ax2);
+        }
+        if (!subs2.isEmpty() && !equiv1.isEmpty()) {
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(subs2), factory.getOWLObjectUnionOf(equiv1));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(equiv1), factory.getOWLObjectUnionOf(subs2));
+            list.add(ax1);
+            list.add(ax2);
         }
         if (!subs1.isEmpty() && !equiv2.isEmpty()) {
-            OWLSubClassOfAxiom ax = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(equiv2), factory.getOWLObjectUnionOf(subs1));
-            list.add(ax);
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(equiv2), factory.getOWLObjectUnionOf(subs1));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(subs1), factory.getOWLObjectUnionOf(equiv2));
+            list.add(ax1);
+            list.add(ax2);
         }
-        if (!equiv1.isEmpty() && !subs2.isEmpty()) {
-            OWLSubClassOfAxiom ax = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(subs2), factory.getOWLObjectUnionOf(equiv1));
-            list.add(ax);
+        if (!subs2.isEmpty() && !equiv2.isEmpty()) {
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(equiv2), factory.getOWLObjectUnionOf(subs2));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(subs2), factory.getOWLObjectUnionOf(equiv2));
+            list.add(ax1);
+            list.add(ax2);
+        }
+        if (!equiv1.isEmpty() && !equiv2.isEmpty()) {
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(equiv2), factory.getOWLObjectUnionOf(equiv1));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(equiv1), factory.getOWLObjectUnionOf(equiv2));
+            list.add(ax1);
+            list.add(ax2);
         }
 
         return list;
@@ -482,6 +517,77 @@ public class Conversor {
     }
 
     private List<OWLAxiom> isa(Set<OWLAxiom> listEsq, Set<OWLAxiom> listDir) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<OWLAxiom> list = new ArrayList<OWLAxiom>();
+
+        Iterator<OWLAxiom> leftIt = listEsq.iterator();
+        Set<OWLClassExpression> subs1 = new HashSet<>();
+        Set<OWLClassExpression> equiv1 = new HashSet<>();
+        while (leftIt.hasNext()) {
+            OWLAxiom objOutter = leftIt.next();
+            if (objOutter.getAxiomType() == AxiomType.SUBCLASS_OF) {
+                OWLClassExpression cc = ((OWLSubClassOfAxiom) objOutter).getSubClass();
+                subs1.add(cc);
+            } else if (objOutter.getAxiomType() == AxiomType.EQUIVALENT_CLASSES) {
+                Set<OWLClass> listaEquivalent = ((OWLEquivalentClassesAxiom) objOutter).getNamedClasses();
+                Iterator<OWLClass> it = listaEquivalent.iterator();
+                while (it.hasNext()) {
+                    equiv1.add(it.next());
+                }
+            }
+        }
+        Iterator<OWLAxiom> rightIt = listDir.iterator();
+        Set<OWLClassExpression> subs2 = new HashSet<>();
+        Set<OWLClassExpression> equiv2 = new HashSet<>();
+        while (rightIt.hasNext()) {
+            OWLAxiom objOutter = rightIt.next();
+            if (objOutter.getAxiomType() == AxiomType.SUBCLASS_OF) {
+                OWLClassExpression cc = ((OWLSubClassOfAxiom) objOutter).getSubClass();
+                subs2.add(cc);
+            } else if (objOutter.getAxiomType() == AxiomType.EQUIVALENT_CLASSES) {
+                Set<OWLClass> listaEquivalent = ((OWLEquivalentClassesAxiom) objOutter).getNamedClasses();
+                Iterator<OWLClass> it = listaEquivalent.iterator();
+                while (it.hasNext()) {
+                    equiv2.add(it.next());
+                }
+            }
+        }
+
+        if (!subs1.isEmpty() && !subs2.isEmpty()) {
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs2), factory.getOWLObjectIntersectionOf(subs1));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs1), factory.getOWLObjectIntersectionOf(subs2));
+            list.add(ax1);
+            list.add(ax2);
+        }
+        if (!subs1.isEmpty() && !equiv1.isEmpty()) {
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs1), factory.getOWLObjectIntersectionOf(equiv1));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(equiv1), factory.getOWLObjectIntersectionOf(subs1));
+            list.add(ax1);
+            list.add(ax2);
+        }
+        if (!subs2.isEmpty() && !equiv1.isEmpty()) {
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs2), factory.getOWLObjectIntersectionOf(equiv1));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(equiv1), factory.getOWLObjectIntersectionOf(subs2));
+            list.add(ax1);
+            list.add(ax2);
+        }
+        if (!subs1.isEmpty() && !equiv2.isEmpty()) {
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(equiv2), factory.getOWLObjectIntersectionOf(subs1));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs1), factory.getOWLObjectIntersectionOf(equiv2));
+            list.add(ax1);
+            list.add(ax2);
+        }
+        if (!subs2.isEmpty() && !equiv2.isEmpty()) {
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(equiv2), factory.getOWLObjectIntersectionOf(subs2));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs2), factory.getOWLObjectIntersectionOf(equiv2));
+            list.add(ax1);
+            list.add(ax2);
+        }
+        if (!equiv1.isEmpty() && !equiv2.isEmpty()) {
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(equiv2), factory.getOWLObjectIntersectionOf(equiv1));
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(equiv1), factory.getOWLObjectIntersectionOf(equiv2));
+            list.add(ax1);
+            list.add(ax2);
+        }
+        return list;
     }
 }
