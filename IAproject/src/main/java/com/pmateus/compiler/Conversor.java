@@ -41,6 +41,8 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
+import org.semanticweb.owlapi.model.OWLIndividual;
+import org.semanticweb.owlapi.model.OWLObjectOneOf;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyDomainAxiom;
 import org.semanticweb.owlapi.model.OWLObjectPropertyRangeAxiom;
@@ -156,6 +158,7 @@ public class Conversor {
                 || op.equals(Util.ISA)
                 || op.equals(Util.EQUIVALENT)
                 || op.equals(Util.ALL)
+                || op.equals(Util.ONLY)
                 || op.equals(Util.SOME)) {
             list = new ArrayList<>();
 
@@ -258,6 +261,27 @@ public class Conversor {
                     } else {
                         OWLObjectProperty property = factory.getOWLObjectProperty(IRI.create(PROJECT_IRI + term[0]));
                         OWLClassExpression exp = factory.getOWLObjectAllValuesFrom(property, dirClass);
+                        OWLSubClassOfAxiom axFinal = factory.getOWLSubClassOfAxiom(dirClass, exp);
+                        list.add(axFinal);
+                    }
+
+                    break;
+                }
+                case Util.ONLY: {
+                    if (listEsq != null && listDir == null) {
+                        OWLIndividual individual = factory.getOWLNamedIndividual(IRI.create(PROJECT_IRI + term[2]));
+                        List<OWLAxiom> listaa = only(listEsq, individual);
+                        list.addAll(listaa);
+                    } else if (listDir != null && listEsq == null) {
+                        OWLIndividual individual = factory.getOWLNamedIndividual(IRI.create(PROJECT_IRI + term[0]));
+                        List<OWLAxiom> listaa = only(listDir, individual);
+                        list.addAll(listaa);
+                    } else if (listEsq != null && listDir != null) {
+                        List<OWLAxiom> listaa = only(listEsq, listDir);
+                        list.addAll(listaa);
+                    } else {
+                        OWLIndividual individual = factory.getOWLNamedIndividual(IRI.create(PROJECT_IRI + term[0]));
+                        OWLClassExpression exp = factory.getOWLObjectOneOf(individual);
                         OWLSubClassOfAxiom axFinal = factory.getOWLSubClassOfAxiom(dirClass, exp);
                         list.add(axFinal);
                     }
@@ -651,11 +675,42 @@ public class Conversor {
         return list;
     }
 
+    private List<OWLAxiom> only(Set<OWLAxiom> lista, OWLIndividual individual) {
+        List<OWLAxiom> list = new ArrayList<OWLAxiom>();
+        Iterator<OWLAxiom> leftIt = lista.iterator();
+
+        Set<OWLClassExpression> subs = new HashSet<>();
+        while (leftIt.hasNext()) {
+            OWLAxiom objOutter = leftIt.next();
+            if (objOutter.getAxiomType() == AxiomType.SUBCLASS_OF) {
+                OWLClassExpression cc = ((OWLSubClassOfAxiom) objOutter).getSubClass();
+                subs.add(cc);
+            } else if (objOutter.getAxiomType() == AxiomType.EQUIVALENT_CLASSES) {
+                Set<OWLClass> listaEquivalent = ((OWLEquivalentClassesAxiom) objOutter).getNamedClasses();
+                Iterator<OWLClass> it = listaEquivalent.iterator();
+                while (it.hasNext()) {
+                    subs.add(it.next());
+                }
+            }
+        }
+        if (!subs.isEmpty()) {
+            OWLClassExpression exp = factory.getOWLObjectOneOf(individual);
+            OWLSubClassOfAxiom axFinal = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs), exp);
+            list.add(axFinal);
+        }
+
+        return list;
+    }
+
     private List<OWLAxiom> some(Set<OWLAxiom> listEsq, Set<OWLAxiom> listDir) throws ConversorException {
-        throw new ConversorException("Property cannot be used as like recursive class."); //To change body of generated methods, choose Tools | Templates.
+        throw new ConversorException("Property cannot be used like a class.");
     }
 
     private List<OWLAxiom> all(Set<OWLAxiom> listEsq, Set<OWLAxiom> listDir) throws ConversorException {
-        throw new ConversorException("Property cannot be used as like recursive class."); //To change body of generated methods, choose Tools | Templates.
+        throw new ConversorException("Property cannot be used like a class.");
+    }
+
+    private List<OWLAxiom> only(Set<OWLAxiom> listEsq, Set<OWLAxiom> listDir) throws ConversorException {
+        throw new ConversorException("Individual cannot be used like a class.");
     }
 }
