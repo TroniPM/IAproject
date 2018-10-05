@@ -94,7 +94,6 @@ public class Conversor {
 
             String str = in.label.replaceAll(" +", " ").trim();
 
-//            System.out.println(str);
             Set<OWLAxiom> list = new HashSet<OWLAxiom>();
             StringTokenizer st = new StringTokenizer(str);
 
@@ -140,11 +139,9 @@ public class Conversor {
         Set<OWLAxiom> listEsq = null, listDir = null;
         for (CompiladorToken in : tokens) {
             if (in.id.equals(term[0])) {
-                System.out.println("if (in.id.equals(term[0]))  >>>>>> " + in.toString() + "\tTERM(0): " + term[0] + " | TERM(2): " + term[2]);
                 listEsq = exec(in);
             }
             if (in.id.equals(term[2])) {
-                System.out.println("if (in.id.equals(term[2]))  <<<<<< " + in.toString() + "\tTERM(0): " + term[0] + " | TERM(2): " + term[2]);
                 listDir = exec(in);
             }
         }
@@ -274,11 +271,7 @@ public class Conversor {
 //        cmd = substituir3(cmd, Util.ALL);
 //        cmd = substituir3(cmd, Util.ONLY);
                 default: {
-                    try {
-                        throw new Exception("Erro ao procurar por operação a ser realizada.");
-                    } catch (Exception ex) {
-                        Logger.getLogger(Conversor.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    throw new ConversorException("Erro ao procurar por operação a ser realizada.");
                 }
             }
             java.util.logging.Logger.getLogger(Conversor.class.getName()).log(Level.INFO, "OK!" + token.string());
@@ -286,15 +279,11 @@ public class Conversor {
             return new HashSet<OWLAxiom>(list);
 
         } else {
-            try {
-                throw new Exception("Operação não permitida: " + op);
-            } catch (Exception ex) {
-                Logger.getLogger(Conversor.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            throw new ConversorException("Operação não permitida: " + op);
         }
-        java.util.logging.Logger.getLogger(Conversor.class.getName()).log(Level.INFO, "NOT OK!!" + token.string());
+//        java.util.logging.Logger.getLogger(Conversor.class.getName()).log(Level.INFO, "NOT OK!!" + token.string());
 
-        return null;
+//        return null;
     }
 
     public void print() {

@@ -300,7 +300,7 @@ public class Sintatic {
             for (String out : Util.COMMANDS_LIST) {
                 if (in.equalsIgnoreCase(out)) {
 
-                    a = a.replace(in, " " + out + " ");
+                    a = a.replace(" " + in + " ", " " + out + " ");
                 }
             }
         }
