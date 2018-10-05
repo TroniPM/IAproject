@@ -153,11 +153,11 @@ public class Sintatic {
 //    public static final String MIN = "min";
 //    public static final String MAX = "max";
 //    public static final String EXACTLY = "exactly";
-        cmd = substituir3(cmd, Util.AND);
-        cmd = substituir3(cmd, Util.OR);
         cmd = substituir3(cmd, Util.SOME);
         cmd = substituir3(cmd, Util.ALL);
         cmd = substituir3(cmd, Util.ONLY);
+        cmd = substituir3(cmd, Util.AND);
+        cmd = substituir3(cmd, Util.OR);
         cmd = substituir3(cmd, Util.ISA);
         cmd = substituir3(cmd, Util.EQUIVALENT);
         cmd = substituir3(cmd, Util.THAT);
@@ -299,6 +299,7 @@ public class Sintatic {
         for (String in : a.split(" ")) {
             for (String out : Util.COMMANDS_LIST) {
                 if (in.equalsIgnoreCase(out)) {
+
                     a = a.replace(in, " " + out + " ");
                 }
             }
