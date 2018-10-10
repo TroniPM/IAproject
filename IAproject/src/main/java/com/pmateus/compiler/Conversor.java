@@ -663,7 +663,7 @@ public class Conversor {
     }
 
     private List<OWLAxiom> only(Set<OWLAxiom> listEsq, Set<OWLAxiom> listDir) throws ConversorException {
-        throw new ConversorException("Individual cannot be used like a class.");
+        throw new ConversorException("Property cannot be used like a class.");
     }
 
     private List<OWLAxiom> equivalent(Set<OWLAxiom> lista, OWLClass classe) {
