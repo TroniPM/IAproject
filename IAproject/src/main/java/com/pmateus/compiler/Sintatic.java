@@ -41,19 +41,18 @@ public class Sintatic {
         return sintatic;
     }
 
-    public static void main(String[] args) {
-//        String source = "Person AND not (hasChild SOME (Person AND (hasChild ONLY Man) AND (hasChild SOME Person)));;";
-//        String source = " Lens and (hasMinEffectiveFocalLength value 35) and (hasMaxEffectiveFocalLength value 120)";
-        String source = "Professor IsA not (hasPet some Dog) or not (hasPet only Cat) and not (hasPet some GoldFish) and (hasPet only (not Bird))";
-        try {
-            System.out.println(source);
-            boolean bb = Sintatic.getInstance().init(source, null);
-            System.out.println("Sintatic: " + bb);
-        } catch (SintaticAnalyzerException ex) {
-            Logger.getLogger(Sintatic.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
+//    public static void main(String[] args) {
+////        String source = "Person AND not (hasChild SOME (Person AND (hasChild ONLY Man) AND (hasChild SOME Person)));;";
+////        String source = " Lens and (hasMinEffectiveFocalLength value 35) and (hasMaxEffectiveFocalLength value 120)";
+//        String source = "Professor IsA not (hasPet some Dog) or not (hasPet only Cat) and not (hasPet some GoldFish) and (hasPet only (not Bird))";
+//        try {
+//            System.out.println(source);
+//            boolean bb = Sintatic.getInstance().init(source, null);
+//            System.out.println("Sintatic: " + bb);
+//        } catch (SintaticAnalyzerException ex) {
+//            Logger.getLogger(Sintatic.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
     public boolean init(String source, JFramePrincipal jFrameMain) throws SintaticAnalyzerException {
         this.jFrameMain = jFrameMain;
         tokens = new ArrayList<>();

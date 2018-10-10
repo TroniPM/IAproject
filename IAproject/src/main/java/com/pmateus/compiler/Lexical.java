@@ -39,17 +39,17 @@ public class Lexical {
         return lexical;
     }
 
-    public static void main(String[] args) {
-        String source = "Person AND hasChild SOME (Person AND (hasChild ONLY Man) AND (hasChild SOME Person));;";
-
-        try {
-            boolean aa = Lexical.getInstance().init(source, null);
-            Sintatic.getInstance().init(source, null);
-            System.out.println("Lexical: " + aa);
-        } catch (LexicalAnalyzerException | SintaticAnalyzerException ex) {
-            Logger.getLogger(Lexical.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+//    public static void main(String[] args) {
+//        String source = "Person AND hasChild SOME (Person AND (hasChild ONLY Man) AND (hasChild SOME Person));;";
+//
+//        try {
+//            boolean aa = Lexical.getInstance().init(source, null);
+//            Sintatic.getInstance().init(source, null);
+//            System.out.println("Lexical: " + aa);
+//        } catch (LexicalAnalyzerException | SintaticAnalyzerException ex) {
+//            Logger.getLogger(Lexical.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
 
     public boolean init(String source, JFramePrincipal jFrameMain) throws LexicalAnalyzerException {
         System.out.println(source);
