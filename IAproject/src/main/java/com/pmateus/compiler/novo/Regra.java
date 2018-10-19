@@ -19,9 +19,9 @@ package com.pmateus.compiler.novo;
  *
  * @author Matt
  */
-public class RegraProducao {
+public class Regra {
 
-    public RegraProducaoEnum tipo = null;
+    public RegraEnum tipo = null;
     public boolean dontPrintException = false;
 
 //    public String method = null;
@@ -38,16 +38,16 @@ public class RegraProducao {
 //        this.tipo = Regras.parse(tipo);
 //        this.dontPrintException = dontPrintException;
 //    }
-    public RegraProducao(int tipo) {
-        this.tipo = RegraProducaoEnum.parse(tipo);;
+    public Regra(int tipo) {
+        this.tipo = RegraEnum.parse(tipo);;
     }
 
-    public RegraProducao(RegraProducaoEnum regra) {
+    public Regra(RegraEnum regra) {
         this.tipo = regra;
     }
 
-    public RegraProducao(int tipo, boolean dontPrintException) {
-        this.tipo = RegraProducaoEnum.parse(tipo);
+    public Regra(int tipo, boolean dontPrintException) {
+        this.tipo = RegraEnum.parse(tipo);
         this.dontPrintException = dontPrintException;
     }
 

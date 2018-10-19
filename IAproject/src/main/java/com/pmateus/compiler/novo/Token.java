@@ -29,7 +29,7 @@ public class Token {
     public int line = 0;
     public int position = 0;
 //    public String scope = null;
-    public String other = null;
+//    public String other = null;
 
     public boolean wasMapped = false;
 
@@ -44,7 +44,7 @@ public class Token {
         t.line = line;
         t.position = position;
 //        t.scope = scope;
-        t.other = other;
+//        t.other = other;
 
         return t;
     }
@@ -65,11 +65,11 @@ public class Token {
 //        this.lexeme = lexeme;
 //        this.description1 = description;
 //    }
-    public Token(int type, String lexeme, String description, String other) {
+    public Token(int type, String lexeme, String description) {
         this.type = TokenEnum.parse(type);
         this.lexeme = lexeme;
         this.description1 = description;
-        this.other = other;
+//        this.other = other;
     }
 
     public void print() {
@@ -83,7 +83,7 @@ public class Token {
         System.out.println("--------------------------------");
     }
 
-    public String getData() {
+    public String toString() {
         String a = "";
         a += ("\nTOKEN: " + type);
         a += ("\nLEXEMA: " + lexeme);

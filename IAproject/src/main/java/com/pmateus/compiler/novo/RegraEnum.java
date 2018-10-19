@@ -19,12 +19,12 @@ package com.pmateus.compiler.novo;
  *
  * @author Matt
  */
-public enum RegraProducaoEnum {
-    DEF(1), CLASSE(2), RES_MAIN(3), RES_CLASSE(4), RES_PROP(5);
+public enum RegraEnum {
+    DEF(1), CLASSE(2), RES_MAIN(3), RES_CLASSE(4), RES_PROP(5), PONTO_VIRGULA(6);
 
     private final int valor;
 
-    RegraProducaoEnum(int valorOpcao) {
+    RegraEnum(int valorOpcao) {
         valor = valorOpcao;
     }
 
@@ -32,25 +32,28 @@ public enum RegraProducaoEnum {
         return valor;
     }
 
-    public static RegraProducaoEnum parse(Integer id) {
-        RegraProducaoEnum job = null;
+    public static RegraEnum parse(Integer id) {
+        RegraEnum job = null;
 
         if (null != id) {
             switch (id) {
                 case 1:
-                    job = RegraProducaoEnum.DEF;
+                    job = RegraEnum.DEF;
                     break;
                 case 2:
-                    job = RegraProducaoEnum.CLASSE;
+                    job = RegraEnum.CLASSE;
                     break;
                 case 3:
-                    job = RegraProducaoEnum.RES_MAIN;
+                    job = RegraEnum.RES_MAIN;
                     break;
                 case 4:
-                    job = RegraProducaoEnum.RES_CLASSE;
+                    job = RegraEnum.RES_CLASSE;
                     break;
                 case 5:
-                    job = RegraProducaoEnum.RES_PROP;
+                    job = RegraEnum.RES_PROP;
+                    break;
+                case 6:
+                    job = RegraEnum.PONTO_VIRGULA;
                     break;
                 default:
                     break;
@@ -62,16 +65,18 @@ public enum RegraProducaoEnum {
 
     @Override
     public String toString() {
-        if (valor == RegraProducaoEnum.DEF.getValor()) {
+        if (valor == RegraEnum.DEF.getValor()) {
             return "DEF";
-        } else if (valor == RegraProducaoEnum.CLASSE.getValor()) {
+        } else if (valor == RegraEnum.CLASSE.getValor()) {
             return "CLASSE";
-        } else if (valor == RegraProducaoEnum.RES_MAIN.getValor()) {
+        } else if (valor == RegraEnum.RES_MAIN.getValor()) {
             return "RES_MAIN";
-        } else if (valor == RegraProducaoEnum.RES_CLASSE.getValor()) {
+        } else if (valor == RegraEnum.RES_CLASSE.getValor()) {
             return "RES_CLASSE";
-        } else if (valor == RegraProducaoEnum.RES_PROP.getValor()) {
+        } else if (valor == RegraEnum.RES_PROP.getValor()) {
             return "RES_PROP";
+        } else if (valor == RegraEnum.PONTO_VIRGULA.getValor()) {
+            return "PONTO_VIRGULA";
         }
 
         return null;

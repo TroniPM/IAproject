@@ -21,8 +21,12 @@ package com.pmateus.compiler.novo;
  */
 public enum TokenEnum {
     END(100),
-    IDENTIFIER(98),
     NUMBER(99),
+    IDENTIFIER(98),
+    MODIFIER_ALL(97),//MEANS TOKEN IS ONE OF: {"and", "or" "isa", "equivalent", "that", "some", "all", "only", "value", "min", "max", "exactly"}
+    MODIFIER_CLASS(96),//MEANS TOKEN IS ONE OF: {"and", "or" "isa", "equivalent", "that"}
+    MODIFIER_PROPERTY(95),//MEANS TOKEN IS ONE OF: {"some", "all", "only"};
+    MODIFIER_INDIVIDUAL(94),//MEANS TOKEN IS ONE OF: {"value", "min", "max", "exactly"};
     //negacao
     //	{"not"};
     NOT(1),
@@ -56,6 +60,18 @@ public enum TokenEnum {
 
         if (null != id) {
             switch (id) {
+                case 94:
+                    job = TokenEnum.MODIFIER_INDIVIDUAL;
+                    break;
+                case 95:
+                    job = TokenEnum.MODIFIER_PROPERTY;
+                    break;
+                case 96:
+                    job = TokenEnum.MODIFIER_CLASS;
+                    break;
+                case 97:
+                    job = TokenEnum.MODIFIER_ALL;
+                    break;
                 case 98:
                     job = TokenEnum.IDENTIFIER;
                     break;
@@ -253,8 +269,21 @@ public enum TokenEnum {
             return "NUMBER";
         } else if (valor == TokenEnum.IDENTIFIER.getValor()) {
             return "IDENTIFIER";
+        } else if (valor == TokenEnum.PONTO_VIRGULA.getValor()) {
+            return "PONTO_VIRGULA";
+        } else if (valor == TokenEnum.PARENTESE_ABRIR.getValor()) {
+            return "PARENTESE_ABRIR";
+        } else if (valor == TokenEnum.PARENTESE_FECHAR.getValor()) {
+            return "PARENTESE_FECHAR";
+        } else if (valor == TokenEnum.CHAVES_ABRIR.getValor()) {
+            return "CHAVES_ABRIR";
+        } else if (valor == TokenEnum.CHAVES_FECHAR.getValor()) {
+            return "CHAVES_FECHAR";
+        } else if (valor == TokenEnum.COLCHETES_ABRIR.getValor()) {
+            return "COLCHETES_ABRIR";
+        } else if (valor == TokenEnum.COLCHETES_FECHAR.getValor()) {
+            return "COLCHETES_FECHAR";
         }
-
         return null;
     }
 }
