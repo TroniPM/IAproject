@@ -20,7 +20,12 @@ package com.pmateus.compiler.novo;
  * @author Matt
  */
 public enum RegraEnum {
-    DEF(1), CLASSE(2), RES_MAIN(3), RES_CLASSE(4), RES_PROP(5), PONTO_VIRGULA(6);
+    DEF(1), CLASSE(2), RES_MAIN(3), RES_CLASSE(4), RES_PROP(5), PONTO_VIRGULA(6),
+    MODIFIER_ALL(50),//MEANS TOKEN IS ONE OF: {"and", "or" "isa", "equivalent", "that", "some", "all", "only", "value", "min", "max", "exactly"}
+    MODIFIER_CLASS(51),//MEANS TOKEN IS ONE OF: {"and", "or" "isa", "equivalent", "that"}
+    MODIFIER_PROPERTY(52),//MEANS TOKEN IS ONE OF: {"some", "all", "only"};
+    MODIFIER_INDIVIDUAL(53)//MEANS TOKEN IS ONE OF: {"value", "min", "max", "exactly"};
+    ;
 
     private final int valor;
 
@@ -55,6 +60,18 @@ public enum RegraEnum {
                 case 6:
                     job = RegraEnum.PONTO_VIRGULA;
                     break;
+                case 50:
+                    job = RegraEnum.MODIFIER_ALL;
+                    break;
+                case 51:
+                    job = RegraEnum.MODIFIER_CLASS;
+                    break;
+                case 52:
+                    job = RegraEnum.MODIFIER_PROPERTY;
+                    break;
+                case 53:
+                    job = RegraEnum.MODIFIER_INDIVIDUAL;
+                    break;
                 default:
                     break;
             }
@@ -77,8 +94,15 @@ public enum RegraEnum {
             return "RES_PROP";
         } else if (valor == RegraEnum.PONTO_VIRGULA.getValor()) {
             return "PONTO_VIRGULA";
+        } else if (valor == RegraEnum.MODIFIER_ALL.getValor()) {
+            return "MODIFIER_ALL";
+        } else if (valor == RegraEnum.MODIFIER_CLASS.getValor()) {
+            return "MODIFIER_CLASS";
+        } else if (valor == RegraEnum.MODIFIER_PROPERTY.getValor()) {
+            return "MODIFIER_PROPERTY";
+        } else if (valor == RegraEnum.MODIFIER_INDIVIDUAL.getValor()) {
+            return "MODIFIER_INDIVIDUAL";
         }
-
         return null;
     }
 }

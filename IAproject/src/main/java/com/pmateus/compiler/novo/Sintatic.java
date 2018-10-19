@@ -15,7 +15,8 @@ public class Sintatic {
         String teste = "";
 //        teste += "Person isa not Racional;\n";
 //        teste += "Human equivalent not(Racional or Crazy);\n";
-        teste += "not(Racional or Crazy);\n";
+//        teste += " Racional or Crazy ;\n";
+        teste += "nOr ( Racional or Crazy and not Matus some Racional);\n";
 //        teste += "Human isa Racional and Crazy;\n";
 //        teste += "Human equivalent (Racional and Crazy) or (Dog and Irational);\n";
 //        teste += "Human isa (Racional or Crazy) and (Dog or Irational);\n";
@@ -64,6 +65,10 @@ public class Sintatic {
 
     private boolean lookAhead(Token get, TokenEnum get0) {
         return get.type == get0;
+    }
+
+    private boolean lookAhead(Regra get, RegraEnum get0) {
+        return get.tipo == get0;
     }
 
     private void printStack() {
@@ -119,13 +124,13 @@ public class Sintatic {
 
         for (int i = 0; i < tokensLexical.size(); i++) {
             Object tokenDaPilha = getObjectFromStack();
-            System.out.println(stackState);
             if (tokenDaPilha instanceof Token) {
 
                 Token o1 = (Token) tokenDaPilha;
                 saveStackState(o1.type.toString());
 
                 if (tokensLexical.get(i).type != o1.type) {
+                    System.out.println(stackState);
                     System.out.println(o1.toString());
                     System.out.println("<><><><><><><><><><><><><><><><><><><><>");
                     System.out.println(tokensLexical.get(i).toString());
@@ -138,48 +143,95 @@ public class Sintatic {
             } else if (tokenDaPilha instanceof Regra) {
                 Regra o1 = (Regra) tokenDaPilha;
                 saveStackState(o1.tipo.toString());
-//                addToStack(new RegraProducao("escopo"));
-//                addToStack(new Token(8, ";", ";"));
-//                addToStack(new Token(5, ")", "false, true, identificador, constante, )", "P" + String.valueOf(label)));
-//                addToStack(new RegraProducao("printar_sec"));
-//                addToStack(new Token(4, "(", "(", "P" + String.valueOf(label)));
-//                addToStack(new Token(27, "print", spe));
                 if (o1.tipo == RegraEnum.DEF) {
-                    if (tokensLexical.get(i).type == TokenEnum.NOT) {
-                        println("if (lookAhead(tokensLexical.get(i + 1), TokenEnum.NOT))");
+                    if (tokensLexical.get(i).type == TokenEnum.NOR) {
+                        println("if (tokensLexical.get(i).type == TokenEnum.NOR)");
                         addToStack(new Regra(RegraEnum.PONTO_VIRGULA));
                         addToStack(new Token(TokenEnum.PARENTESE_FECHAR));
                         addToStack(new Regra(RegraEnum.DEF));
                         addToStack(new Token(TokenEnum.PARENTESE_ABRIR));
-                        addToStack(new Token(TokenEnum.NOT));
+                        addToStack(new Token(TokenEnum.NOR));
                     } else if (tokensLexical.get(i).type == TokenEnum.PARENTESE_ABRIR) {
-                        println("if (lookAhead(tokensLexical.get(i + 1), TokenEnum.PARENTESE_ABRIR))");
+                        println("if (tokensLexical.get(i).type == TokenEnum.PARENTESE_ABRIR)");
                         addToStack(new Regra(RegraEnum.PONTO_VIRGULA));
                         addToStack(new Token(TokenEnum.PARENTESE_FECHAR));
                         addToStack(new Regra(RegraEnum.DEF));
                         addToStack(new Token(TokenEnum.PARENTESE_ABRIR));
-                    } else if (tokensLexical.get(i).type == TokenEnum.IDENTIFIER) {
-                        println("if (lookAhead(tokensLexical.get(i + 1), TokenEnum.IDENTIFIER))");
+                    } else if (tokensLexical.get(i).type == TokenEnum.IDENTIFIER
+                            && (lookAhead(tokensLexical.get(i + 1), TokenEnum.OR)
+                            || lookAhead(tokensLexical.get(i + 1), TokenEnum.ISA)
+                            || lookAhead(tokensLexical.get(i + 1), TokenEnum.EQUIVALENT)
+                            || lookAhead(tokensLexical.get(i + 1), TokenEnum.THAT)
+                            || lookAhead(tokensLexical.get(i + 1), TokenEnum.SOME)
+                            || lookAhead(tokensLexical.get(i + 1), TokenEnum.ALL)
+                            || lookAhead(tokensLexical.get(i + 1), TokenEnum.ONLY)
+                            || lookAhead(tokensLexical.get(i + 1), TokenEnum.VALUE)
+                            || lookAhead(tokensLexical.get(i + 1), TokenEnum.MIN)
+                            || lookAhead(tokensLexical.get(i + 1), TokenEnum.MAX)
+                            || lookAhead(tokensLexical.get(i + 1), TokenEnum.EXACTLY)
+                            || lookAhead(tokensLexical.get(i + 1), TokenEnum.AND)) //                            || tokensLexical.get(i).type == TokenEnum.NOT
+                            //                            && lookAhead(tokensLexical.get(i + 1), TokenEnum.IDENTIFIER)
+                            ) {
+                        println("if (tokensLexical.get(i).type == TokenEnum.IDENTIFIER) + LOOKAHEAD(MODIFICADORES)");
                         addToStack(new Regra(RegraEnum.PONTO_VIRGULA));
                         addToStack(new Regra(RegraEnum.DEF));
-                        addToStack(new Token(TokenEnum.MODIFIER_ALL));
+                        addToStack(new Regra(RegraEnum.MODIFIER_ALL));
                         addToStack(new Regra(RegraEnum.CLASSE));
-                    } else if (tokensLexical.get(i).type == TokenEnum.PONTO_VIRGULA) {
-                        println("if (lookAhead(tokensLexical.get(i + 1), TokenEnum.PONTO_VIRGULA))");
+                    } else if (tokensLexical.get(i).type == TokenEnum.IDENTIFIER) {
+                        println("if (tokensLexical.get(i).type == TokenEnum.IDENTIFIER)");
                         addToStack(new Regra(RegraEnum.PONTO_VIRGULA));
                         addToStack(new Regra(RegraEnum.CLASSE));
                     } else {
-                        throw new SintaticAnalyzerException(tokensLexical.get(i), "NOT, (, IDENTIFIER");
+                        println(stackState);
+                        throw new SintaticAnalyzerException(tokensLexical.get(i), "NOR, (, IDENTIFIER");
+                    }
+                } else if (o1.tipo == RegraEnum.CLASSE) {
+                    if (tokensLexical.get(i).type == TokenEnum.IDENTIFIER) {
+                        addToStack(new Token(TokenEnum.IDENTIFIER));
+                    } else if (tokensLexical.get(i).type == TokenEnum.NOT && lookAhead(tokensLexical.get(i + 1), TokenEnum.IDENTIFIER)) {
+                        addToStack(new Token(TokenEnum.IDENTIFIER));
+                        addToStack(new Token(TokenEnum.NOT));
+                    } else {
+                        println(stackState);
+                        throw new SintaticAnalyzerException(tokensLexical.get(i), "NOT, IDENTIFIER");
+                    }
+                } else if (o1.tipo == RegraEnum.PONTO_VIRGULA) {
+                    if (tokensLexical.get(i).type == TokenEnum.PONTO_VIRGULA) {
+                        addToStack(new Token(TokenEnum.PONTO_VIRGULA));
+                    } else {
+                        //PODE GERAR VAZIO, então não printar erro
+                    }
+
+                } else if (o1.tipo == RegraEnum.MODIFIER_ALL) {
+                    if (tokensLexical.get(i).type == TokenEnum.AND) {
+                        addToStack(new Token(TokenEnum.AND));
+                    } else if (tokensLexical.get(i).type == TokenEnum.OR) {
+                        addToStack(new Token(TokenEnum.OR));
+                    } else if (tokensLexical.get(i).type == TokenEnum.ISA) {
+                        addToStack(new Token(TokenEnum.ISA));
+                    } else if (tokensLexical.get(i).type == TokenEnum.EQUIVALENT) {
+                        addToStack(new Token(TokenEnum.EQUIVALENT));
+                    } else if (tokensLexical.get(i).type == TokenEnum.THAT) {
+                        addToStack(new Token(TokenEnum.THAT));
+                    } else if (tokensLexical.get(i).type == TokenEnum.SOME) {
+                        addToStack(new Token(TokenEnum.SOME));
+                    } else if (tokensLexical.get(i).type == TokenEnum.ALL) {
+                        addToStack(new Token(TokenEnum.ALL));
+                    } else if (tokensLexical.get(i).type == TokenEnum.ONLY) {
+                        addToStack(new Token(TokenEnum.ONLY));
+                    } else if (tokensLexical.get(i).type == TokenEnum.VALUE) {
+                        addToStack(new Token(TokenEnum.VALUE));
+                    } else if (tokensLexical.get(i).type == TokenEnum.MIN) {
+                        addToStack(new Token(TokenEnum.MIN));
+                    } else if (tokensLexical.get(i).type == TokenEnum.MAX) {
+                        addToStack(new Token(TokenEnum.MAX));
+                    } else if (tokensLexical.get(i).type == TokenEnum.EXACTLY) {
+                        addToStack(new Token(TokenEnum.EXACTLY));
+                    } else {
+                        println(stackState);
+                        throw new SintaticAnalyzerException(tokensLexical.get(i), "), AND, OR, ISA, EQUIVALENT, THAT, SOME, ALL, ONLY, VALUE, MIN, MAX, EXACTLY");
                     }
                 }
-//                else if (o1.tipo == RegraProducaoEnum.PONTO_VIRGULA) {
-//                    if (lookAhead(tokensLexical.get(i + 1), TokenEnum.PONTO_VIRGULA)) {
-//                        addToStack(new Token(TokenEnum.PONTO_VIRGULA));
-//                    } else {
-//                        //PODE GERAR VAZIO, então não printar erro
-//                    }
-//
-//                }
                 i--;
             }
 //            else if (tokenDaPilha instanceof RegraProducao) {
@@ -781,8 +833,6 @@ public class Sintatic {
 //                }
 //            }
         }
-
-        System.out.println(stackState);
     }
 
     /**

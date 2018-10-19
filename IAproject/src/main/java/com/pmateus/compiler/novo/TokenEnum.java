@@ -23,13 +23,10 @@ public enum TokenEnum {
     END(100),
     NUMBER(99),
     IDENTIFIER(98),
-    MODIFIER_ALL(97),//MEANS TOKEN IS ONE OF: {"and", "or" "isa", "equivalent", "that", "some", "all", "only", "value", "min", "max", "exactly"}
-    MODIFIER_CLASS(96),//MEANS TOKEN IS ONE OF: {"and", "or" "isa", "equivalent", "that"}
-    MODIFIER_PROPERTY(95),//MEANS TOKEN IS ONE OF: {"some", "all", "only"};
-    MODIFIER_INDIVIDUAL(94),//MEANS TOKEN IS ONE OF: {"value", "min", "max", "exactly"};
     //negacao
     //	{"not"};
     NOT(1),
+    NOR(14),
     //classe
     //	{"and", "or" "isa", "equivalent", "that"};
     AND(2), OR(3), ISA(4), EQUIVALENT(5), THAT(6),
@@ -60,18 +57,6 @@ public enum TokenEnum {
 
         if (null != id) {
             switch (id) {
-                case 94:
-                    job = TokenEnum.MODIFIER_INDIVIDUAL;
-                    break;
-                case 95:
-                    job = TokenEnum.MODIFIER_PROPERTY;
-                    break;
-                case 96:
-                    job = TokenEnum.MODIFIER_CLASS;
-                    break;
-                case 97:
-                    job = TokenEnum.MODIFIER_ALL;
-                    break;
                 case 98:
                     job = TokenEnum.IDENTIFIER;
                     break;
@@ -120,6 +105,9 @@ public enum TokenEnum {
                 case 13:
                     job = TokenEnum.EXACTLY;
                     break;
+                case 14:
+                    job = TokenEnum.NOR;
+                    break;
                 case 50:
                     job = TokenEnum.PONTO_VIRGULA;
                     break;
@@ -164,6 +152,9 @@ public enum TokenEnum {
 //                    break;
                 case "NOT":
                     job = TokenEnum.NOT;
+                    break;
+                case "NOR":
+                    job = TokenEnum.NOR;
                     break;
                 case "AND":
                     job = TokenEnum.AND;
@@ -241,6 +232,8 @@ public enum TokenEnum {
     public String toString() {
         if (valor == TokenEnum.NOT.getValor()) {
             return "NOT";
+        } else if (valor == TokenEnum.NOR.getValor()) {
+            return "NOR";
         } else if (valor == TokenEnum.AND.getValor()) {
             return "AND";
         } else if (valor == TokenEnum.OR.getValor()) {
@@ -283,6 +276,8 @@ public enum TokenEnum {
             return "COLCHETES_ABRIR";
         } else if (valor == TokenEnum.COLCHETES_FECHAR.getValor()) {
             return "COLCHETES_FECHAR";
+        } else if (valor == TokenEnum.END.getValor()) {
+            return "END";
         }
         return null;
     }
