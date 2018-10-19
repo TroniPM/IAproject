@@ -20,8 +20,9 @@ package com.pmateus.compiler.novo;
  * @author Matt
  */
 public enum TokenEnum {
-    IDENTIFIER(99),
-    NUMBER(100),
+    END(100),
+    IDENTIFIER(98),
+    NUMBER(99),
     //negacao
     //	{"not"};
     NOT(1),
@@ -55,11 +56,14 @@ public enum TokenEnum {
 
         if (null != id) {
             switch (id) {
-                case 99:
+                case 98:
                     job = TokenEnum.IDENTIFIER;
                     break;
-                case 100:
+                case 99:
                     job = TokenEnum.NUMBER;
+                    break;
+                case 100:
+                    job = TokenEnum.END;
                     break;
                 case 1:
                     job = TokenEnum.NOT;
@@ -138,6 +142,10 @@ public enum TokenEnum {
 
         if (null != id) {
             switch (id) {
+                //Desabilito aqui para não permitir a entrada dessa palavra no codigo fonte
+//                case "END":
+//                    job = TokenEnum.END;
+//                    break;
                 case "NOT":
                     job = TokenEnum.NOT;
                     break;

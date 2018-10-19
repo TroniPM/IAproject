@@ -15,6 +15,8 @@
  */
 package com.pmateus.compiler.exception;
 
+import com.pmateus.compiler.novo.Token;
+
 /**
  *
  * @author Matt
@@ -23,5 +25,14 @@ public class SintaticAnalyzerException extends Exception {
 
     public SintaticAnalyzerException(String message) {
         super(message);
+    }
+
+    public SintaticAnalyzerException(Token l) {
+        super("Unexpected token '" + (l.lexeme) + "' at line " + l.line + " and position " + l.position + ".");
+    }
+
+    public SintaticAnalyzerException(Token l, String expected) {
+        super("Unexpected token '" + (l.lexeme)
+                + "' at line " + l.line + " and position " + l.position + " (expected: '" + expected + "').");
     }
 }

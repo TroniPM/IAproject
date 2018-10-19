@@ -52,17 +52,19 @@ public class Token {
     public Token() {
     }
 
-    public Token(int type, String lexeme) {
-        this.type = TokenEnum.parse(type);
-        this.lexeme = lexeme;
+    public Token(TokenEnum type) {
+        this.type = type;
     }
 
-    public Token(int type, String lexeme, String description) {
-        this.type = TokenEnum.parse(type);
-        this.lexeme = lexeme;
-        this.description1 = description;
-    }
-
+//    public Token(int type, String lexeme) {
+//        this.type = TokenEnum.parse(type);
+//        this.lexeme = lexeme;
+//    }
+//    public Token(int type, String lexeme, String description) {
+//        this.type = TokenEnum.parse(type);
+//        this.lexeme = lexeme;
+//        this.description1 = description;
+//    }
     public Token(int type, String lexeme, String description, String other) {
         this.type = TokenEnum.parse(type);
         this.lexeme = lexeme;
