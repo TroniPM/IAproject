@@ -15,6 +15,8 @@
  */
 package com.pmateus.compiler.exception;
 
+import com.pmateus.compiler.novo.Token;
+
 /**
  *
  * @author Matt
@@ -23,5 +25,9 @@ public class LexicalAnalyzerException extends Exception {
 
     public LexicalAnalyzerException(String message) {
         super(message);
+    }
+
+    public LexicalAnalyzerException(Token l) {
+        super("Unknow token '" + l.lexeme + "' at line " + l.line + " and position " + l.position + ".");
     }
 }
