@@ -31,7 +31,7 @@ public class Lexical {
         new Lexical().init(teste);
     }
 
-    public void init(String sourceCode) throws LexicalAnalyzerException {
+    public ArrayList<Token> init(String sourceCode) throws LexicalAnalyzerException {
         if (sourceCode == null || sourceCode.isEmpty()) {
             throw new LexicalAnalyzerException("Nenhum código fonte informado.");
         }
@@ -39,6 +39,8 @@ public class Lexical {
         this.sourceCode = formatSourceCode(sourceCode);
 
         tokenArray = parser();
+
+        return tokenArray;
     }
 
     private String formatSourceCode(String msg) {
