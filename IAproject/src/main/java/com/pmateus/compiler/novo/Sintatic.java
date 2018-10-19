@@ -13,13 +13,12 @@ public class Sintatic {
 
     public static void main(String[] args) throws LexicalAnalyzerException, SintaticAnalyzerException {
         String teste = "";
+        teste += "nor ( Racional or Crazy and Matus some  Racional and nor (not joao and marcos) and (joao or antonia));\n";
 //        teste += "Person isa not Racional;\n";
-//        teste += "Human equivalent not(Racional or Crazy);\n";
 //        teste += " Racional or Crazy ;\n";
-        teste += "nOr ( Racional or Crazy and Matus some  Racional and nor (not joao and marcos));\n";
 //        teste += "Human isa Racional and Crazy;\n";
 //        teste += "Human equivalent (Racional and Crazy) or (Dog and Irational);\n";
-//        teste += "Human isa (Racional or Crazy) and (Dog or Irational);\n";
+//        teste += "Human isa (Racional or Crazy) and (not Dog or Irational);\n";
 //        teste += "Person equivalent hasPet some Dog;\n";
 //        teste += "Human isa hasPet only Cat;\n";
 //        teste += "Human equivalent Person and (hasPet some Cat);\n";
@@ -117,10 +116,8 @@ public class Sintatic {
         stackState = "";
         iteracao = 1;
 
-//        addToStack(new Token(-1, "$", "FIM DO PROGRAMA ($), <declarar_func>"));
         addToStack(new Token(TokenEnum.END));
         addToStack(new Regra(RegraEnum.DEF));
-//        saveStackState("DEF");
 
         for (int i = 0; i < tokensLexical.size(); i++) {
             Object tokenDaPilha = getObjectFromStack();
@@ -147,6 +144,7 @@ public class Sintatic {
                     if (tokensLexical.get(i).type == TokenEnum.NOR) {
 //                        println("if (tokensLexical.get(i).type == TokenEnum.NOR)");
                         addToStack(new Regra(RegraEnum.PONTO_VIRGULA));
+                        addToStack(new Regra(RegraEnum.DEF2));
                         addToStack(new Token(TokenEnum.PARENTESE_FECHAR));
                         addToStack(new Regra(RegraEnum.DEF));
                         addToStack(new Token(TokenEnum.PARENTESE_ABRIR));
@@ -154,6 +152,7 @@ public class Sintatic {
                     } else if (tokensLexical.get(i).type == TokenEnum.PARENTESE_ABRIR) {
 //                        println("if (tokensLexical.get(i).type == TokenEnum.PARENTESE_ABRIR)");
                         addToStack(new Regra(RegraEnum.PONTO_VIRGULA));
+                        addToStack(new Regra(RegraEnum.DEF2));
                         addToStack(new Token(TokenEnum.PARENTESE_FECHAR));
                         addToStack(new Regra(RegraEnum.DEF));
                         addToStack(new Token(TokenEnum.PARENTESE_ABRIR));
@@ -217,6 +216,26 @@ public class Sintatic {
                         println(stackState);
                         throw new SintaticAnalyzerException(tokensLexical.get(i), "NOT, IDENTIFIER");
                     }
+                } else if (o1.tipo == RegraEnum.DEF2) {
+                    if (tokensLexical.get(i).type == TokenEnum.AND
+                            || tokensLexical.get(i).type == TokenEnum.OR
+                            || tokensLexical.get(i).type == TokenEnum.ISA
+                            || tokensLexical.get(i).type == TokenEnum.EQUIVALENT
+                            || tokensLexical.get(i).type == TokenEnum.THAT
+                            || tokensLexical.get(i).type == TokenEnum.SOME
+                            || tokensLexical.get(i).type == TokenEnum.ALL
+                            || tokensLexical.get(i).type == TokenEnum.ONLY
+                            || tokensLexical.get(i).type == TokenEnum.VALUE
+                            || tokensLexical.get(i).type == TokenEnum.MIN
+                            || tokensLexical.get(i).type == TokenEnum.MAX
+                            || tokensLexical.get(i).type == TokenEnum.EXACTLY
+                            || tokensLexical.get(i).type == TokenEnum.AND) {
+                        addToStack(new Regra(RegraEnum.DEF));
+                        addToStack(new Regra(RegraEnum.MODIFIER_ALL));
+                    } else {
+                        //PODE GERAR VAZIO, então não printar erro
+                    }
+
                 } else if (o1.tipo == RegraEnum.PONTO_VIRGULA) {
                     if (tokensLexical.get(i).type == TokenEnum.PONTO_VIRGULA) {
                         addToStack(new Token(TokenEnum.PONTO_VIRGULA));
@@ -251,7 +270,7 @@ public class Sintatic {
                         addToStack(new Token(TokenEnum.EXACTLY));
                     } else {
                         println(stackState);
-                        throw new SintaticAnalyzerException(tokensLexical.get(i), "), AND, OR, ISA, EQUIVALENT, THAT, SOME, ALL, ONLY, VALUE, MIN, MAX, EXACTLY");
+                        throw new SintaticAnalyzerException(tokensLexical.get(i), "AND, OR, ISA, EQUIVALENT, THAT, SOME, ALL, ONLY, VALUE, MIN, MAX, EXACTLY");
                     }
                 }
                 i--;
