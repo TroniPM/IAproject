@@ -20,7 +20,7 @@ package com.pmateus.compiler.novo;
  * @author Matt
  */
 public enum RegraEnum {
-    DEF(1), CLASSE(2), RES_MAIN(3), RES_CLASSE(4), RES_PROP(5), PONTO_VIRGULA(6),
+    DEF(1), CLASSE(2), RES_MAIN(3), RES_CLASSE(4), RES_PROP(5), PONTO_VIRGULA(6), DEF2(7),
     MODIFIER_ALL(50),//MEANS TOKEN IS ONE OF: {"and", "or" "isa", "equivalent", "that", "some", "all", "only", "value", "min", "max", "exactly"}
     MODIFIER_CLASS(51),//MEANS TOKEN IS ONE OF: {"and", "or" "isa", "equivalent", "that"}
     MODIFIER_PROPERTY(52),//MEANS TOKEN IS ONE OF: {"some", "all", "only"};
@@ -60,6 +60,9 @@ public enum RegraEnum {
                 case 6:
                     job = RegraEnum.PONTO_VIRGULA;
                     break;
+                case 7:
+                    job = RegraEnum.DEF2;
+                    break;
                 case 50:
                     job = RegraEnum.MODIFIER_ALL;
                     break;
@@ -84,6 +87,8 @@ public enum RegraEnum {
     public String toString() {
         if (valor == RegraEnum.DEF.getValor()) {
             return "DEF";
+        } else if (valor == RegraEnum.DEF2.getValor()) {
+            return "DEF2";
         } else if (valor == RegraEnum.CLASSE.getValor()) {
             return "CLASSE";
         } else if (valor == RegraEnum.RES_MAIN.getValor()) {
