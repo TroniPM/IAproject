@@ -51,6 +51,10 @@ public class Regra {
         this.dontPrintException = dontPrintException;
     }
 
+    public String toString() {
+        return tipo.toString();
+    }
+
     public void print() {
         System.out.println("-----------------");
         System.out.println("Regra: <" + tipo.toString() + ">");
