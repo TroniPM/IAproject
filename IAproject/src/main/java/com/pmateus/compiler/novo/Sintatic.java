@@ -16,7 +16,7 @@ public class Sintatic {
 //        teste += "Person isa not Racional;\n";
 //        teste += "Human equivalent not(Racional or Crazy);\n";
 //        teste += " Racional or Crazy ;\n";
-        teste += "nOr ( Racional or Crazy and not Matus some Racional);\n";
+        teste += "nOr ( Racional or Crazy and Matus some  Racional and nor (not joao and marcos));\n";
 //        teste += "Human isa Racional and Crazy;\n";
 //        teste += "Human equivalent (Racional and Crazy) or (Dog and Irational);\n";
 //        teste += "Human isa (Racional or Crazy) and (Dog or Irational);\n";
@@ -145,14 +145,14 @@ public class Sintatic {
                 saveStackState(o1.tipo.toString());
                 if (o1.tipo == RegraEnum.DEF) {
                     if (tokensLexical.get(i).type == TokenEnum.NOR) {
-                        println("if (tokensLexical.get(i).type == TokenEnum.NOR)");
+//                        println("if (tokensLexical.get(i).type == TokenEnum.NOR)");
                         addToStack(new Regra(RegraEnum.PONTO_VIRGULA));
                         addToStack(new Token(TokenEnum.PARENTESE_FECHAR));
                         addToStack(new Regra(RegraEnum.DEF));
                         addToStack(new Token(TokenEnum.PARENTESE_ABRIR));
                         addToStack(new Token(TokenEnum.NOR));
                     } else if (tokensLexical.get(i).type == TokenEnum.PARENTESE_ABRIR) {
-                        println("if (tokensLexical.get(i).type == TokenEnum.PARENTESE_ABRIR)");
+//                        println("if (tokensLexical.get(i).type == TokenEnum.PARENTESE_ABRIR)");
                         addToStack(new Regra(RegraEnum.PONTO_VIRGULA));
                         addToStack(new Token(TokenEnum.PARENTESE_FECHAR));
                         addToStack(new Regra(RegraEnum.DEF));
@@ -169,21 +169,43 @@ public class Sintatic {
                             || lookAhead(tokensLexical.get(i + 1), TokenEnum.MIN)
                             || lookAhead(tokensLexical.get(i + 1), TokenEnum.MAX)
                             || lookAhead(tokensLexical.get(i + 1), TokenEnum.EXACTLY)
-                            || lookAhead(tokensLexical.get(i + 1), TokenEnum.AND)) //                            || tokensLexical.get(i).type == TokenEnum.NOT
-                            //                            && lookAhead(tokensLexical.get(i + 1), TokenEnum.IDENTIFIER)
-                            ) {
-                        println("if (tokensLexical.get(i).type == TokenEnum.IDENTIFIER) + LOOKAHEAD(MODIFICADORES)");
+                            || lookAhead(tokensLexical.get(i + 1), TokenEnum.AND))) {
+//                        println("if (tokensLexical.get(i).type == TokenEnum.IDENTIFIER) + LOOKAHEAD(MODIFICADORES)");
                         addToStack(new Regra(RegraEnum.PONTO_VIRGULA));
                         addToStack(new Regra(RegraEnum.DEF));
                         addToStack(new Regra(RegraEnum.MODIFIER_ALL));
                         addToStack(new Regra(RegraEnum.CLASSE));
                     } else if (tokensLexical.get(i).type == TokenEnum.IDENTIFIER) {
-                        println("if (tokensLexical.get(i).type == TokenEnum.IDENTIFIER)");
+//                        println("if (tokensLexical.get(i).type == TokenEnum.IDENTIFIER)");
                         addToStack(new Regra(RegraEnum.PONTO_VIRGULA));
                         addToStack(new Regra(RegraEnum.CLASSE));
+                    } else if (tokensLexical.get(i).type == TokenEnum.NOT) {
+                        if (lookAhead(tokensLexical.get(i + 1), TokenEnum.IDENTIFIER)
+                                && (lookAhead(tokensLexical.get(i + 2), TokenEnum.OR)
+                                || lookAhead(tokensLexical.get(i + 2), TokenEnum.ISA)
+                                || lookAhead(tokensLexical.get(i + 2), TokenEnum.EQUIVALENT)
+                                || lookAhead(tokensLexical.get(i + 2), TokenEnum.THAT)
+                                || lookAhead(tokensLexical.get(i + 2), TokenEnum.SOME)
+                                || lookAhead(tokensLexical.get(i + 2), TokenEnum.ALL)
+                                || lookAhead(tokensLexical.get(i + 2), TokenEnum.ONLY)
+                                || lookAhead(tokensLexical.get(i + 2), TokenEnum.VALUE)
+                                || lookAhead(tokensLexical.get(i + 2), TokenEnum.MIN)
+                                || lookAhead(tokensLexical.get(i + 2), TokenEnum.MAX)
+                                || lookAhead(tokensLexical.get(i + 2), TokenEnum.EXACTLY)
+                                || lookAhead(tokensLexical.get(i + 2), TokenEnum.AND))) {
+//                            println("TokenEnum.NOT >>>>>> if (tokensLexical.get(i).type == TokenEnum.IDENTIFIER) + LOOKAHEAD(MODIFICADORES)");
+                            addToStack(new Regra(RegraEnum.PONTO_VIRGULA));
+                            addToStack(new Regra(RegraEnum.DEF));
+                            addToStack(new Regra(RegraEnum.MODIFIER_ALL));
+                            addToStack(new Regra(RegraEnum.CLASSE));
+                        } else if (lookAhead(tokensLexical.get(i + 1), TokenEnum.IDENTIFIER)) {
+//                            println("TokenEnum.NOT >>>>>> if (tokensLexical.get(i).type == TokenEnum.IDENTIFIER)");
+                            addToStack(new Regra(RegraEnum.PONTO_VIRGULA));
+                            addToStack(new Regra(RegraEnum.CLASSE));
+                        }
                     } else {
                         println(stackState);
-                        throw new SintaticAnalyzerException(tokensLexical.get(i), "NOR, (, IDENTIFIER");
+                        throw new SintaticAnalyzerException(tokensLexical.get(i), "NOT, NOR, (, IDENTIFIER");
                     }
                 } else if (o1.tipo == RegraEnum.CLASSE) {
                     if (tokensLexical.get(i).type == TokenEnum.IDENTIFIER) {
