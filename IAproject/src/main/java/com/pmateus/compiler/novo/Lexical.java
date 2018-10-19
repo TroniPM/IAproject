@@ -15,8 +15,8 @@ public class Lexical {
 
     public static void main(String[] args) throws LexicalAnalyzerException {
         String teste = "";
-        teste += "Person isa Racional;\n";
-        teste += "Human equivalent Racional or Crazy;\n";
+        teste += "Person isa not Racional;\n";
+        teste += "Human equivalent not(Racional or Crazy);\n";
         teste += "Human isa Racional and Crazy;\n";
         teste += "Human equivalent (Racional and Crazy) or (Dog and Irational);\n";
         teste += "Human isa (Racional or Crazy) and (Dog or Irational);\n";
