@@ -28,10 +28,13 @@ public class Token {
     public String regra = null;
     public int line = 0;
     public int position = 0;
-//    public String scope = null;
-//    public String other = null;
 
     public boolean wasMapped = false;
+
+    public boolean isNegacao = false;
+    public String id;
+
+    public boolean used = false;//para compatibilidade
 
     @Override
     public Token clone() {
@@ -94,6 +97,12 @@ public class Token {
         a += ("\nREGRA: " + regra);
         a += ("\n--------------------------------");
 
+        return a;
+    }
+
+    public String string() {
+        String a = "id: " + id + " | ";
+        a += "label: " + (isNegacao ? "NOT> " : "") + lexeme;
         return a;
     }
 }

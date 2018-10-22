@@ -13,7 +13,7 @@ public class Lexical {
     private static Lexical lexical = null;
 
     private String sourceCode = null;
-    public ArrayList<Token> tokenArray = null;
+    private ArrayList<Token> tokens = null;
 
     public static void main(String[] args) throws LexicalAnalyzerException {
         String teste = "";
@@ -44,16 +44,13 @@ public class Lexical {
         return lexical;
     }
 
-    public ArrayList<Token> init(String sourceCode) throws LexicalAnalyzerException {
+    public void init(String sourceCode) throws LexicalAnalyzerException {
         if (sourceCode == null || sourceCode.isEmpty()) {
             throw new LexicalAnalyzerException("Nenhum código fonte informado.");
         }
 
         this.sourceCode = formatSourceCode(sourceCode);
-
-        tokenArray = parser();
-
-        return tokenArray;
+        this.tokens = parser();
     }
 
     private String formatSourceCode(String msg) {
@@ -123,5 +120,12 @@ public class Lexical {
             }
         }
         return arr;
+    }
+
+    /**
+     * @return the tokens
+     */
+    public ArrayList<Token> getTokens() {
+        return tokens;
     }
 }
