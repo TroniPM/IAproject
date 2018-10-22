@@ -1,5 +1,11 @@
 FAZER ~NOT~
 
+	IMPLEMENTAR VALUE
+	
+	IMPLEMENTAR MIN
+	
+	IMPLEMENTAR MAX
+
 Se abrir um arquivo owl, converter para manchester owl sintaxe e jogar no editor.
 
 Adicionar batchfile para que outros sistemas operacionais possam utilizar o programa. (ainda não compatível com unix e mac)
