@@ -1,5 +1,9 @@
 FAZER ~NOT~
 
+ERRO DE SINTAXE PASSANDO:
+	Human equivalent (Racional and Crazy) or nor(Dog and Irational);
+
+
 	IMPLEMENTAR VALUE
 	
 	IMPLEMENTAR MIN
