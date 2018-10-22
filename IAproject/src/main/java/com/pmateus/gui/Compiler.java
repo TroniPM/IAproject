@@ -17,11 +17,13 @@ package com.pmateus.gui;
 
 import com.google.common.base.Joiner;
 import com.pmateus.compiler.Conversor;
-import com.pmateus.compiler.Lexical;
-import com.pmateus.compiler.Sintatic;
 import com.pmateus.compiler.exception.ConversorException;
 import com.pmateus.compiler.exception.LexicalAnalyzerException;
+import com.pmateus.compiler.exception.SemanticAnalyzerException;
 import com.pmateus.compiler.exception.SintaticAnalyzerException;
+import com.pmateus.compiler.novo.Lexical;
+import com.pmateus.compiler.novo.Semantic;
+import com.pmateus.compiler.novo.Sintatic;
 import com.pmateus.gui.util.LinePainter;
 import com.pmateus.gui.util.TextLineNumber;
 import com.pmateus.gui.util.popupmenu.PopUpMenuAtRightClickNormalEditorListener;
@@ -337,32 +339,40 @@ public class Compiler extends javax.swing.JPanel {
         }
 
         try {
-            boolean lexical = Lexical.getInstance().init(jTextPane1.getText(), jFrameMain);
-            if (lexical) {
-                jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#696969\" face=\"\" /><b> Lexical</b> OK.</font><br/>";
-                boolean sintatic = Sintatic.getInstance().init(jTextPane1.getText(), jFrameMain);
+            Lexical.getInstance().init(jTextPane1.getText());
+            jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#696969\" face=\"\" /><b> Lexical</b> OK.</font><br/>";
+            Sintatic.getInstance().init(Lexical.getInstance().getTokens());
+            jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#696969\" face=\"\" /><b>  Sintatic</b> OK.</font><br/>";
+            Semantic.getInstance().init(jTextPane1.getText());
+            jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#696969\" face=\"\" /><b>   Semantic</b> OK.</font><br/>";
 
-                if (sintatic) {
-                    jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#696969\" face=\"\" /><b>Sintatic</b> OK.</font><br/>";
-
-                    boolean conversor = Conversor.getInstance().init(Sintatic.getInstance().tokens, jFrameMain);
-                    if (conversor) {
-                        jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#006400\" face=\"\" /><b> Conversor</b> OK.</font><br/><br/>";
-                    } else {
-                        throw new ConversorException("Conversor couldn't finish the job.");
-                    }
-                    try {
-                        jFrameMain.coreApp.owlRepository.saveState();
-                    } catch (OWLOntologyCreationException ex) {
-                        java.util.logging.Logger.getLogger(InsertionAnalyser.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } else {
-                    throw new SintaticAnalyzerException("Sintatic analyzer can't verify the code.");
-                }
-            } else {
-                throw new LexicalAnalyzerException("Lexical analyzer can't verify the code.");
-            }
-        } catch (LexicalAnalyzerException | SintaticAnalyzerException | ConversorException | OWLOntologyCreationException ex) {
+            Conversor.getInstance().init(Semantic.getInstance().getTokens(), jFrameMain);
+            jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#006400\" face=\"\" /><b> Conversor</b> OK.</font><br/><br/>";
+//            if (lexical) {
+//                jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#696969\" face=\"\" /><b> Lexical</b> OK.</font><br/>";
+//                boolean sintatic = Sintatic.getInstance().init(jTextPane1.getText(), jFrameMain);
+//
+//                if (sintatic) {
+//                    jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#696969\" face=\"\" /><b>Sintatic</b> OK.</font><br/>";
+//
+//                    boolean conversor = Conversor.getInstance().init(Sintatic.getInstance().tokens, jFrameMain);
+//                    if (conversor) {
+//                        jFrameMain.coreApp.iAnalyser.erroString += "<font color=\"#006400\" face=\"\" /><b> Conversor</b> OK.</font><br/><br/>";
+//                    } else {
+//                        throw new ConversorException("Conversor couldn't finish the job.");
+//                    }
+//                    try {
+//                        jFrameMain.coreApp.owlRepository.saveState();
+//                    } catch (OWLOntologyCreationException ex) {
+//                        java.util.logging.Logger.getLogger(InsertionAnalyser.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                } else {
+//                    throw new SintaticAnalyzerException("Sintatic analyzer can't verify the code.");
+//                }
+//            } else {
+//                throw new LexicalAnalyzerException("Lexical analyzer can't verify the code.");
+//            }
+        } catch (ConversorException | SemanticAnalyzerException | LexicalAnalyzerException | SintaticAnalyzerException | OWLOntologyCreationException ex) {
             java.util.logging.Logger.getLogger(Compiler.class.getName()).log(Level.SEVERE, null, ex);
             jFrameMain.coreApp.iAnalyser.erroString += "&nbsp;&nbsp;<font color=\"#ff0000\" face=\"\" /><b>" + ex.getClass().getSimpleName() + "</b>: " + ex.getMessage() + "</font><br/>";
         }
