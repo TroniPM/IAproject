@@ -10,6 +10,8 @@ import java.util.StringTokenizer;
  */
 public class Lexical {
 
+    private static Lexical lexical = null;
+
     private String sourceCode = null;
     public ArrayList<Token> tokenArray = null;
 
@@ -28,7 +30,18 @@ public class Lexical {
         teste += "Doctor isa (hasPet some Dog);\n";
         teste += "Doctor equivalent (hasPet only Dog);";
 
-        new Lexical().init(teste);
+        Lexical.getInstance().init(teste);
+    }
+
+    private Lexical() {
+    }
+
+    public static Lexical getInstance() {
+        if (lexical == null) {
+            lexical = new Lexical();
+        }
+
+        return lexical;
     }
 
     public ArrayList<Token> init(String sourceCode) throws LexicalAnalyzerException {

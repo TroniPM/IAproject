@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public class Sintatic {
 
+    private static Sintatic sintatic = null;
+
     public ArrayList<Token> tokensLexical = null;
     private ArrayList<Object> stack = null;
     public String stackState = null;
@@ -27,11 +29,22 @@ public class Sintatic {
         teste += "Doctor isa (hasPet some Dog);\n";
         teste += "Doctor equivalent (hasPet only Dog);";
 
-        ArrayList<Token> list = new Lexical().init(teste);
-        new Sintatic().init(list);
+        ArrayList<Token> list = Lexical.getInstance().init(teste);
+        list = Sintatic.getInstance().init(list);
     }
 
-    public void init(ArrayList<Token> arr) throws SintaticAnalyzerException {
+    private Sintatic() {
+    }
+
+    public static Sintatic getInstance() {
+        if (sintatic == null) {
+            sintatic = new Sintatic();
+        }
+
+        return sintatic;
+    }
+
+    public ArrayList<Token> init(ArrayList<Token> arr) throws SintaticAnalyzerException {
         if (arr.isEmpty()) {
             throw new SintaticAnalyzerException("Unexpected empty token list. Cause: probably the source code is empty.");
         }
@@ -39,6 +52,7 @@ public class Sintatic {
         this.tokensLexical = arr;
 
         parserNew();
+        return this.tokensLexical;
     }
 
     private void addToStack(Object token) {
@@ -279,56 +293,6 @@ public class Sintatic {
                 }
                 i--;
             }
-            /**
-             * Quando chega ao final, verificar se DECLARAR_FUNC é vazio
-             */
-//            if (stack.get(stack.size() - 1) == null) {
-//
-//                if (tokensLexical.get(i) instanceof Token) {
-//                    throw new SintaticAnalyzerException("Unexpected token '" + (tokensLexical.get(i).lexeme)
-//                            + "' at line " + tokensLexical.get(i).line + " (expected: '" + tokensLexical.get(i).description1 + "').");
-//                } else {
-//                    throw new SintaticAnalyzerException("Pilha foi lida mas o código fonte ainda não acabou.");
-//                }
-//            }
-
-//            if (i + 1 == tokensLexical.size() && stack.size() > 0) {
-//                //RegraProducao o1 = (RegraProducao) getNaPilha();
-//
-//                Object o = getObjectFromStack();
-//                if (o instanceof RegraProducao && ((RegraProducao) o).method.equals("declarar_func")) {
-//                    //dummy if
-//                } else {
-//                    /*for (Object in : pilha) {
-//                        if (in instanceof LexicalToken) {
-//                            System.out.println(((LexicalToken) in).lexeme);
-//                        } else {
-//                            System.out.println(((RegraProducao) in).method);
-//                        }
-//                    }*/
-//                    //System.out.println(arr.get(i+1));
-//                    String in = "";
-//
-//                    String esp = "";
-//                    for (int x1 = 0; x1 < stack.size(); x1++) {
-//                        Object out = getObjectFromStack();
-//                        if (out instanceof Token) {
-//                            in += ((Token) out).lexeme + ", ";
-//
-//                            if (x1 == 0) {
-//                                esp = ((Token) out).lexeme;
-//                            }
-//                        } else if (out instanceof RegraProducao) {
-//                            in += (((RegraProducao) out).method) + ", ";
-//
-//                            if (x1 == 0) {
-//                                esp = ((RegraProducao) out).method;
-//                            }
-//                        }
-//                    }
-//                    throw new SintaticAnalyzerException("All source code was readed, but stack is not EMPTY (size: " + stack.size() + ", tokens: " + in + "). Expected: '" + esp + "'");
-//                }
-//            }
         }
     }
 }
