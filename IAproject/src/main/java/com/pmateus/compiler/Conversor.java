@@ -426,10 +426,16 @@ public class Conversor {
                 while (it.hasNext()) {
                     subs.add(it.next());
                 }
+            } else if (objOutter.getAxiomType() == AxiomType.DISJOINT_CLASSES) {
+                Set<OWLClassExpression> listaEquivalent = ((OWLDisjointClassesAxiom) objOutter).getClassExpressions();
+                Iterator<OWLClassExpression> it = listaEquivalent.iterator();
+                while (it.hasNext()) {
+                    subs.add(it.next());
+                }
             }
         }
         if (!subs.isEmpty()) {
-            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(subs), classe);
+            OWLDisjointClassesAxiom ax1 = factory.getOWLDisjointClassesAxiom(factory.getOWLObjectUnionOf(subs), classe);
             list.add(ax1);
         }
 //        if (!equiv.isEmpty()) {
@@ -457,6 +463,12 @@ public class Conversor {
                 while (it.hasNext()) {
                     subs1.add(it.next());
                 }
+            } else if (objOutter.getAxiomType() == AxiomType.DISJOINT_CLASSES) {
+                Set<OWLClassExpression> listaEquivalent = ((OWLDisjointClassesAxiom) objOutter).getClassExpressions();
+                Iterator<OWLClassExpression> it = listaEquivalent.iterator();
+                while (it.hasNext()) {
+                    subs1.add(it.next());
+                }
             }
         }
         Iterator<OWLAxiom> rightIt = listDir.iterator();
@@ -473,14 +485,20 @@ public class Conversor {
                 while (it.hasNext()) {
                     subs2.add(it.next());
                 }
+            } else if (objOutter.getAxiomType() == AxiomType.DISJOINT_CLASSES) {
+                Set<OWLClassExpression> listaEquivalent = ((OWLDisjointClassesAxiom) objOutter).getClassExpressions();
+                Iterator<OWLClassExpression> it = listaEquivalent.iterator();
+                while (it.hasNext()) {
+                    subs2.add(it.next());
+                }
             }
         }
 
         if (!subs1.isEmpty() && !subs2.isEmpty()) {
-            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(subs2), factory.getOWLObjectUnionOf(subs1));
-//            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(subs1), factory.getOWLObjectUnionOf(subs2));
+            OWLDisjointClassesAxiom ax1 = factory.getOWLDisjointClassesAxiom(factory.getOWLObjectUnionOf(subs2), factory.getOWLObjectUnionOf(subs1));
+            OWLDisjointClassesAxiom ax2 = factory.getOWLDisjointClassesAxiom(factory.getOWLObjectUnionOf(subs1), factory.getOWLObjectUnionOf(subs2));
             list.add(ax1);
-//            list.add(ax2);
+            list.add(ax2);
         }
 
         return list;
