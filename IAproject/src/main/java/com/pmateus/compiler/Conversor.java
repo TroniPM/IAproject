@@ -698,6 +698,12 @@ public class Conversor {
                 while (it.hasNext()) {
                     subs.add(it.next());
                 }
+            } else if (objOutter.getAxiomType() == AxiomType.DISJOINT_CLASSES) {
+                Set<OWLClassExpression> listaEquivalent = ((OWLDisjointClassesAxiom) objOutter).getClassExpressions();
+                Iterator<OWLClassExpression> it = listaEquivalent.iterator();
+                while (it.hasNext()) {
+                    subs.add(it.next());
+                }
             }
         }
         if (!subs.isEmpty()) {
