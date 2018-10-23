@@ -106,7 +106,7 @@ public class Conversor {
 
             if (!flag) {
                 flag = false;
-                list = exec(in);
+                list = exec(in, 0);
 
                 manager.addAxioms(ontology, list);
 
@@ -119,29 +119,46 @@ public class Conversor {
         return true;
     }
 
-    public Set<OWLAxiom> exec(CompiladorToken token) throws ConversorException {//PODE SER RECURSIVO
+    public Set<OWLAxiom> exec(CompiladorToken token, int notPosition) throws ConversorException {//PODE SER RECURSIVO
         java.util.logging.Logger.getLogger(Conversor.class.getName()).log(Level.INFO, token.string());
 
         String[] term = token.label.replace("(", "").replace(")", "").replaceAll(" +", " ").trim().split(" ");
         int size = term.length;
-        if (size != 3) {
+
+        int posicaoNOT = 0;//0 = nenhum, -1 ESQUERDA, 1 DIREITA, 2, DIREITA-ESQUERDA
+
+        if (size != 3) {//existe algum not
             String aa = "";
-            for (String in : term) {
-                aa += " " + in;
+
+            ArrayList<String> arrayNOTs = new ArrayList<String>(Arrays.asList(term));
+            if (arrayNOTs.indexOf("not") != -1) {
+                if (arrayNOTs.indexOf("not") == arrayNOTs.lastIndexOf("not")) {
+                    if (arrayNOTs.indexOf("not") == 0) {
+                        posicaoNOT = -1;
+                    } else {
+                        posicaoNOT = 1;
+                    }
+
+                } else {
+                    posicaoNOT = 2;
+                }
             }
-            try {
-                throw new Exception("Expressão diferente de 3 palavras: " + aa);
-            } catch (Exception ex) {
-                Logger.getLogger(Conversor.class.getName()).log(Level.SEVERE, null, ex);
-            }
+//            for (String in : term) {
+//                aa += " " + in;
+//            }
+//            try {
+//                throw new Exception("Expressão diferente de 3 palavras: " + aa);
+//            } catch (Exception ex) {
+//                Logger.getLogger(Conversor.class.getName()).log(Level.SEVERE, null, ex);
+//            }
         }
         Set<OWLAxiom> listEsq = null, listDir = null;
         for (CompiladorToken in : tokens) {
             if (in.id.equals(term[0])) {
-                listEsq = exec(in);
+                listEsq = exec(in, posicaoNOT == -1 || posicaoNOT == 2 ? -1 : 0);
             }
             if (in.id.equals(term[2])) {
-                listDir = exec(in);
+                listDir = exec(in, posicaoNOT == 1 || posicaoNOT == 2 ? 1 : 0);
             }
         }
 
@@ -160,6 +177,9 @@ public class Conversor {
             list = new ArrayList<>();
 
             OWLClass esqClass = factory.getOWLClass(IRI.create(PROJECT_IRI + term[0]));
+            if (posicaoNOT == -1 || posicaoNOT == 2) {
+
+            }
             OWLClass dirClass = factory.getOWLClass(IRI.create(PROJECT_IRI + term[2]));
 
             switch (op) {
