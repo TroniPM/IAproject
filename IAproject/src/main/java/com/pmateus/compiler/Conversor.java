@@ -211,19 +211,24 @@ public class Conversor {
                 }
                 case Util.OR: {
                     if (listEsq != null && listDir == null) {
-                        List<OWLAxiom> listaa = uniao(listEsq, dir);
+                        List<OWLAxiom> listaa = uniao(listEsq, dir, hasNotExpression);
                         list.addAll(listaa);
                     } else if (listDir != null && listEsq == null) {
-                        List<OWLAxiom> listaa = uniao(listDir, esq);
+                        List<OWLAxiom> listaa = uniao(listDir, esq, hasNotExpression);
                         list.addAll(listaa);
                     } else if (listEsq != null && listDir != null) {
-                        List<OWLAxiom> listaa = uniao(listEsq, listDir);
+                        List<OWLAxiom> listaa = uniao(listEsq, listDir, hasNotExpression);
                         list.addAll(listaa);
                     } else {
                         OWLDisjointClassesAxiom ax1 = factory.getOWLDisjointClassesAxiom(dir, esq);
                         OWLDisjointClassesAxiom ax2 = factory.getOWLDisjointClassesAxiom(esq, dir);
-                        list.add(ax1);
-                        list.add(ax2);
+                        if (hasNotExpression) {//NEGAÇÃO DA NEGAÇÃO
+                            list.add(ax1.getNNF());
+                            list.add(ax2.getNNF());
+                        } else {
+                            list.add(ax1);
+                            list.add(ax2);
+                        }
                     }
                     break;
                 }
@@ -444,7 +449,7 @@ public class Conversor {
         return list;
     }
 
-    private List<OWLAxiom> uniao(Set<OWLAxiom> lista, OWLClassExpression classe) {
+    private List<OWLAxiom> uniao(Set<OWLAxiom> lista, OWLClassExpression classe, boolean hasNotExpression) {
         List<OWLAxiom> list = new ArrayList<OWLAxiom>();
 
         Iterator<OWLAxiom> leftIt = lista.iterator();
@@ -472,7 +477,11 @@ public class Conversor {
         }
         if (!subs.isEmpty()) {
             OWLDisjointClassesAxiom ax1 = factory.getOWLDisjointClassesAxiom(factory.getOWLObjectUnionOf(subs), classe);
-            list.add(ax1);
+            if (hasNotExpression) {//NEGAÇÃO DA NEGAÇÃO
+                list.add(ax1.getNNF());
+            } else {
+                list.add(ax1);
+            }
         }
 //        if (!equiv.isEmpty()) {
 //            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectUnionOf(equiv), classe);
@@ -482,7 +491,7 @@ public class Conversor {
         return list;
     }
 
-    private List<OWLAxiom> uniao(Set<OWLAxiom> listEsq, Set<OWLAxiom> listDir) {
+    private List<OWLAxiom> uniao(Set<OWLAxiom> listEsq, Set<OWLAxiom> listDir, boolean hasNotExpression) {
         List<OWLAxiom> list = new ArrayList<OWLAxiom>();
 
         Iterator<OWLAxiom> leftIt = listEsq.iterator();
@@ -533,8 +542,13 @@ public class Conversor {
         if (!subs1.isEmpty() && !subs2.isEmpty()) {
             OWLDisjointClassesAxiom ax1 = factory.getOWLDisjointClassesAxiom(factory.getOWLObjectUnionOf(subs2), factory.getOWLObjectUnionOf(subs1));
             OWLDisjointClassesAxiom ax2 = factory.getOWLDisjointClassesAxiom(factory.getOWLObjectUnionOf(subs1), factory.getOWLObjectUnionOf(subs2));
-            list.add(ax1);
-            list.add(ax2);
+            if (hasNotExpression) {//NEGAÇÃO DA NEGAÇÃO
+                list.add(ax1.getNNF());
+                list.add(ax2.getNNF());
+            } else {
+                list.add(ax1);
+                list.add(ax2);
+            }
         }
 
         return list;
