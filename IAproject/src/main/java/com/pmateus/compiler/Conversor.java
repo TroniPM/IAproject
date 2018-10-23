@@ -129,17 +129,21 @@ public class Conversor {
         int posicaoNOT = 0;//0 = nenhum, -1 ESQUERDA, 1 DIREITA, 2, DIREITA-ESQUERDA
 
         if (size != 3) {//existe algum not
-            String aa = "";
+//            System.out.println("||||||||||||||||||||||||||| " + String.join(",", term));//DEBUG
 
             ArrayList<String> arrayNOTs = new ArrayList<String>(Arrays.asList(term));
             if (arrayNOTs.indexOf("not") != -1) {
                 if (arrayNOTs.indexOf("not") == arrayNOTs.lastIndexOf("not")) {
                     if (arrayNOTs.indexOf("not") == 0) {
+                        term[0] = term[1];
                         posicaoNOT = -1;
                     } else {
+                        term[2] = term[3];
                         posicaoNOT = 1;
                     }
                 } else {
+                    term[0] = term[1];
+                    term[3] = term[4];
                     posicaoNOT = 2;
                 }
             }
@@ -154,6 +158,7 @@ public class Conversor {
                 listDir = exec(in, posicaoNOT == 1 || posicaoNOT == 2);
             }
         }
+//        System.out.println("||||||||||||||||||||||||||| POSICAO: " + posicaoNOT);//DEBUG
 
         String op = term[1].toLowerCase();
         List<OWLAxiom> list = null;

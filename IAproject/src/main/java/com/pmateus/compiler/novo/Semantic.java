@@ -78,7 +78,7 @@ public class Semantic {
             }
         }
 
-        cmd = substituir2(cmd, Util.NOT);
+//        cmd = substituir2(cmd, Util.NOT);
 
         /**
          * TODO ordem de resolução. Adicionar campos abaixo
@@ -133,7 +133,6 @@ public class Semantic {
 //                if ((reservado || Character.isDigit(str.charAt(0))) && isNOT) {//Se for uma NEGACAO, não pode vir palavra-reservada/numero depois, apenas classes/propriedade
 //                    throw new SemanticAnalyzerException("'NOT' operator can only be used with classes and properties at command '" + token.label.replaceAll(" +", " ").trim() + "', at line " + token.line + ".");
 //                }
-
                 if (lastReservado && reservado) {
                     throw new SemanticAnalyzerException("Unexpected tokens at '" + last + " " + str + "', command '" + token.label.replaceAll(" +", " ").trim() + "'.");
                 } else if (!lastReservado && !reservado && !primeiro) {
@@ -197,6 +196,9 @@ public class Semantic {
 
             String last = "";
             boolean operador = false;
+
+            boolean esq = false, dir = false;
+            int interacoesDepoisDoNot = 0;
             while (st.hasMoreTokens()) {
                 String s = st.nextToken();
                 boolean flag = false;
@@ -205,18 +207,41 @@ public class Semantic {
                     operador = true;
                 }
 
+                if (s.equals(Util.NOT)) {
+                    if (!operador) {
+                        esq = true;
+                    } else {
+                        dir = true;
+                    }
+
+                    continue;
+                }
+
+                interacoesDepoisDoNot++;
+
                 if (operador && !flag) {
-                    String particula = last + " " + PATTERN + " " + s;
+                    String particula = (esq ? "not " : "") + last + " " + PATTERN + " " + (dir ? "not " : "") + s;
                     CompiladorToken token = new CompiladorToken(0, 0, particula);
                     tokens.add(token);
-//                    System.out.println("VAI TROCAR: " + token.label + " >> " + token.id);
+                    System.out.println("VAI TROCAR: " + token.label + " >> " + token.id);
                     cmd[linha] = cmd[linha].replace(token.label, token.id);
 //                    return substituir3(cmd, PATTERN);
+                    esq = false;
+                    dir = false;
+                    interacoesDepoisDoNot = 0;
                 }
 
                 if (!flag) {
                     operador = false;
                     last = s;
+
+                    //Controle pq o NOT da esquerda seja efetivamente dessa expressão, e não de uma
+                    // anterior. EX:
+                    // NOT AA OR ((((((BB ANDNOT CC))))))
+                    if (interacoesDepoisDoNot > 1) {
+                        esq = false;
+                        interacoesDepoisDoNot = 0;
+                    }
                 }
             }
         }
