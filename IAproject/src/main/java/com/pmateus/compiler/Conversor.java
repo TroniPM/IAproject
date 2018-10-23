@@ -234,17 +234,21 @@ public class Conversor {
                 }
                 case Util.ISA: {
                     if (listEsq != null && listDir == null) {
-                        List<OWLAxiom> listaa = isa(listEsq, dir);
+                        List<OWLAxiom> listaa = isa(listEsq, dir, hasNotExpression);
                         list.addAll(listaa);
                     } else if (listDir != null && listEsq == null) {
-                        List<OWLAxiom> listaa = isa(listDir, esq);
+                        List<OWLAxiom> listaa = isa(listDir, esq, hasNotExpression);
                         list.addAll(listaa);
                     } else if (listEsq != null && listDir != null) {
-                        List<OWLAxiom> listaa = isa(listEsq, listDir);
+                        List<OWLAxiom> listaa = isa(listEsq, listDir, hasNotExpression);
                         list.addAll(listaa);
                     } else {
                         OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(esq, dir);
-                        list.add(ax1);
+                        if (hasNotExpression) {//NEGAÇÃO DA NEGAÇÃO
+                            list.add(ax1.getNNF());
+                        } else {
+                            list.add(ax1);
+                        }
                     }
 
                     break;
@@ -554,7 +558,7 @@ public class Conversor {
         return list;
     }
 
-    private List<OWLAxiom> isa(Set<OWLAxiom> lista, OWLClassExpression classe) {
+    private List<OWLAxiom> isa(Set<OWLAxiom> lista, OWLClassExpression classe, boolean hasNotExpression) {
         List<OWLAxiom> list = new ArrayList<OWLAxiom>();
 
         Iterator<OWLAxiom> leftIt = lista.iterator();
@@ -564,13 +568,22 @@ public class Conversor {
             if (objOutter.getAxiomType() == AxiomType.SUBCLASS_OF) {
                 OWLClassExpression cc = ((OWLSubClassOfAxiom) objOutter).getSubClass();
                 OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(cc, classe);
-                list.add(ax1);
+                if (hasNotExpression) {//NEGAÇÃO DA NEGAÇÃO
+                    list.add(ax1.getNNF());
+                } else {
+                    list.add(ax1);
+                }
             } else if (objOutter.getAxiomType() == AxiomType.EQUIVALENT_CLASSES) {
                 Set<OWLClass> listaEquivalent = ((OWLEquivalentClassesAxiom) objOutter).getNamedClasses();
                 Iterator<OWLClass> it = listaEquivalent.iterator();
                 while (it.hasNext()) {
                     OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(it.next(), classe);
-                    list.add(ax2);
+                    if (hasNotExpression) {//NEGAÇÃO DA NEGAÇÃO
+                        list.add(ax2.getNNF());
+                    } else {
+                        list.add(ax2);
+                    }
+                }
                 }
             }
         }
@@ -578,7 +591,7 @@ public class Conversor {
         return list;
     }
 
-    private List<OWLAxiom> isa(Set<OWLAxiom> listEsq, Set<OWLAxiom> listDir) {
+    private List<OWLAxiom> isa(Set<OWLAxiom> listEsq, Set<OWLAxiom> listDir, boolean hasNotExpression) {
         List<OWLAxiom> list = new ArrayList<OWLAxiom>();
 
         Iterator<OWLAxiom> leftIt = listEsq.iterator();
@@ -617,8 +630,13 @@ public class Conversor {
         if (!subs1.isEmpty() && !subs2.isEmpty()) {
             OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs2), factory.getOWLObjectIntersectionOf(subs1));
             OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs1), factory.getOWLObjectIntersectionOf(subs2));
-            list.add(ax1);
-            list.add(ax2);
+            if (hasNotExpression) {//NEGAÇÃO DA NEGAÇÃO
+                list.add(ax1.getNNF());
+                list.add(ax2.getNNF());
+            } else {
+                list.add(ax1);
+                list.add(ax2);
+            }
         }
 
         return list;
