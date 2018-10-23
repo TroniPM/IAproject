@@ -823,6 +823,12 @@ public class Conversor {
                 while (it.hasNext()) {
                     subs.add(it.next());
                 }
+            } else if (objOutter.getAxiomType() == AxiomType.DISJOINT_CLASSES) {
+                Set<OWLClassExpression> listaEquivalent = ((OWLDisjointClassesAxiom) objOutter).getClassExpressions();
+                Iterator<OWLClassExpression> it = listaEquivalent.iterator();
+                while (it.hasNext()) {
+                    subs.add(it.next());
+                }
             }
         }
         if (!subs.isEmpty()) {
@@ -849,6 +855,12 @@ public class Conversor {
                 while (it.hasNext()) {
                     subs1.add(it.next());
                 }
+            } else if (objOutter.getAxiomType() == AxiomType.DISJOINT_CLASSES) {
+                Set<OWLClassExpression> listaEquivalent = ((OWLDisjointClassesAxiom) objOutter).getClassExpressions();
+                Iterator<OWLClassExpression> it = listaEquivalent.iterator();
+                while (it.hasNext()) {
+                    subs1.add(it.next());
+                }
             }
         }
         Iterator<OWLAxiom> rightIt = listDir.iterator();
@@ -861,6 +873,12 @@ public class Conversor {
             } else if (objOutter.getAxiomType() == AxiomType.EQUIVALENT_CLASSES) {
                 Set<OWLClass> listaEquivalent = ((OWLEquivalentClassesAxiom) objOutter).getNamedClasses();
                 Iterator<OWLClass> it = listaEquivalent.iterator();
+                while (it.hasNext()) {
+                    subs2.add(it.next());
+                }
+            } else if (objOutter.getAxiomType() == AxiomType.DISJOINT_CLASSES) {
+                Set<OWLClassExpression> listaEquivalent = ((OWLDisjointClassesAxiom) objOutter).getClassExpressions();
+                Iterator<OWLClassExpression> it = listaEquivalent.iterator();
                 while (it.hasNext()) {
                     subs2.add(it.next());
                 }
