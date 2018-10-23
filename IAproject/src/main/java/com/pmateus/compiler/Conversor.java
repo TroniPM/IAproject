@@ -41,6 +41,7 @@ import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDisjointClassesAxiom;
 import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
 import org.semanticweb.owlapi.model.OWLIndividual;
+import org.semanticweb.owlapi.model.OWLObjectComplementOf;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyDomainAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -106,7 +107,7 @@ public class Conversor {
 
             if (!flag) {
                 flag = false;
-                list = exec(in, 0);
+                list = exec(in, false);
 
                 manager.addAxioms(ontology, list);
 
@@ -119,7 +120,7 @@ public class Conversor {
         return true;
     }
 
-    public Set<OWLAxiom> exec(CompiladorToken token, int notPosition) throws ConversorException {//PODE SER RECURSIVO
+    public Set<OWLAxiom> exec(CompiladorToken token, boolean hasNotExpression) throws ConversorException {//PODE SER RECURSIVO
         java.util.logging.Logger.getLogger(Conversor.class.getName()).log(Level.INFO, token.string());
 
         String[] term = token.label.replace("(", "").replace(")", "").replaceAll(" +", " ").trim().split(" ");
@@ -143,22 +144,21 @@ public class Conversor {
                     posicaoNOT = 2;
                 }
             }
-//            for (String in : term) {
-//                aa += " " + in;
-//            }
-//            try {
-//                throw new Exception("Expressão diferente de 3 palavras: " + aa);
-//            } catch (Exception ex) {
-//                Logger.getLogger(Conversor.class.getName()).log(Level.SEVERE, null, ex);
-//            }
         }
+
+        if (hasNotExpression) {
+            if (posicaoNOT == -1) {
+                posicaoNOT = 1;
+            }
+        }
+
         Set<OWLAxiom> listEsq = null, listDir = null;
         for (CompiladorToken in : tokens) {
             if (in.id.equals(term[0])) {
-                listEsq = exec(in, posicaoNOT == -1 || posicaoNOT == 2 ? -1 : 0);
+                listEsq = exec(in, posicaoNOT == -1 || posicaoNOT == 2);
             }
             if (in.id.equals(term[2])) {
-                listDir = exec(in, posicaoNOT == 1 || posicaoNOT == 2 ? 1 : 0);
+                listDir = exec(in, posicaoNOT == 1 || posicaoNOT == 2);
             }
         }
 
@@ -177,26 +177,35 @@ public class Conversor {
             list = new ArrayList<>();
 
             OWLClass esqClass = factory.getOWLClass(IRI.create(PROJECT_IRI + term[0]));
+            OWLClassExpression esq = null;
             if (posicaoNOT == -1 || posicaoNOT == 2) {
-
+                esq = esqClass.getComplementNNF();
+            } else {
+                esq = esqClass;
             }
             OWLClass dirClass = factory.getOWLClass(IRI.create(PROJECT_IRI + term[2]));
+            OWLClassExpression dir = null;
+            if (posicaoNOT == 1 || posicaoNOT == 2) {
+                dir = dirClass.getComplementNNF();
+            } else {
+                dir = dirClass;
+            }
 
             switch (op) {
                 case Util.THAT:
                 case Util.AND: {
                     if (listEsq != null && listDir == null) {
-                        List<OWLAxiom> listaa = intersecao(listEsq, dirClass);
+                        List<OWLAxiom> listaa = intersecao(listEsq, dir);
                         list.addAll(listaa);
                     } else if (listDir != null && listEsq == null) {
-                        List<OWLAxiom> listaa = intersecao(listDir, esqClass);
+                        List<OWLAxiom> listaa = intersecao(listDir, esq);
                         list.addAll(listaa);
                     } else if (listEsq != null && listDir != null) {
                         List<OWLAxiom> listaa = intersecao(listEsq, listDir);
                         list.addAll(listaa);
                     } else {
-                        OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(dirClass, factory.getOWLObjectIntersectionOf(esqClass));
-                        OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(esqClass, factory.getOWLObjectIntersectionOf(dirClass));
+                        OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(dir, factory.getOWLObjectIntersectionOf(esq));
+                        OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(esq, factory.getOWLObjectIntersectionOf(dir));
                         list.add(ax1);
                         list.add(ax2);
                     }
@@ -204,17 +213,17 @@ public class Conversor {
                 }
                 case Util.OR: {
                     if (listEsq != null && listDir == null) {
-                        List<OWLAxiom> listaa = uniao(listEsq, dirClass);
+                        List<OWLAxiom> listaa = uniao(listEsq, dir);
                         list.addAll(listaa);
                     } else if (listDir != null && listEsq == null) {
-                        List<OWLAxiom> listaa = uniao(listDir, esqClass);
+                        List<OWLAxiom> listaa = uniao(listDir, esq);
                         list.addAll(listaa);
                     } else if (listEsq != null && listDir != null) {
                         List<OWLAxiom> listaa = uniao(listEsq, listDir);
                         list.addAll(listaa);
                     } else {
-                        OWLDisjointClassesAxiom ax1 = factory.getOWLDisjointClassesAxiom(dirClass, esqClass);
-                        OWLDisjointClassesAxiom ax2 = factory.getOWLDisjointClassesAxiom(esqClass, dirClass);
+                        OWLDisjointClassesAxiom ax1 = factory.getOWLDisjointClassesAxiom(dir, esq);
+                        OWLDisjointClassesAxiom ax2 = factory.getOWLDisjointClassesAxiom(esq, dir);
                         list.add(ax1);
                         list.add(ax2);
                     }
@@ -222,16 +231,16 @@ public class Conversor {
                 }
                 case Util.ISA: {
                     if (listEsq != null && listDir == null) {
-                        List<OWLAxiom> listaa = isa(listEsq, dirClass);
+                        List<OWLAxiom> listaa = isa(listEsq, dir);
                         list.addAll(listaa);
                     } else if (listDir != null && listEsq == null) {
-                        List<OWLAxiom> listaa = isa(listDir, esqClass);
+                        List<OWLAxiom> listaa = isa(listDir, esq);
                         list.addAll(listaa);
                     } else if (listEsq != null && listDir != null) {
                         List<OWLAxiom> listaa = isa(listEsq, listDir);
                         list.addAll(listaa);
                     } else {
-                        OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(esqClass, dirClass);
+                        OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(esq, dir);
                         list.add(ax1);
                     }
 
@@ -239,16 +248,16 @@ public class Conversor {
                 }
                 case Util.EQUIVALENT: {
                     if (listEsq != null && listDir == null) {
-                        List<OWLAxiom> listaa = equivalent(listEsq, dirClass);
+                        List<OWLAxiom> listaa = equivalent(listEsq, dir);
                         list.addAll(listaa);
                     } else if (listDir != null && listEsq == null) {
-                        List<OWLAxiom> listaa = equivalent(listDir, esqClass);
+                        List<OWLAxiom> listaa = equivalent(listDir, esq);
                         list.addAll(listaa);
                     } else if (listEsq != null && listDir != null) {
                         List<OWLAxiom> listaa = equivalent(listEsq, listDir);
                         list.addAll(listaa);
                     } else {
-                        OWLEquivalentClassesAxiom ax1 = factory.getOWLEquivalentClassesAxiom(esqClass, dirClass);
+                        OWLEquivalentClassesAxiom ax1 = factory.getOWLEquivalentClassesAxiom(esq, dir);
                         list.add(ax1);
                     }
                     break;
@@ -267,8 +276,8 @@ public class Conversor {
                         list.addAll(listaa);
                     } else {
                         OWLObjectProperty property = factory.getOWLObjectProperty(IRI.create(PROJECT_IRI + term[0]));
-                        OWLClassExpression exp = factory.getOWLObjectSomeValuesFrom(property, dirClass);
-                        OWLSubClassOfAxiom axFinal = factory.getOWLSubClassOfAxiom(dirClass, exp);
+                        OWLClassExpression exp = factory.getOWLObjectSomeValuesFrom(property, dir);
+                        OWLSubClassOfAxiom axFinal = factory.getOWLSubClassOfAxiom(dir, exp);
                         list.add(axFinal);
                     }
 
@@ -288,8 +297,8 @@ public class Conversor {
                         list.addAll(listaa);
                     } else {
                         OWLObjectProperty property = factory.getOWLObjectProperty(IRI.create(PROJECT_IRI + term[0]));
-                        OWLClassExpression exp = factory.getOWLObjectAllValuesFrom(property, dirClass);
-                        OWLSubClassOfAxiom axFinal = factory.getOWLSubClassOfAxiom(dirClass, exp);
+                        OWLClassExpression exp = factory.getOWLObjectAllValuesFrom(property, dir);
+                        OWLSubClassOfAxiom axFinal = factory.getOWLSubClassOfAxiom(dir, exp);
                         list.add(axFinal);
                     }
 
@@ -310,7 +319,7 @@ public class Conversor {
                     } else {
                         OWLIndividual individual = factory.getOWLNamedIndividual(IRI.create(PROJECT_IRI + term[0]));
                         OWLClassExpression exp = factory.getOWLObjectOneOf(individual);
-                        OWLSubClassOfAxiom axFinal = factory.getOWLSubClassOfAxiom(dirClass, exp);
+                        OWLSubClassOfAxiom axFinal = factory.getOWLSubClassOfAxiom(dir, exp);
                         list.add(axFinal);
                     }
 
@@ -351,7 +360,7 @@ public class Conversor {
         }
     }
 
-    private List<OWLAxiom> intersecao(Set<OWLAxiom> lista, OWLClass classe) {
+    private List<OWLAxiom> intersecao(Set<OWLAxiom> lista, OWLClassExpression classe) {
         List<OWLAxiom> list = new ArrayList<OWLAxiom>();
 
         Iterator<OWLAxiom> leftIt = lista.iterator();
@@ -428,7 +437,7 @@ public class Conversor {
         return list;
     }
 
-    private List<OWLAxiom> uniao(Set<OWLAxiom> lista, OWLClass classe) {
+    private List<OWLAxiom> uniao(Set<OWLAxiom> lista, OWLClassExpression classe) {
         List<OWLAxiom> list = new ArrayList<OWLAxiom>();
 
         Iterator<OWLAxiom> leftIt = lista.iterator();
@@ -524,7 +533,7 @@ public class Conversor {
         return list;
     }
 
-    private List<OWLAxiom> isa(Set<OWLAxiom> lista, OWLClass classe) {
+    private List<OWLAxiom> isa(Set<OWLAxiom> lista, OWLClassExpression classe) {
         List<OWLAxiom> list = new ArrayList<OWLAxiom>();
 
         Iterator<OWLAxiom> leftIt = lista.iterator();
@@ -701,7 +710,7 @@ public class Conversor {
         throw new ConversorException("Property cannot be used like a class.");
     }
 
-    private List<OWLAxiom> equivalent(Set<OWLAxiom> lista, OWLClass classe) {
+    private List<OWLAxiom> equivalent(Set<OWLAxiom> lista, OWLClassExpression classe) {
         List<OWLAxiom> list = new ArrayList<OWLAxiom>();
         Iterator<OWLAxiom> leftIt = lista.iterator();
 
