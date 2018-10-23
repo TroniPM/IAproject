@@ -420,6 +420,12 @@ public class Conversor {
                 while (it.hasNext()) {
                     subs1.add(it.next());
                 }
+            } else if (objOutter.getAxiomType() == AxiomType.DISJOINT_CLASSES) {
+                Set<OWLClassExpression> listaEquivalent = ((OWLDisjointClassesAxiom) objOutter).getClassExpressions();
+                Iterator<OWLClassExpression> it = listaEquivalent.iterator();
+                while (it.hasNext()) {
+                    subs1.add(it.next());
+                }
             }
         }
         Iterator<OWLAxiom> rightIt = listDir.iterator();
@@ -584,6 +590,16 @@ public class Conversor {
                         list.add(ax2);
                     }
                 }
+            } else if (objOutter.getAxiomType() == AxiomType.DISJOINT_CLASSES) {
+                Set<OWLClassExpression> listaEquivalent = ((OWLDisjointClassesAxiom) objOutter).getClassExpressions();
+                Iterator<OWLClassExpression> it = listaEquivalent.iterator();
+                while (it.hasNext()) {
+                    OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(it.next(), classe);
+                    if (hasNotExpression) {//NEGAÇÃO DA NEGAÇÃO
+                        list.add(ax2.getNNF());
+                    } else {
+                        list.add(ax2);
+                    }
                 }
             }
         }
