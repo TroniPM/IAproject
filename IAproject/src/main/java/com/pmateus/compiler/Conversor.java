@@ -139,16 +139,9 @@ public class Conversor {
                     } else {
                         posicaoNOT = 1;
                     }
-
                 } else {
                     posicaoNOT = 2;
                 }
-            }
-        }
-
-        if (hasNotExpression) {
-            if (posicaoNOT == -1) {
-                posicaoNOT = 1;
             }
         }
 
@@ -195,19 +188,24 @@ public class Conversor {
                 case Util.THAT:
                 case Util.AND: {
                     if (listEsq != null && listDir == null) {
-                        List<OWLAxiom> listaa = intersecao(listEsq, dir);
+                        List<OWLAxiom> listaa = intersecao(listEsq, dir, hasNotExpression);
                         list.addAll(listaa);
                     } else if (listDir != null && listEsq == null) {
-                        List<OWLAxiom> listaa = intersecao(listDir, esq);
+                        List<OWLAxiom> listaa = intersecao(listDir, esq, hasNotExpression);
                         list.addAll(listaa);
                     } else if (listEsq != null && listDir != null) {
-                        List<OWLAxiom> listaa = intersecao(listEsq, listDir);
+                        List<OWLAxiom> listaa = intersecao(listEsq, listDir, hasNotExpression);
                         list.addAll(listaa);
                     } else {
                         OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(dir, factory.getOWLObjectIntersectionOf(esq));
                         OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(esq, factory.getOWLObjectIntersectionOf(dir));
-                        list.add(ax1);
-                        list.add(ax2);
+                        if (hasNotExpression) {//NEGAÇÃO DA NEGAÇÃO
+                            list.add(ax1.getNNF());
+                            list.add(ax2.getNNF());
+                        } else {
+                            list.add(ax1);
+                            list.add(ax2);
+                        }
                     }
                     break;
                 }
@@ -360,7 +358,7 @@ public class Conversor {
         }
     }
 
-    private List<OWLAxiom> intersecao(Set<OWLAxiom> lista, OWLClassExpression classe) {
+    private List<OWLAxiom> intersecao(Set<OWLAxiom> lista, OWLClassExpression classe, boolean hasNotExpression) {
         List<OWLAxiom> list = new ArrayList<OWLAxiom>();
 
         Iterator<OWLAxiom> leftIt = lista.iterator();
@@ -382,7 +380,11 @@ public class Conversor {
         }
         if (!subs.isEmpty()) {
             OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs), classe);
-            list.add(ax1);
+            if (hasNotExpression) {//NEGAÇÃO DA NEGAÇÃO
+                list.add(ax1.getNNF());
+            } else {
+                list.add(ax1);
+            }
         }
 //        if (!equiv.isEmpty()) {
 //            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(equiv), classe);
@@ -392,7 +394,7 @@ public class Conversor {
         return list;
     }
 
-    private List<OWLAxiom> intersecao(Set<OWLAxiom> listEsq, Set<OWLAxiom> listDir) {
+    private List<OWLAxiom> intersecao(Set<OWLAxiom> listEsq, Set<OWLAxiom> listDir, boolean hasNotExpression) {
         List<OWLAxiom> list = new ArrayList<OWLAxiom>();
 
         Iterator<OWLAxiom> leftIt = listEsq.iterator();
@@ -431,8 +433,13 @@ public class Conversor {
         if (!subs1.isEmpty() && !subs2.isEmpty()) {
             OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs2), factory.getOWLObjectIntersectionOf(subs1));
             OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(factory.getOWLObjectIntersectionOf(subs1), factory.getOWLObjectIntersectionOf(subs2));
-            list.add(ax1);
-            list.add(ax2);
+            if (hasNotExpression) {//NEGAÇÃO DA NEGAÇÃO
+                list.add(ax1.getNNF());
+                list.add(ax2.getNNF());
+            } else {
+                list.add(ax1);
+                list.add(ax2);
+            }
         }
         return list;
     }
