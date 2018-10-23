@@ -125,6 +125,7 @@ public class Conversor {
 
         String[] term = token.label.replace("(", "").replace(")", "").replaceAll(" +", " ").trim().split(" ");
         int size = term.length;
+        String op = null;
 
         int posicaoNOT = 0;//0 = nenhum, -1 ESQUERDA, 1 DIREITA, 2, DIREITA-ESQUERDA
 
@@ -135,18 +136,29 @@ public class Conversor {
             if (arrayNOTs.indexOf("not") != -1) {
                 if (arrayNOTs.indexOf("not") == arrayNOTs.lastIndexOf("not")) {
                     if (arrayNOTs.indexOf("not") == 0) {
-                        term[0] = term[1];
                         posicaoNOT = -1;
-                    } else {
+
+                        op = term[2].toLowerCase();
+                        term[0] = term[1];
                         term[2] = term[3];
+                    } else {
                         posicaoNOT = 1;
+
+                        op = term[1].toLowerCase();
+                        term[2] = term[3];
                     }
                 } else {
+                    posicaoNOT = 2;
+
+                    op = term[2].toLowerCase();
                     term[0] = term[1];
                     term[3] = term[4];
-                    posicaoNOT = 2;
                 }
+            } else {
+                op = term[1].toLowerCase();
             }
+        } else {
+            op = term[1].toLowerCase();
         }
 
         Set<OWLAxiom> listEsq = null, listDir = null;
@@ -160,7 +172,6 @@ public class Conversor {
         }
 //        System.out.println("||||||||||||||||||||||||||| POSICAO: " + posicaoNOT);//DEBUG
 
-        String op = term[1].toLowerCase();
         List<OWLAxiom> list = null;
 
         //Operações permitidas
@@ -356,6 +367,7 @@ public class Conversor {
             return new HashSet<OWLAxiom>(list);
 
         } else {
+            System.out.println("||||||||||||||||||||||||||| " + String.join(",", term));//DEBUG
             throw new ConversorException("Operação não permitida: " + op);
         }
 //        java.util.logging.Logger.getLogger(Conversor.class.getName()).log(Level.INFO, "NOT OK!!" + token.string());
