@@ -1,4 +1,6 @@
 FAZER ~NOT~
+	VER COMO FICA A IMPLEMENTAÇÃO DO NOT QNOS CASOS SOME/ALL
+
 
 ERRO DE SINTAXE PASSANDO:
 	Human equivalent (Racional and Crazy) or nor(Dog and Irational);
