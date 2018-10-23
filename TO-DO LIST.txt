@@ -1,19 +1,21 @@
+								===============================================
+								===============ORDEM DE MUDANÇA:===============
+								===============================================
+
+=============================================================================================================================
 FAZER ~NOT~
-	VER COMO FICA A IMPLEMENTAÇÃO DO NOT QNOS CASOS SOME/ALL
-
-
+	VER COMO FICA A IMPLEMENTAÇÃO DO NOT NOS CASOS SOME/ALL
+=============================================================================================================================
 ERRO DE SINTAXE PASSANDO:
 	Human equivalent (Racional and Crazy) or nor(Dog and Irational);
-
-
-	IMPLEMENTAR VALUE
-	
-	IMPLEMENTAR MIN
-	
-	IMPLEMENTAR MAX
-
+=============================================================================================================================
+IMPLEMENTAR VALUE
+IMPLEMENTAR MIN
+IMPLEMENTAR MAX
+=============================================================================================================================
 Se abrir um arquivo owl, converter para manchester owl sintaxe e jogar no editor.
-
+=============================================================================================================================
 Adicionar batchfile para que outros sistemas operacionais possam utilizar o programa. (ainda não compatível com unix e mac)
-
+=============================================================================================================================
 Se texto for número, colocar cor verde.
+=============================================================================================================================
