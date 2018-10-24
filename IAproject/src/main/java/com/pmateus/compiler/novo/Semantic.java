@@ -63,7 +63,7 @@ public class Semantic {
                             String particula = cmd[cm].substring(j, i + 1);
                             CompiladorToken token = new CompiladorToken(0, 0, particula);
                             tokens.add(token);
-//                            System.out.println("VAI TROCAR: " + token.label + " >> " + token.id);
+//                            System.out.println("@@@@@ VAI TROCAR: " + token.label + " >> " + token.id);
                             cmd[cm] = cmd[cm].replace(token.label, token.id);
                             flag = true;
                             break inner;
@@ -78,8 +78,7 @@ public class Semantic {
             }
         }
 
-//        cmd = substituir2(cmd, Util.NOT);
-
+        cmd = substituir2(cmd, Util.NOR);
         /**
          * TODO ordem de resolução. Adicionar campos abaixo
          */
@@ -99,7 +98,7 @@ public class Semantic {
         cmd = substituir3(cmd, Util.ISA);
         cmd = substituir3(cmd, Util.EQUIVALENT);
         cmd = substituir3(cmd, Util.THAT);
-        System.out.println(Arrays.toString(cmd));
+//        System.out.println(Arrays.toString(cmd));
         System.out.println("*******************************************");
 
         StringBuilder toPrint = new StringBuilder();
@@ -176,7 +175,7 @@ public class Semantic {
                     String particula = PATTERN + " " + s;
                     CompiladorToken token = new CompiladorToken(0, 0, particula);
                     tokens.add(token);
-//                    System.out.println("VAI TROCAR: " + token.label + " >> " + token.id);
+                    System.out.println("substituir2 >> VAI TROCAR: " + token.label + " >> " + token.id);
                     cmd[linha] = cmd[linha].replace(token.label, token.id);
 
                     operador = false;
@@ -223,7 +222,7 @@ public class Semantic {
                     String particula = (esq ? "not " : "") + last + " " + PATTERN + " " + (dir ? "not " : "") + s;
                     CompiladorToken token = new CompiladorToken(0, 0, particula);
                     tokens.add(token);
-                    System.out.println("VAI TROCAR: " + token.label + " >> " + token.id);
+                    System.out.println("substituir3 << VAI TROCAR: " + token.label + " >> " + token.id);
                     cmd[linha] = cmd[linha].replace(token.label, token.id);
 //                    return substituir3(cmd, PATTERN);
                     esq = false;

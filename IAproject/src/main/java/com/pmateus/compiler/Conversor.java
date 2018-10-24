@@ -162,12 +162,22 @@ public class Conversor {
         }
 
         Set<OWLAxiom> listEsq = null, listDir = null;
-        for (CompiladorToken in : tokens) {
-            if (in.id.equals(term[0])) {
-                listEsq = exec(in, posicaoNOT == -1 || posicaoNOT == 2);
+
+        if (size == 2) {//NOR CASE
+            for (CompiladorToken in : tokens) {
+                if (in.id.equals(term[1])) {
+                    Set<OWLAxiom> list = exec(in, true);
+                    return list;
+                }
             }
-            if (in.id.equals(term[2])) {
-                listDir = exec(in, posicaoNOT == 1 || posicaoNOT == 2);
+        } else {
+            for (CompiladorToken in : tokens) {
+                if (in.id.equals(term[0])) {
+                    listEsq = exec(in, posicaoNOT == -1 || posicaoNOT == 2);
+                }
+                if (in.id.equals(term[2])) {
+                    listDir = exec(in, posicaoNOT == 1 || posicaoNOT == 2);
+                }
             }
         }
 //        System.out.println("||||||||||||||||||||||||||| POSICAO: " + posicaoNOT);//DEBUG

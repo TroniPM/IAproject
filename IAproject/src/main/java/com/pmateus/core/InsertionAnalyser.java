@@ -34,6 +34,7 @@ public class InsertionAnalyser {
     public static String command_subclass = "subc";
     public static String command_equiv = "equiv";
     public static String command_not = "not";
+    public static String command_nor = "nor";
     public static String command_relationship = "rs";
     public static String command_qtf_existencial = "+";
     public static String command_qtf_universal = "*";
@@ -42,9 +43,9 @@ public class InsertionAnalyser {
 
     /*
     * TODO alterar isso aqui caso adicione palavras reservadas novas
-    */
+     */
     public static String[] commands_list = new String[]{"some", "all", "value",
-        "min", "max", "exactly", "that", "not", "and", "or", "only", "isa", "equivalent"};
+        "min", "max", "exactly", "that", "not", "and", "or", "only", "isa", "equivalent", "nor"};
 
     public String[] all_commands = null;
 

@@ -29,12 +29,13 @@ public abstract class Util {
     public static final String EXACTLY = "exactly";
     public static final String THAT = "that";
     public static final String NOT = "not";
+    public static final String NOR = "nor";
     public static final String AND = "and";
     public static final String OR = "or";
     public static final String ONLY = "only";
     public static final String ISA = "isa";
     public static final String EQUIVALENT = "equivalent";
     public static final String[] COMMANDS_LIST = new String[]{SOME, ALL, VALUE,
-        MIN, MAX, EXACTLY, THAT, NOT, AND, OR, ONLY, ISA, EQUIVALENT};
+        MIN, MAX, EXACTLY, THAT, NOT, AND, OR, ONLY, ISA, EQUIVALENT, NOR};
 
 }
