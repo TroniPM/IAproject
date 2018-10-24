@@ -44,6 +44,7 @@ import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLObjectComplementOf;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyDomainAxiom;
+import org.semanticweb.owlapi.model.OWLObjectUnionOf;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
@@ -246,8 +247,12 @@ public class Conversor {
                         List<OWLAxiom> listaa = uniao(listEsq, listDir, hasNotExpression);
                         list.addAll(listaa);
                     } else {
-                        OWLDisjointClassesAxiom ax1 = factory.getOWLDisjointClassesAxiom(dir, esq);
-                        OWLDisjointClassesAxiom ax2 = factory.getOWLDisjointClassesAxiom(esq, dir);
+                        OWLObjectUnionOf ax = factory.getOWLObjectUnionOf(dir, esq);
+                        OWLObjectUnionOf ay = factory.getOWLObjectUnionOf(esq, dir);
+
+                        OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(ax, ay);
+                        OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(ay, ax);
+
                         if (hasNotExpression) {//NEGAÇÃO DA NEGAÇÃO
                             list.add(ax1.getNNF());
                             list.add(ax2.getNNF());
@@ -529,11 +534,18 @@ public class Conversor {
             }
         }
         if (!subs.isEmpty()) {
-            OWLDisjointClassesAxiom ax1 = factory.getOWLDisjointClassesAxiom(factory.getOWLObjectUnionOf(subs), classe);
+            OWLObjectUnionOf ax = factory.getOWLObjectUnionOf(factory.getOWLObjectUnionOf(subs), classe);
+            OWLObjectUnionOf ay = factory.getOWLObjectUnionOf(classe, factory.getOWLObjectUnionOf(subs));
+
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(ax, ay);
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(ay, ax);
+
             if (hasNotExpression) {//NEGAÇÃO DA NEGAÇÃO
                 list.add(ax1.getNNF());
+                list.add(ax2.getNNF());
             } else {
                 list.add(ax1);
+                list.add(ax2);
             }
         }
 //        if (!equiv.isEmpty()) {
@@ -593,8 +605,12 @@ public class Conversor {
         }
 
         if (!subs1.isEmpty() && !subs2.isEmpty()) {
-            OWLDisjointClassesAxiom ax1 = factory.getOWLDisjointClassesAxiom(factory.getOWLObjectUnionOf(subs2), factory.getOWLObjectUnionOf(subs1));
-            OWLDisjointClassesAxiom ax2 = factory.getOWLDisjointClassesAxiom(factory.getOWLObjectUnionOf(subs1), factory.getOWLObjectUnionOf(subs2));
+            OWLObjectUnionOf ax = factory.getOWLObjectUnionOf(factory.getOWLObjectUnionOf(subs1), factory.getOWLObjectUnionOf(subs2));
+            OWLObjectUnionOf ay = factory.getOWLObjectUnionOf(factory.getOWLObjectUnionOf(subs2), factory.getOWLObjectUnionOf(subs1));
+
+            OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(ax, ay);
+            OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(ay, ax);
+
             if (hasNotExpression) {//NEGAÇÃO DA NEGAÇÃO
                 list.add(ax1.getNNF());
                 list.add(ax2.getNNF());
