@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.tronipm.gauufrpe.compiler.exception;
+package com.tronipm.gauufrpe.exception;
 
 import com.tronipm.gauufrpe.model.TokenPreProcessamento;
 
@@ -21,18 +21,13 @@ import com.tronipm.gauufrpe.model.TokenPreProcessamento;
  *
  * @author Matt
  */
-public class SintaticAnalyzerException extends Exception {
+public class LexicalAnalyzerException extends Exception {
 
-    public SintaticAnalyzerException(String message) {
+    public LexicalAnalyzerException(String message) {
         super(message);
     }
 
-    public SintaticAnalyzerException(TokenPreProcessamento l) {
-        super("Unexpected token '" + (l.lexeme) + "' at line " + l.line + " and position " + l.position + ".");
-    }
-
-    public SintaticAnalyzerException(TokenPreProcessamento l, String expected) {
-        super("Unexpected token '" + (l.lexeme)
-                + "' at line " + l.line + " and position " + l.position + " (expected: '" + expected + "').");
+    public LexicalAnalyzerException(TokenPreProcessamento l) {
+        super("Unknow token '" + l.lexeme + "' at line " + l.line + " and position " + l.position + ".");
     }
 }

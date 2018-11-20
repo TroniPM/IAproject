@@ -17,7 +17,7 @@ package com.tronipm.gauufrpe.controller;
 
 import com.tronipm.gauufrpe.model.TokenProcessamento;
 import com.tronipm.gauufrpe.util.Util;
-import com.tronipm.gauufrpe.compiler.exception.SemanticAnalyzerException;
+import com.tronipm.gauufrpe.exception.SemanticAnalyzerException;
 import java.util.StringTokenizer;
 import java.util.ArrayList;
 import java.util.Arrays;

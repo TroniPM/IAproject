@@ -17,10 +17,10 @@ package com.tronipm.gauufrpe.view;
 
 import com.google.common.base.Joiner;
 import com.tronipm.gauufrpe.controller.ControllerConversor;
-import com.tronipm.gauufrpe.compiler.exception.ConversorException;
-import com.tronipm.gauufrpe.compiler.exception.LexicalAnalyzerException;
-import com.tronipm.gauufrpe.compiler.exception.SemanticAnalyzerException;
-import com.tronipm.gauufrpe.compiler.exception.SintaticAnalyzerException;
+import com.tronipm.gauufrpe.exception.ConversorException;
+import com.tronipm.gauufrpe.exception.LexicalAnalyzerException;
+import com.tronipm.gauufrpe.exception.SemanticAnalyzerException;
+import com.tronipm.gauufrpe.exception.SintaticAnalyzerException;
 import com.tronipm.gauufrpe.controller.ControllerLexical;
 import com.tronipm.gauufrpe.controller.ControllerSemantic;
 import com.tronipm.gauufrpe.controller.ControllerSintatic;

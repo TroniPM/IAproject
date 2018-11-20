@@ -2,7 +2,7 @@ package com.tronipm.gauufrpe.controller;
 
 import com.tronipm.gauufrpe.model.TokenEnum;
 import com.tronipm.gauufrpe.model.TokenPreProcessamento;
-import com.tronipm.gauufrpe.compiler.exception.LexicalAnalyzerException;
+import com.tronipm.gauufrpe.exception.LexicalAnalyzerException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 

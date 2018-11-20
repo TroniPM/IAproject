@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.tronipm.gauufrpe.compiler.exception.ConversorException;
+import com.tronipm.gauufrpe.exception.ConversorException;
 import com.tronipm.gauufrpe.view.JFramePrincipal;
 import java.util.Arrays;
 import java.util.Iterator;

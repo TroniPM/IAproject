@@ -4,8 +4,8 @@ import com.tronipm.gauufrpe.model.RegraEnum;
 import com.tronipm.gauufrpe.model.TokenEnum;
 import com.tronipm.gauufrpe.model.Regra;
 import com.tronipm.gauufrpe.model.TokenPreProcessamento;
-import com.tronipm.gauufrpe.compiler.exception.LexicalAnalyzerException;
-import com.tronipm.gauufrpe.compiler.exception.SintaticAnalyzerException;
+import com.tronipm.gauufrpe.exception.LexicalAnalyzerException;
+import com.tronipm.gauufrpe.exception.SintaticAnalyzerException;
 import java.util.ArrayList;
 
 public class ControllerSintatic {
