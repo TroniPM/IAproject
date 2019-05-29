@@ -1,4 +1,4 @@
-# IAProject
+# OrCA IDE
 Software to create ontologies and make queries (TODO) in these ontologies.
 
 
