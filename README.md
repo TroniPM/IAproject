@@ -1,5 +1,5 @@
 # OrCA IDE
-Software to create ontologies and make queries (TODO) in these ontologies.
+Ontology vieweR and CreAtor Integrated Development Environment
 
-
-This project require maven (tested with netbeans).
+   - Software to create ontologies and make queries (TODO) in these ontologies.
+   - This project require maven (tested with netbeans).
