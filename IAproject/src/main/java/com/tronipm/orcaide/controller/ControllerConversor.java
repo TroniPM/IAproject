@@ -15,6 +15,7 @@
  */
 package com.tronipm.orcaide.controller;
 
+import com.tronipm.orcaide.core.InsertionAnalyser;
 import com.tronipm.orcaide.util.Util;
 import com.tronipm.orcaide.model.TokenProcessamento;
 import edu.stanford.nlp.io.StringOutputStream;
@@ -37,13 +38,23 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
 import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.AxiomType;
+import org.semanticweb.owlapi.model.EntityType;
+import org.semanticweb.owlapi.model.OWLAnnotation;
+import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLDatatype;
+import org.semanticweb.owlapi.model.OWLDeclarationAxiom;
 import org.semanticweb.owlapi.model.OWLDisjointClassesAxiom;
 import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
 import org.semanticweb.owlapi.model.OWLIndividual;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectComplementOf;
+import org.semanticweb.owlapi.model.OWLObjectExactCardinality;
+import org.semanticweb.owlapi.model.OWLObjectIntersectionOf;
+import org.semanticweb.owlapi.model.OWLObjectMaxCardinality;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyDomainAxiom;
 import org.semanticweb.owlapi.model.OWLObjectUnionOf;
@@ -112,6 +123,14 @@ public class ControllerConversor {
                 flag = false;
                 list = exec(in, false);
 
+                System.out.println("EXPRESSION(): " + in.string());
+                System.out.println("SIZE(): " + in.axiomas.size());
+                if (in.axiomas.size() > 0) {
+                    for (OWLClassExpression inn : in.axiomas) {
+                        System.out.println("AXIOM(): " + inn.toString());
+                    }
+                }
+
                 manager.addAxioms(ontology, list);
 
             } else {
@@ -121,6 +140,13 @@ public class ControllerConversor {
         jFrameMain.coreApp.owlRepository.currentOntologyManager = manager;
         jFrameMain.coreApp.owlRepository.currentDataFactory = factory;
         return true;
+    }
+
+    private String father = null;
+
+    public Set<OWLAxiom> exec(TokenProcessamento token, boolean hasNotExpression, String father) throws ConversorException {//PODE SER RECURSIVO
+        this.father = father;
+        return exec(token, hasNotExpression);
     }
 
     public Set<OWLAxiom> exec(TokenProcessamento token, boolean hasNotExpression) throws ConversorException {//PODE SER RECURSIVO
@@ -159,9 +185,11 @@ public class ControllerConversor {
                 }
             } else {
                 op = term[1].toLowerCase();
+                //token.operacao.add(op);
             }
         } else {
             op = term[1].toLowerCase();
+            //token.operacao.add(op);
         }
 
         Set<OWLAxiom> listEsq = null, listDir = null;
@@ -174,17 +202,93 @@ public class ControllerConversor {
                 }
             }
         } else {
+            //Pegando axioma correpondente ao HASH
             for (TokenProcessamento in : tokens) {
-                if (in.id.equals(term[0])) {
-                    listEsq = exec(in, posicaoNOT == -1 || posicaoNOT == 2);
-                }
-                if (in.id.equals(term[2])) {
-                    listDir = exec(in, posicaoNOT == 1 || posicaoNOT == 2);
+                for (String termF : term) {
+                    boolean flagTerm = false;
+                    if (in.id.equals(token.id) && InsertionAnalyser.wordIsReserved(termF)) {
+                        token.operacao.add(termF);
+                        continue;
+                    }
+
+                    if (in.id.equals(termF)) {
+                        if (!in.used) {
+                            exec(in, posicaoNOT == -1 || posicaoNOT == 2);
+                        }
+                        flagTerm = true;
+                    }
+                    if (flagTerm && in.axiomas.size() == 1) {
+                        token.axiomas.add(in.axiomas.get(0));
+                    }
                 }
             }
         }
-//        System.out.println("||||||||||||||||||||||||||| POSICAO: " + posicaoNOT);//DEBUG
 
+        if (token.axiomas.size() >= 2) {
+            int qtd = 0;
+            String loc = token.operacao.get(0);
+            for (String in : token.operacao) {
+                if (loc.equals(in)) {
+                    qtd++;
+                } else {
+                    qtd = -1;
+                    break;
+                }
+            }
+
+            //Se só tiver  operação de um tipo: (aaa OR bbb or ccc)
+            if (qtd > 0) {
+                //Checar se todos os itens da expressão são os mesmos que tão dentro expressão
+                //senão, vai adicionalos manualmente a lista de axiomas
+
+                for (String termF : term) {
+                    boolean flaag = true;
+                    //Ignora se for palavra reservada
+                    for (String oop : token.operacao) {
+                        if (oop.equals(termF)) {
+                            flaag = false;
+                            break;
+                        }
+                    }
+
+                    if (flaag
+                            && !termF.startsWith(TokenProcessamento.INI)
+                            && !termF.endsWith(TokenProcessamento.END)) {
+                        token.axiomas.add(factory.getOWLClass(IRI.create(PROJECT_IRI + termF)));
+                    }
+                }
+
+                Set<OWLClassExpression> a123 = new HashSet<>(token.axiomas);
+                token.axiomas.clear();
+                if (token.operacao.get(0).equals(Util.OR)) {
+                    token.axiomas.add(factory.getOWLObjectUnionOf(a123));
+                } else if (token.operacao.get(0).equals(Util.AND)) {
+                    token.axiomas.add(factory.getOWLObjectIntersectionOf(a123));
+                } else {
+                    throw new ConversorException("Tentou juntar classes mas deu erro.");
+                }
+            } else {
+                List<OWLClassExpression> auxAxiomas = new ArrayList<>();
+                for (int ii = 0; ii < token.operacao.size(); ii++) {
+                    String oop = token.operacao.get(ii);
+
+                    String esqS = term[ii];
+                    String dirS = term[ii + 1];
+
+                    System.out.println("esqS: " + esqS);
+                    System.out.println("dirS: " + dirS);
+                    //TODO fazer isso daqui. qnd tem A is (B and C or D)
+                }
+                throw new ConversorException("Tentou fazer algo como A OP (BB and CC or DD)");
+
+            }
+
+            //Dummy
+            token.used = true;
+            return new HashSet<OWLAxiom>(new ArrayList<OWLAxiom>());
+        }
+
+//        System.out.println("||||||||||||||||||||||||||| POSICAO: " + posicaoNOT);//DEBUG
         List<OWLAxiom> list = null;
 
         //Operações permitidas
@@ -202,6 +306,7 @@ public class ControllerConversor {
             OWLClassExpression esq = null;
             if (posicaoNOT == -1 || posicaoNOT == 2) {
                 esq = esqClass.getComplementNNF();
+//                esq = esqClass.getNNF();
             } else {
                 esq = esqClass;
             }
@@ -209,8 +314,92 @@ public class ControllerConversor {
             OWLClassExpression dir = null;
             if (posicaoNOT == 1 || posicaoNOT == 2) {
                 dir = dirClass.getComplementNNF();
+//                dir = dirClass.getNNF();
             } else {
                 dir = dirClass;
+            }
+
+            //Fazer verificação se esquerda ou direita é um placeholder
+            //ESQUERDA
+            if (term.length == 3) {
+                for (TokenProcessamento esqC : tokens) {
+                    if (esqC.id.equals(term[0]) && !esqC.axiomas.isEmpty()) {
+                        esq = esqC.axiomas.get(0);
+                        break;
+                    }
+                }
+                //DIREITA
+                for (TokenProcessamento dirC : tokens) {
+                    if (dirC.id.equals(term[2]) && !dirC.axiomas.isEmpty()) {
+                        dir = dirC.axiomas.get(0);
+                        break;
+                    }
+                }
+            } else if (term.length > 3
+                    && !(posicaoNOT == 1 || posicaoNOT == 2) && !(posicaoNOT == -1 || posicaoNOT == 2)) {
+                int qtd = 0;
+                String loc = token.operacao.get(0);
+                for (String in : token.operacao) {
+                    if (loc.equals(in)) {
+                        qtd++;
+                    } else {
+                        qtd = -1;
+                        break;
+                    }
+                }
+
+                if (qtd > 0) {
+                    for (String in : term) {
+                        if (InsertionAnalyser.wordIsReserved(in)) {
+                            continue;
+                        }
+                        OWLClass c1 = factory.getOWLClass(IRI.create(PROJECT_IRI + in));
+                        token.axiomas.add(c1);
+
+                    }
+                    Set<OWLClassExpression> a123 = new HashSet<>(token.axiomas);
+                    token.axiomas.clear();
+                    if (token.operacao.get(0).equals(Util.OR)) {
+                        token.axiomas.add(factory.getOWLObjectUnionOf(a123));
+                    } else if (token.operacao.get(0).equals(Util.AND)) {
+                        token.axiomas.add(factory.getOWLObjectIntersectionOf(a123));
+                    } else {
+                        throw new ConversorException("Tentou juntar classes mas deu erro.");
+                    }
+                } else {
+//                    throw new ConversorException("Tentou usar A OP0 (B OP1 C OP2 D)");
+
+                    OWLClassExpression current = null;
+                    for (int ij = 0; ij < token.operacao.size(); ij++) {
+                        String oop = token.operacao.get(ij);
+                        String left = term[ij * 2];
+                        String right = term[(ij * 2) + 2];
+
+                        if (oop.equals(Util.AND) || oop.equals(Util.THAT)) {
+                            OWLClass cEsq = factory.getOWLClass(IRI.create(PROJECT_IRI + left));
+                            OWLClass cDir = factory.getOWLClass(IRI.create(PROJECT_IRI + right));
+
+                            if (current == null) {
+                                current = (factory.getOWLObjectIntersectionOf(cEsq, cDir));
+                            } else {
+                                current = (factory.getOWLObjectIntersectionOf(current, cDir));
+                            }
+                        } else if (oop.equals(Util.OR)) {
+                            OWLClass cEsq = factory.getOWLClass(IRI.create(PROJECT_IRI + left));
+                            OWLClass cDir = factory.getOWLClass(IRI.create(PROJECT_IRI + right));
+
+                            if (current == null) {
+                                current = (factory.getOWLObjectUnionOf(cEsq, cDir));
+                            } else {
+                                current = (factory.getOWLObjectUnionOf(current, cDir));
+                            }
+                        }
+                    }
+                    if (current != null) {
+                        token.axiomas.add(current);
+                    }
+                }
+
             }
 
             switch (op) {
@@ -226,8 +415,20 @@ public class ControllerConversor {
                         List<OWLAxiom> listaa = intersecao(listEsq, listDir, hasNotExpression);
                         list.addAll(listaa);
                     } else {
-                        OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(dir, factory.getOWLObjectIntersectionOf(esq));
-                        OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(esq, factory.getOWLObjectIntersectionOf(dir));
+                        //OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(dir, factory.getOWLObjectIntersectionOf(esq));
+                        //OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(esq, factory.getOWLObjectIntersectionOf(dir));
+                        OWLObjectIntersectionOf ax = factory.getOWLObjectIntersectionOf(dir, esq);
+                        OWLObjectIntersectionOf ay = factory.getOWLObjectIntersectionOf(esq, dir);
+
+                        OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(ax, ay);
+                        OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(ay, ax);
+
+                        if (token.axiomas.size() == 1) {
+                            token.axiomas.clear();
+                        }
+
+                        token.axiomas.add(factory.getOWLObjectIntersectionOf(esq, dir));
+
                         if (hasNotExpression) {//NEGAÇÃO DA NEGAÇÃO
                             list.add(ax1.getNNF());
                             list.add(ax2.getNNF());
@@ -236,6 +437,7 @@ public class ControllerConversor {
                             list.add(ax2);
                         }
                     }
+                    token.used = true;
                     break;
                 }
                 case Util.OR: {
@@ -255,6 +457,12 @@ public class ControllerConversor {
                         OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(ax, ay);
                         OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(ay, ax);
 
+                        if (token.axiomas.size() == 1) {
+                            token.axiomas.clear();
+                        }
+
+                        token.axiomas.add(factory.getOWLObjectUnionOf(esq, dir));
+
                         if (hasNotExpression) {//NEGAÇÃO DA NEGAÇÃO
                             list.add(ax1.getNNF());
                             list.add(ax2.getNNF());
@@ -263,6 +471,7 @@ public class ControllerConversor {
                             list.add(ax2);
                         }
                     }
+                    token.used = true;
                     break;
                 }
                 case Util.ISA: {
@@ -283,7 +492,7 @@ public class ControllerConversor {
                             list.add(ax1);
                         }
                     }
-
+                    token.used = true;
                     break;
                 }
                 case Util.EQUIVALENT: {
@@ -304,6 +513,7 @@ public class ControllerConversor {
                             list.add(ax1);
                         }
                     }
+                    token.used = true;
                     break;
                 }
                 case Util.SOME: {
@@ -321,10 +531,31 @@ public class ControllerConversor {
                     } else {
                         OWLObjectProperty property = factory.getOWLObjectProperty(IRI.create(PROJECT_IRI + term[0]));
                         OWLClassExpression exp = factory.getOWLObjectSomeValuesFrom(property, dir);
-                        OWLSubClassOfAxiom axFinal = factory.getOWLSubClassOfAxiom(dir, exp);
-                        list.add(axFinal);
-                    }
+                        OWLSubClassOfAxiom axFinal;
 
+                        if (father != null) {
+                            OWLClass fatherClass = factory.getOWLClass(IRI.create(PROJECT_IRI + father));
+                            axFinal = factory.getOWLSubClassOfAxiom(fatherClass, exp);
+                            father = null;
+                            list.add(axFinal);
+                        } else {
+
+                            //Se já tiver expressão e ela for igual...
+                            if (token.axiomas.size() == 1
+                                    && token.axiomas.get(0).toString().equals(exp.toString())) {
+                                break;
+                            } else if (token.axiomas.size() == 1) {
+                                token.axiomas.clear();
+
+                            }
+
+                            token.axiomas.add(exp);
+                            // axFinal = factory.getOWLSubClassOfAxiom(dir, exp);
+                        }
+
+                        // list.add(axFinal);
+                    }
+                    token.used = true;
                     break;
                 }
                 case Util.ALL: {
@@ -342,10 +573,31 @@ public class ControllerConversor {
                     } else {
                         OWLObjectProperty property = factory.getOWLObjectProperty(IRI.create(PROJECT_IRI + term[0]));
                         OWLClassExpression exp = factory.getOWLObjectAllValuesFrom(property, dir);
-                        OWLSubClassOfAxiom axFinal = factory.getOWLSubClassOfAxiom(dir, exp);
-                        list.add(axFinal);
-                    }
+                        OWLSubClassOfAxiom axFinal;
 
+                        if (father != null) {
+                            OWLClass fatherClass = factory.getOWLClass(IRI.create(PROJECT_IRI + father));
+                            axFinal = factory.getOWLSubClassOfAxiom(fatherClass, exp);
+                            father = null;
+                            list.add(axFinal);
+                        } else {
+
+                            //Se já tiver expressão e ela for igual...
+                            if (token.axiomas.size() == 1
+                                    && token.axiomas.get(0).toString().equals(exp.toString())) {
+                                break;
+                            } else if (token.axiomas.size() == 1) {
+                                token.axiomas.clear();
+
+                            }
+
+                            token.axiomas.add(exp);
+                            // axFinal = factory.getOWLSubClassOfAxiom(dir, exp);
+                        }
+
+                        // list.add(axFinal);
+                    }
+                    token.used = true;
                     break;
                 }
                 case Util.ONLY: {
@@ -366,7 +618,7 @@ public class ControllerConversor {
                         OWLSubClassOfAxiom axFinal = factory.getOWLSubClassOfAxiom(dir, exp);
                         list.add(axFinal);
                     }
-
+                    token.used = true;
                     break;
                 }
                 /**
@@ -381,6 +633,7 @@ public class ControllerConversor {
             }
             java.util.logging.Logger.getLogger(ControllerConversor.class.getName()).log(Level.INFO, "OK!" + token.string());
 
+            token.used = true;
             return new HashSet<OWLAxiom>(list);
 
         } else {
@@ -632,6 +885,12 @@ public class ControllerConversor {
 
         while (leftIt.hasNext()) {
             OWLAxiom objOutter = leftIt.next();
+
+            if (lista.size() == 1) {
+                list.add(objOutter);
+                return list;
+            }
+
             if (objOutter.getAxiomType() == AxiomType.SUBCLASS_OF) {
                 OWLClassExpression cc = ((OWLSubClassOfAxiom) objOutter).getSubClass();
                 OWLSubClassOfAxiom ax1 = factory.getOWLSubClassOfAxiom(cc, classe);

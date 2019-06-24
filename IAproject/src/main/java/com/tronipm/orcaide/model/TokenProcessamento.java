@@ -16,6 +16,10 @@
 package com.tronipm.orcaide.model;
 
 import com.tronipm.orcaide.util.RandomString;
+import java.util.ArrayList;
+import java.util.List;
+import org.semanticweb.owlapi.model.OWLAxiom;
+import org.semanticweb.owlapi.model.OWLClassExpression;
 
 /**
  *
@@ -29,6 +33,11 @@ public class TokenProcessamento {
     public boolean isNegacao = false;
 
     public boolean used = false;
+    public List<OWLClassExpression> axiomas = new ArrayList<>();
+    public String pai = null;
+    public List<String> operacao = new ArrayList<>();
+    public static final String INI = "@#@#";
+    public static final String END = "#@#@";
 
     public TokenProcessamento(int line, int column, String label) {
         this.line = line;
@@ -36,7 +45,7 @@ public class TokenProcessamento {
         this.label = label;
 
 //        this.id = new RandomString(label.length(), label.replace(")", "").replace("(", "").replace(" ", "")).nextString();
-        this.id = new RandomString(label.length()).nextString();
+        this.id = INI + (new RandomString(label.length()).nextString()) + END;
     }
 
     public TokenProcessamento(int line, int column, String label, boolean isNegacao) {

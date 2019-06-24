@@ -69,6 +69,17 @@ public class InsertionAnalyser {
         this.coreApp = aThis;
     }
 
+    public static boolean wordIsReserved(String word) {
+        boolean flag = false;
+        for (int i = 0; i < commands_list.length; i++) {
+            if (word.equalsIgnoreCase(commands_list[i])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public boolean onSubmitCode(String submitted) {
         if (Session.isDebbug) {
             System.out.println(InsertionAnalyser.class + " onSubmitCode()");

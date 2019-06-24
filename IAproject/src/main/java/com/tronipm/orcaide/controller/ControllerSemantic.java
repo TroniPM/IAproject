@@ -15,6 +15,7 @@
  */
 package com.tronipm.orcaide.controller;
 
+import com.tronipm.orcaide.core.InsertionAnalyser;
 import com.tronipm.orcaide.model.TokenProcessamento;
 import com.tronipm.orcaide.util.Util;
 import com.tronipm.orcaide.exception.SemanticAnalyzerException;

@@ -1,0 +1,99 @@
+/biotop/Action isa /biotop/Process;
+
+/biotop/Death isa /injuryAndDeath/DeathEvent;
+
+/biotop/Human isa (/biotop/bearerOf some (/PATO/PATO_0001894 and (/biotop/qualityLocated some /ntdo/PhenotypicSexValueRegion)));
+
+/biotop/LivingOrganism isa (/biotop/hasLocus all /biotop/LivingOrganism);
+/biotop/LivingOrganism isa (/ntdo/hasGeographicLocation all /biotop/SpatialRegion);
+
+/biotop/PointInTime equivalent /injuryAndDeath/TimeBoundary;
+
+/biotop/Process isa ((/biotop/hasDuration some /biotop/TimeInterval) or (/biotop/hasPointInTime some /biotop/PointInTime));
+
+/biotop/SpatialRegion equivalent /GeoOnto/SpatialRegion;
+
+/biotop/TimeInterval equivalent /injuryAndDeath/Chronoid;
+
+/PATO/PATO_0000047 isa /PATO/PATO_0001995;
+
+ERRADO <REMOVER_DAQUI_PRA_TRAS_QUANDO_COMPILAR> /PATO/PATO_0000383 isa /PATO/PATO_0001894;
+
+/PATO/PATO_0000384 isa /PATO/PATO_0001894;
+
+/PATO/PATO_0001894 isa /PATO/PATO_0000047;
+
+/PATO/PATO_0001995 isa /biotop/ObjectQuality;
+
+/GeoOnto/SpatialRegion isa /biotop/ImmaterialThreeDimensionalPhysicalEntity;
+
+/injuryAndDeath/BiologicalDeathProcess isa ((/biotop/causedBy all (/biotop/PathologicalProcess or /injuryAndDeath/InjuryEvent)) and (/injuryAndDeath/hasConvalescentPatient all /biotop/LivingOrganism));
+
+/injuryAndDeath/BirthEvent isa /biotop/InstantaneousProcess;
+
+/injuryAndDeath/Chronoid isa /biotop/Time;
+
+/injuryAndDeath/DeathEvent isa /biotop/InstantaneousProcess;
+/injuryAndDeath/DeathEvent isa (/ntdo/hasRelatedDeathCause all /biotop/Condition);
+/injuryAndDeath/DeathEvent isa (/biotop/precedes all /ntdo/HealthSurveillanceNotificationAction);
+
+/injuryAndDeath/InjuryEvent isa /biotop/InstantaneousProcess;
+/injuryAndDeath/InjuryEvent isa (/biotop/InstantaneousProcess and (/biotop/causedBy all (/biotop/Process and not /biotop/BiologicalProcessualEntity)) and (/injuryAndDeath/hasInjuriedPatient all /biotop/LivingOrganism) and (/ntdo/hasGeographicLocation all /biotop/SpatialRegion));
+
+/Leishmaniasis/ArgentinaLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/BelizeLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/BoliviaLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/BrazilLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/ColombiaLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/CostaRicaLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/DominicanLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/EcuadorLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/ElSalvadorLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/FrenchGuyanaLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/GuadeloupeLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/GuatemalaLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/GuyanaLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/HondurasLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/MartiniqueLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/MexicoLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/NicaraguaLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/PanamaLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/ParaguayLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/PeruLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/SurinamLocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/USALocation isa /Ontology1317128918920/CountryLocation;
+
+/Leishmaniasis/VenezuelaLocation isa /Ontology1317128918920/CountryLocation;
+
+/ntdo/DeathDisposition isa /biotop/Disposition;
+
+/ntdo/HealthSurveillanceNotificationAction isa /biotop/Action;
+/ntdo/HealthSurveillanceNotificationAction isa ((/biotop/precededBy all (/biotop/PathologicalProcess or /injuryAndDeath/DeathEvent)) and (/ntdo/hasGeographicLocation all /biotop/SpatialRegion));
+/ntdo/HealthSurveillanceNotificationAction equivalent (/biotop/Action and (/biotop/precededBy some (/biotop/PathologicalProcess or /injuryAndDeath/DeathEvent)) and (/ntdo/hasGeographicLocation some /biotop/SpatialRegion));
+
+/ntdo/OrganismCharacteristicValueRegion isa /biotop/ValueRegion;
+
+/ntdo/PhenotypicSexValueRegion isa /ntdo/OrganismCharacteristicValueRegion;
+
+/Ontology1317128918920/CountryLocation isa /GeoOnto/SpatialRegion;

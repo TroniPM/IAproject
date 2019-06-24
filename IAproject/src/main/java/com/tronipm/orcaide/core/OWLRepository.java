@@ -36,7 +36,7 @@ import org.semanticweb.owlapi.util.OWLOntologyMerger;
 
 public class OWLRepository {
 
-    public static final IRI PROJECT_IRI = IRI.create("http://com.tronipm.orcaide#");
+    public static final IRI PROJECT_IRI = IRI.create("http://tronipm.orca.com#");
     public OWLOntologyManager currentOntologyManager = null;
     public OWLOntology currentOntology = null;
     public OWLDataFactory currentDataFactory = null;
