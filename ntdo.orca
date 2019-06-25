@@ -1,6 +1,6 @@
 /biotop/Action isa /biotop/Process;
 
-/biotop/Death isa /injuryAndDeath/DeathEvent;
+/biotop/Death equivalent /injuryAndDeath/DeathEvent;
 
 /biotop/Human isa (/biotop/bearerOf some (/PATO/PATO_0001894 and (/biotop/qualityLocated some /ntdo/PhenotypicSexValueRegion)));
 

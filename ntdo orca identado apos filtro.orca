@@ -1,0 +1,86 @@
+
+
+	/biotop/Human isa (
+		/biotop/bearerOf some (
+			/PATO/PATO_0001894 and (
+				/biotop/qualityLocated some /ntdo/PhenotypicSexValueRegion
+			)
+		)
+	);
+	
+	
+	
+	/biotop/LivingOrganism isa (
+		/biotop/hasLocus all /biotop/LivingOrganism
+	);
+	/biotop/LivingOrganism isa (
+		/ntdo/hasGeographicLocation all /biotop/SpatialRegion
+	);
+	
+	
+
+	/biotop/Process isa (
+		(/biotop/hasDuration some /biotop/TimeInterval) 
+		or 
+		(/biotop/hasPointInTime some /biotop/PointInTime)
+	);
+
+
+
+	/injuryAndDeath/BiologicalDeathProcess isa (
+		(
+			/biotop/causedBy all (
+				/biotop/PathologicalProcess or /injuryAndDeath/InjuryEvent
+			)
+		)
+		and 
+		(/injuryAndDeath/hasConvalescentPatient all /biotop/LivingOrganism)
+	);
+	
+	
+	/injuryAndDeath/DeathEvent isa /biotop/InstantaneousProcess;
+	/injuryAndDeath/DeathEvent isa (
+		/ntdo/hasRelatedDeathCause all /biotop/Condition
+	);
+	/injuryAndDeath/DeathEvent isa (
+		/biotop/precedes all /ntdo/HealthSurveillanceNotificationAction
+	);
+	
+	
+
+	/injuryAndDeath/InjuryEvent isa /biotop/InstantaneousProcess;
+	/injuryAndDeath/InjuryEvent isa (
+		/biotop/InstantaneousProcess and (
+			/biotop/causedBy all (
+				/biotop/Process and not /biotop/BiologicalProcessualEntity
+			)
+		)
+		and
+		(/injuryAndDeath/hasInjuriedPatient all /biotop/LivingOrganism)
+		and
+		(/ntdo/hasGeographicLocation all /biotop/SpatialRegion)
+	);
+
+	
+	
+	
+
+	/ntdo/HealthSurveillanceNotificationAction isa /biotop/Action;
+	/ntdo/HealthSurveillanceNotificationAction isa (
+		(
+			/biotop/precededBy all (
+				/biotop/PathologicalProcess or /injuryAndDeath/DeathEvent
+			)
+		) 
+		and 
+		(/ntdo/hasGeographicLocation all /biotop/SpatialRegion)
+	);
+	/ntdo/HealthSurveillanceNotificationAction equivalent (
+		/biotop/Action and (
+			/biotop/precededBy some (
+				/biotop/PathologicalProcess or /injuryAndDeath/DeathEvent
+			)
+		) 
+		and 
+		(/ntdo/hasGeographicLocation some /biotop/SpatialRegion)
+	);

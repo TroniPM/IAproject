@@ -1,0 +1,383 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="new1.com/#"
+     xml:base="new1.com/"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="new1.com/#"/>
+	
+    <owl:ObjectProperty rdf:about="new1.com/#/biotop/bearerOf"/>
+	
+    <owl:ObjectProperty rdf:about="new1.com/#/biotop/causedBy"/>
+	
+    <owl:ObjectProperty rdf:about="new1.com/#/biotop/hasDuration"/>
+	
+    <owl:ObjectProperty rdf:about="new1.com/#/biotop/hasLocus"/>
+	
+    <owl:ObjectProperty rdf:about="new1.com/#/biotop/hasPointInTime"/>
+	
+    <owl:ObjectProperty rdf:about="new1.com/#/biotop/precededBy"/>
+	
+    <owl:ObjectProperty rdf:about="new1.com/#/biotop/precedes"/>
+	
+    <owl:ObjectProperty rdf:about="new1.com/#/biotop/qualityLocated"/>
+	
+    <owl:ObjectProperty rdf:about="new1.com/#/injuryAndDeath/hasConvalescentPatient"/>
+	
+    <owl:ObjectProperty rdf:about="new1.com/#/injuryAndDeath/hasInjuriedPatient"/>
+	
+    <owl:ObjectProperty rdf:about="new1.com/#/ntdo/hasGeographicLocation"/>
+	
+    <owl:ObjectProperty rdf:about="new1.com/#/ntdo/hasRelatedDeathCause"/>
+	
+    <owl:Class rdf:about="new1.com/#/GeoOnto/SpatialRegion">
+        <owl:equivalentClass rdf:resource="new1.com/#/biotop/SpatialRegion"/>
+        <rdfs:subClassOf rdf:resource="new1.com/#/biotop/ImmaterialThreeDimensionalPhysicalEntity"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/ArgentinaLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/BelizeLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/BoliviaLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/BrazilLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/ColombiaLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/CostaRicaLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/DominicanLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/EcuadorLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/ElSalvadorLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/FrenchGuyanaLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/GuadeloupeLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/GuatemalaLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/GuyanaLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/HondurasLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/MartiniqueLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/MexicoLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/NicaraguaLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/PanamaLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/ParaguayLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/PeruLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/SurinamLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/USALocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Leishmaniasis/VenezuelaLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/Ontology1317128918920/CountryLocation"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/Ontology1317128918920/CountryLocation">
+        <rdfs:subClassOf rdf:resource="new1.com/#/GeoOnto/SpatialRegion"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/PATO/PATO_0000047">
+        <rdfs:subClassOf rdf:resource="new1.com/#/PATO/PATO_0001995"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/PATO/PATO_0000383">
+        <rdfs:subClassOf rdf:resource="new1.com/#/PATO/PATO_0001894"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/PATO/PATO_0000384">
+        <rdfs:subClassOf rdf:resource="new1.com/#/PATO/PATO_0001894"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/PATO/PATO_0001894">
+        <rdfs:subClassOf rdf:resource="new1.com/#/PATO/PATO_0000047"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/PATO/PATO_0001995">
+        <rdfs:subClassOf rdf:resource="new1.com/#/biotop/ObjectQuality"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/biotop/Action">
+        <rdfs:subClassOf rdf:resource="new1.com/#/biotop/Process"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/biotop/BiologicalProcessualEntity"/>
+	
+    <owl:Class rdf:about="new1.com/#/biotop/Condition"/>
+	
+    <owl:Class rdf:about="new1.com/#/biotop/Death">
+        <owl:equivalentClass rdf:resource="new1.com/#/injuryAndDeath/DeathEvent"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/biotop/Disposition"/>
+	
+    <owl:Class rdf:about="new1.com/#/biotop/Human">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="new1.com/#/biotop/bearerOf"/>
+                <owl:someValuesFrom>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="new1.com/#/PATO/PATO_0001894"/>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="new1.com/#/biotop/qualityLocated"/>
+                                <owl:someValuesFrom rdf:resource="new1.com/#/ntdo/PhenotypicSexValueRegion"/>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/biotop/ImmaterialThreeDimensionalPhysicalEntity"/>
+	
+    <owl:Class rdf:about="new1.com/#/biotop/InstantaneousProcess"/>
+	
+    <owl:Class rdf:about="new1.com/#/biotop/LivingOrganism">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="new1.com/#/biotop/hasLocus"/>
+                <owl:allValuesFrom rdf:resource="new1.com/#/biotop/LivingOrganism"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="new1.com/#/ntdo/hasGeographicLocation"/>
+                <owl:allValuesFrom rdf:resource="new1.com/#/biotop/SpatialRegion"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/biotop/ObjectQuality"/>
+	
+    <owl:Class rdf:about="new1.com/#/biotop/PathologicalProcess"/>
+	
+    <owl:Class rdf:about="new1.com/#/biotop/PointInTime">
+        <owl:equivalentClass rdf:resource="new1.com/#/injuryAndDeath/TimeBoundary"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/biotop/Process">
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="new1.com/#/biotop/hasDuration"/>
+                        <owl:someValuesFrom rdf:resource="new1.com/#/biotop/TimeInterval"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="new1.com/#/biotop/hasPointInTime"/>
+                        <owl:someValuesFrom rdf:resource="new1.com/#/biotop/PointInTime"/>
+                    </owl:Restriction>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/biotop/SpatialRegion"/>
+	
+    <owl:Class rdf:about="new1.com/#/biotop/Time"/>
+	
+    <owl:Class rdf:about="new1.com/#/biotop/TimeInterval">
+        <owl:equivalentClass rdf:resource="new1.com/#/injuryAndDeath/Chronoid"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/biotop/ValueRegion"/>
+	
+    <owl:Class rdf:about="new1.com/#/injuryAndDeath/BiologicalDeathProcess">
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="new1.com/#/biotop/causedBy"/>
+                        <owl:allValuesFrom>
+                            <owl:Class>
+                                <owl:unionOf rdf:parseType="Collection">
+                                    <rdf:Description rdf:about="new1.com/#/biotop/PathologicalProcess"/>
+                                    <rdf:Description rdf:about="new1.com/#/injuryAndDeath/InjuryEvent"/>
+                                </owl:unionOf>
+                            </owl:Class>
+                        </owl:allValuesFrom>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="new1.com/#/injuryAndDeath/hasConvalescentPatient"/>
+                        <owl:allValuesFrom rdf:resource="new1.com/#/biotop/LivingOrganism"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/injuryAndDeath/BirthEvent">
+        <rdfs:subClassOf rdf:resource="new1.com/#/biotop/InstantaneousProcess"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/injuryAndDeath/Chronoid">
+        <rdfs:subClassOf rdf:resource="new1.com/#/biotop/Time"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/injuryAndDeath/DeathEvent">
+        <rdfs:subClassOf rdf:resource="new1.com/#/biotop/InstantaneousProcess"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="new1.com/#/biotop/precedes"/>
+                <owl:allValuesFrom rdf:resource="new1.com/#/ntdo/HealthSurveillanceNotificationAction"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="new1.com/#/ntdo/hasRelatedDeathCause"/>
+                <owl:allValuesFrom rdf:resource="new1.com/#/biotop/Condition"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/injuryAndDeath/InjuryEvent">
+        <rdfs:subClassOf rdf:resource="new1.com/#/biotop/InstantaneousProcess"/>
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="new1.com/#/biotop/InstantaneousProcess"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="new1.com/#/biotop/causedBy"/>
+                        <owl:allValuesFrom>
+                            <owl:Class>
+                                <owl:intersectionOf rdf:parseType="Collection">
+                                    <rdf:Description rdf:about="new1.com/#/biotop/Process"/>
+                                    <owl:Class>
+                                        <owl:complementOf rdf:resource="new1.com/#/biotop/BiologicalProcessualEntity"/>
+                                    </owl:Class>
+                                </owl:intersectionOf>
+                            </owl:Class>
+                        </owl:allValuesFrom>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="new1.com/#/injuryAndDeath/hasInjuriedPatient"/>
+                        <owl:allValuesFrom rdf:resource="new1.com/#/biotop/LivingOrganism"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="new1.com/#/ntdo/hasGeographicLocation"/>
+                        <owl:allValuesFrom rdf:resource="new1.com/#/biotop/SpatialRegion"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/injuryAndDeath/TimeBoundary"/>
+	
+    <owl:Class rdf:about="new1.com/#/ntdo/DeathDisposition">
+        <rdfs:subClassOf rdf:resource="new1.com/#/biotop/Disposition"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/ntdo/HealthSurveillanceNotificationAction">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="new1.com/#/biotop/Action"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="new1.com/#/biotop/precededBy"/>
+                        <owl:someValuesFrom>
+                            <owl:Class>
+                                <owl:unionOf rdf:parseType="Collection">
+                                    <rdf:Description rdf:about="new1.com/#/biotop/PathologicalProcess"/>
+                                    <rdf:Description rdf:about="new1.com/#/injuryAndDeath/DeathEvent"/>
+                                </owl:unionOf>
+                            </owl:Class>
+                        </owl:someValuesFrom>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="new1.com/#/ntdo/hasGeographicLocation"/>
+                        <owl:someValuesFrom rdf:resource="new1.com/#/biotop/SpatialRegion"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="new1.com/#/biotop/Action"/>
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="new1.com/#/biotop/precededBy"/>
+                        <owl:allValuesFrom>
+                            <owl:Class>
+                                <owl:unionOf rdf:parseType="Collection">
+                                    <rdf:Description rdf:about="new1.com/#/biotop/PathologicalProcess"/>
+                                    <rdf:Description rdf:about="new1.com/#/injuryAndDeath/DeathEvent"/>
+                                </owl:unionOf>
+                            </owl:Class>
+                        </owl:allValuesFrom>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="new1.com/#/ntdo/hasGeographicLocation"/>
+                        <owl:allValuesFrom rdf:resource="new1.com/#/biotop/SpatialRegion"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/ntdo/OrganismCharacteristicValueRegion">
+        <rdfs:subClassOf rdf:resource="new1.com/#/biotop/ValueRegion"/>
+    </owl:Class>
+	
+    <owl:Class rdf:about="new1.com/#/ntdo/PhenotypicSexValueRegion">
+        <rdfs:subClassOf rdf:resource="new1.com/#/ntdo/OrganismCharacteristicValueRegion"/>
+    </owl:Class>
+</rdf:RDF>

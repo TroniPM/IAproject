@@ -118,7 +118,7 @@ public class ControllerSemantic {
                     continue;
                 }
 
-                if (str.equalsIgnoreCase(Util.NOT)) {
+                if (str.equalsIgnoreCase(Util.NOT) || str.equalsIgnoreCase(Util.NOR)) {
                     isNOT = true;
                     continue;
                 }

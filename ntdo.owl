@@ -1,28 +1,4 @@
 <?xml version="1.0"?>
-
-
-<!DOCTYPE rdf:RDF [
-    <!ENTITY PATO "http://purl.org/obo/owl/PATO#" >
-    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
-    <!ENTITY swrl "http://www.w3.org/2003/11/swrl#" >
-    <!ENTITY swrlb "http://www.w3.org/2003/11/swrlb#" >
-    <!ENTITY dc "http://purl.org/dc/elements/1.1/" >
-    <!ENTITY ru-meta "http://purl.org/imbi/ru-meta.owl#" >
-    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
-    <!ENTITY biotop "http://purl.org/biotop/biotop.owl#" >
-    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
-    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
-    <!ENTITY ntdo "http://www.cin.ufpe.br/~ntdo/OWLFiles/ntdo.owl#" >
-    <!ENTITY protege "http://protege.stanford.edu/plugins/owl/protege#" >
-    <!ENTITY xsp "http://www.owl-ontologies.com/2005/08/07/xsp.owl#" >
-    <!ENTITY GeoOnto "http://www.cin.ufpe.br/~ntdo/OWLFiles/GeoOnto.owl#" >
-    <!ENTITY DengueFever "http://www.cin.ufpe.br/~ntdo/OWLFiles/DengueFever.owl#" >
-    <!ENTITY Leishmaniasis "http://www.cin.ufpe.br/~ntdo/OWLFiles/Leishmaniasis.owl#" >
-    <!ENTITY injuryAndDeath "http://www.cin.ufpe.br/~ntdo/OWLFiles/InjuryAndDeath.owl#" >
-    <!ENTITY Ontology1317128918920 "http://www.semanticweb.org/ontologies/2011/8/Ontology1317128918920.owl#" >
-]>
-
-
 <rdf:RDF xmlns="http://www.cin.ufpe.br/~ntdo/OWLFiles/ntdo.owl#"
      xml:base="http://www.cin.ufpe.br/~ntdo/OWLFiles/ntdo.owl"
      xmlns:ru-meta="http://purl.org/imbi/ru-meta.owl#"
@@ -55,7 +31,7 @@
         <rdfs:subClassOf rdf:resource="/biotop/Process"/>
     </rdf:Description>
 
-<!-- /biotop/Death isa /injuryAndDeath/DeathEvent; -->
+<!-- /biotop/Death equivalent /injuryAndDeath/DeathEvent; -->
     <rdf:Description rdf:about="/biotop/Death">
         <owl:equivalentClass rdf:resource="/injuryAndDeath/DeathEvent"/>
     </rdf:Description>

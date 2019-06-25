@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import com.tronipm.orcaide.exception.ConversorException;
 import com.tronipm.orcaide.view.JFramePrincipal;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import org.semanticweb.owlapi.model.IRI;
@@ -152,19 +153,32 @@ public class ControllerConversor {
     public Set<OWLAxiom> exec(TokenProcessamento token, boolean hasNotExpression) throws ConversorException {//PODE SER RECURSIVO
         java.util.logging.Logger.getLogger(ControllerConversor.class.getName()).log(Level.INFO, token.string());
 
-        String[] term = token.label.replace("(", "").replace(")", "").replaceAll(" +", " ").trim().split(" ");
+        String[] term = token.label
+                .replace("(", "")
+                .replace(")", "")
+                .replace("\r", " ")
+                .replace("\t", " ")
+                .replace("\n", " ")
+                .replaceAll(" +", " ")
+                .trim().split(" ");
         int size = term.length;
         String op = null;
 
         int posicaoNOT = 0;//0 = nenhum, -1 ESQUERDA, 1 DIREITA, 2, DIREITA-ESQUERDA
+        HashMap<String, Boolean> arrayNOTAux = new HashMap<>();
+        for (int i = 0; i < term.length; i++) {
+            if (term[i].equals(Util.NOR)) {
+                arrayNOTAux.put(term[i + 1], true);
+            }
+        }
 
         if (size != 3) {//existe algum not
 //            System.out.println("||||||||||||||||||||||||||| " + String.join(",", term));//DEBUG
 
             ArrayList<String> arrayNOTs = new ArrayList<String>(Arrays.asList(term));
-            if (arrayNOTs.indexOf("not") != -1) {
-                if (arrayNOTs.indexOf("not") == arrayNOTs.lastIndexOf("not")) {
-                    if (arrayNOTs.indexOf("not") == 0) {
+            if (arrayNOTs.indexOf(Util.NOT) != -1) {
+                if (arrayNOTs.indexOf(Util.NOT) == arrayNOTs.lastIndexOf(Util.NOT)) {
+                    if (arrayNOTs.indexOf(Util.NOT) == 0) {
                         posicaoNOT = -1;
 
                         op = term[2].toLowerCase();
@@ -175,6 +189,12 @@ public class ControllerConversor {
 
                         op = term[1].toLowerCase();
                         term[2] = term[3];
+
+                        String[] termAux = new String[3];
+                        termAux[0] = term[0];
+                        termAux[1] = term[1];
+                        termAux[2] = term[2];
+                        term = termAux;
                     }
                 } else {
                     posicaoNOT = 2;
@@ -185,44 +205,58 @@ public class ControllerConversor {
                 }
             } else {
                 op = term[1].toLowerCase();
-                //token.operacao.add(op);
+
+                if (arrayNOTs.indexOf(Util.NOR) != -1) {
+                    op = term[arrayNOTs.indexOf(Util.NOR)].toLowerCase();
+                    String[] termAux = new String[term.length + 1];
+                    for (int i = 0; i < term.length; i++) {
+                        termAux[i] = term[i];
+                    }
+                    //Apenas adicionando dummy index para não quebrar qnd montar ESQ no getOWLClas
+                    termAux[termAux.length - 1] = "";
+                    term = termAux;
+                }
             }
         } else {
             op = term[1].toLowerCase();
-            //token.operacao.add(op);
         }
 
         Set<OWLAxiom> listEsq = null, listDir = null;
 
-        if (size == 2) {//NOR CASE
+        /*if (size == 2) {//NOR CASE
             for (TokenProcessamento in : tokens) {
                 if (in.id.equals(term[1])) {
                     Set<OWLAxiom> list = exec(in, true);
                     return list;
                 }
             }
-        } else {
-            //Pegando axioma correpondente ao HASH
-            for (TokenProcessamento in : tokens) {
-                for (String termF : term) {
-                    boolean flagTerm = false;
-                    if (in.id.equals(token.id) && InsertionAnalyser.wordIsReserved(termF)) {
-                        token.operacao.add(termF);
-                        continue;
-                    }
+        } else {*/
+        //Pegando axioma correpondente ao HASH
+        for (TokenProcessamento in : tokens) {
+            for (String termF : term) {
+                boolean flagTerm = false;
+                if (in.id.equals(token.id) && InsertionAnalyser.wordIsReserved(termF, false)) {
+                    token.operacao.add(termF);
+                    continue;
+                }
 
-                    if (in.id.equals(termF)) {
-                        if (!in.used) {
-                            exec(in, posicaoNOT == -1 || posicaoNOT == 2);
-                        }
-                        flagTerm = true;
+                if (in.id.equals(termF)) {
+                    if (!in.used) {
+                        exec(in, posicaoNOT == -1 || posicaoNOT == 2);
                     }
-                    if (flagTerm && in.axiomas.size() == 1) {
+                    flagTerm = true;
+                }
+                if (flagTerm && in.axiomas.size() == 1) {
+                    //Caso esse termo tenha sido salvo com negação antecedendo, faço negação aqui
+                    if (!arrayNOTAux.getOrDefault(termF, false)) {
                         token.axiomas.add(in.axiomas.get(0));
+                    } else {
+                        token.axiomas.add(in.axiomas.get(0).getNNF());
                     }
                 }
             }
         }
+        //}
 
         if (token.axiomas.size() >= 2) {
             int qtd = 0;
@@ -253,8 +287,13 @@ public class ControllerConversor {
 
                     if (flaag
                             && !termF.startsWith(TokenProcessamento.INI)
-                            && !termF.endsWith(TokenProcessamento.END)) {
-                        token.axiomas.add(factory.getOWLClass(IRI.create(PROJECT_IRI + termF)));
+                            && !termF.endsWith(TokenProcessamento.END)
+                            && !termF.equals(Util.NOT)
+                            && !termF.equals(Util.NOR)
+                            && !termF.isEmpty()) {
+                        //Caso seja um termo com negação antecedendo
+                        OWLClass clazz = factory.getOWLClass(IRI.create(PROJECT_IRI + termF));
+                        token.axiomas.add(clazz);
                     }
                 }
 
@@ -299,7 +338,9 @@ public class ControllerConversor {
                 || op.equals(Util.EQUIVALENT)
                 || op.equals(Util.ALL)
                 || op.equals(Util.ONLY)
-                || op.equals(Util.SOME)) {
+                || op.equals(Util.SOME)
+                || op.equals(Util.NOT)
+                || op.equals(Util.NOR)) {
             list = new ArrayList<>();
 
             OWLClass esqClass = factory.getOWLClass(IRI.create(PROJECT_IRI + term[0]));
@@ -350,7 +391,7 @@ public class ControllerConversor {
 
                 if (qtd > 0) {
                     for (String in : term) {
-                        if (InsertionAnalyser.wordIsReserved(in)) {
+                        if (InsertionAnalyser.wordIsReserved(in, false)) {
                             continue;
                         }
                         OWLClass c1 = factory.getOWLClass(IRI.create(PROJECT_IRI + in));
@@ -621,12 +662,24 @@ public class ControllerConversor {
                     token.used = true;
                     break;
                 }
-                /**
-                 * TODO fazer esses casos abaixo;
-                 */
-//        cmd = substituir3(cmd, Util.SOME);
-//        cmd = substituir3(cmd, Util.ALL);
-//        cmd = substituir3(cmd, Util.ONLY);
+                case Util.NOR: {
+                    if (!token.axiomas.isEmpty()) {
+                        OWLClassExpression clazz = token.axiomas.get(0);
+                        clazz = clazz.getComplementNNF();
+                        token.axiomas.clear();
+                        token.axiomas.add(clazz);
+                    }
+                    break;
+                }
+                case Util.NOT: {
+                    if (!token.axiomas.isEmpty()) {
+                        OWLClassExpression clazz = token.axiomas.get(0);
+                        clazz = clazz.getComplementNNF();
+                        token.axiomas.clear();
+                        token.axiomas.add(clazz);
+                    }
+                    break;
+                }
                 default: {
                     throw new ConversorException("Erro ao procurar por operação a ser realizada.");
                 }

@@ -16,6 +16,7 @@
 package com.tronipm.orcaide.core;
 
 import com.tronipm.orcaide.util.Session;
+import com.tronipm.orcaide.util.Util;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,9 +70,12 @@ public class InsertionAnalyser {
         this.coreApp = aThis;
     }
 
-    public static boolean wordIsReserved(String word) {
-        boolean flag = false;
+    public static boolean wordIsReserved(String word, boolean withNot) {
         for (int i = 0; i < commands_list.length; i++) {
+            if (!withNot
+                    && (commands_list[i].equals(Util.NOT) || commands_list[i].equals(Util.NOR))) {
+                continue;
+            }
             if (word.equalsIgnoreCase(commands_list[i])) {
                 return true;
             }
