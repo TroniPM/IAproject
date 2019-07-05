@@ -35,7 +35,8 @@ public abstract class Util {
     public static final String ONLY = "only";
     public static final String ISA = "isa";
     public static final String EQUIVALENT = "equivalent";
+    public static final String DISJOINT = "disjoint";
     public static final String[] COMMANDS_LIST = new String[]{SOME, ALL, VALUE,
-        MIN, MAX, EXACTLY, THAT, NOT, AND, OR, ONLY, ISA, EQUIVALENT, NOR};
+        MIN, MAX, EXACTLY, THAT, NOT, AND, OR, ONLY, ISA, EQUIVALENT, NOR, DISJOINT};
 
 }

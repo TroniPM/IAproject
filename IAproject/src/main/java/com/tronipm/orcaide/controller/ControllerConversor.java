@@ -337,6 +337,7 @@ public class ControllerConversor {
                 || op.equals(Util.ISA)
                 || op.equals(Util.EQUIVALENT)
                 || op.equals(Util.ALL)
+                || op.equals(Util.DISJOINT)
                 || op.equals(Util.ONLY)
                 || op.equals(Util.SOME)
                 || op.equals(Util.NOT)
@@ -678,6 +679,12 @@ public class ControllerConversor {
                         token.axiomas.clear();
                         token.axiomas.add(clazz);
                     }
+                    break;
+                }
+                case Util.DISJOINT: {
+                    // esq dir
+                    OWLDisjointClassesAxiom clazz = factory.getOWLDisjointClassesAxiom(esq, dir);
+                    list.add(clazz);
                     break;
                 }
                 default: {

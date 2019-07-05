@@ -29,7 +29,7 @@ public enum TokenEnum {
     NOR(14),
     //classe
     //	{"and", "or" "isa", "equivalent", "that"};
-    AND(2), OR(3), ISA(4), EQUIVALENT(5), THAT(6),
+    AND(2), OR(3), ISA(4), EQUIVALENT(5), THAT(6), DISJOINT(15),
     //property
     //	{"some", "all", "only"};
     SOME(7), ALL(8), ONLY(9),
@@ -108,6 +108,9 @@ public enum TokenEnum {
                 case 14:
                     job = TokenEnum.NOR;
                     break;
+                case 15:
+                    job = TokenEnum.DISJOINT;
+                    break;
                 case 50:
                     job = TokenEnum.PONTO_VIRGULA;
                     break;
@@ -176,6 +179,9 @@ public enum TokenEnum {
                     break;
                 case "ALL":
                     job = TokenEnum.ALL;
+                    break;
+                case "DISJOINT":
+                    job = TokenEnum.DISJOINT;
                     break;
                 case "ONLY":
                     job = TokenEnum.ONLY;
@@ -248,6 +254,8 @@ public enum TokenEnum {
             return "SOME";
         } else if (valor == TokenEnum.ALL.getValor()) {
             return "ALL";
+        } else if (valor == TokenEnum.DISJOINT.getValor()) {
+            return "DISJOINT";
         } else if (valor == TokenEnum.ONLY.getValor()) {
             return "ONLY";
         } else if (valor == TokenEnum.VALUE.getValor()) {

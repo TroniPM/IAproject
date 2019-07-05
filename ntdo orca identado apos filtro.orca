@@ -84,3 +84,8 @@
 		and 
 		(/ntdo/hasGeographicLocation some /biotop/SpatialRegion)
 	);
+	
+	
+	
+	/PATO/PATO_0000383 isa /PATO/PATO_0001894;
+	/PATO/PATO_0000383 disjoint /PATO/PATO_0000384;

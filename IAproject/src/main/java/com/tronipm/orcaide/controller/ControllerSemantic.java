@@ -93,6 +93,7 @@ public class ControllerSemantic {
 //        cmd = substituir3(cmd, Util.MAX);
         cmd = substituir3(cmd, Util.SOME);
         cmd = substituir3(cmd, Util.ALL);
+        cmd = substituir3(cmd, Util.DISJOINT);
         cmd = substituir3(cmd, Util.ONLY);
         cmd = substituir3(cmd, Util.AND);
         cmd = substituir3(cmd, Util.OR);

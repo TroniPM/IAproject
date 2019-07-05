@@ -46,7 +46,7 @@ public class InsertionAnalyser {
     * TODO alterar isso aqui caso adicione palavras reservadas novas
      */
     public static String[] commands_list = new String[]{"some", "all", "value",
-        "min", "max", "exactly", "that", "not", "and", "or", "only", "isa", "equivalent", "nor"};
+        "min", "max", "exactly", "that", "not", "and", "or", "only", "isa", "equivalent", "nor", "disjoint"};
 
     public String[] all_commands = null;
 

@@ -21,26 +21,6 @@ public class ControllerSintatic {
         return this.tokens;
     }
 
-    public static void main(String[] args) throws LexicalAnalyzerException, SintaticAnalyzerException {
-        String teste = "";
-        teste += "nor ( Racional or Crazy and Matus some  Racional and nor (not joao and marcos) and (joao or antonia));\n";
-        teste += "Person isa not Racional;\n";
-        teste += " Racional or Crazy ;\n";
-        teste += "Human isa Racional and Crazy;\n";
-        teste += "Human equivalent (Racional and Crazy) or (Dog and Irational);\n";
-        teste += "Human isa (Racional or Crazy) and (not Dog or Irational);\n";
-        teste += "Person equivalent hasPet some Dog;\n";
-        teste += "Human isa hasPet only Cat;\n";
-        teste += "Human equivalent Person and (hasPet some Cat);\n";
-        teste += "Vet isa (hasPet some Cat) or (hasPet some Dog);\n";
-        teste += "Vet equivalent Person and (hasPet some (Cat or Dog));\n";
-        teste += "Doctor isa (hasPet some Dog);\n";
-        teste += "Doctor equivalent (hasPet only Dog);";
-
-        ControllerLexical.getInstance().init(teste);
-        ControllerSintatic.getInstance().init(ControllerLexical.getInstance().getTokens());
-    }
-
     private ControllerSintatic() {
     }
 
@@ -184,6 +164,7 @@ public class ControllerSintatic {
                             || lookAhead(tokens.get(i + 1), TokenEnum.THAT)
                             || lookAhead(tokens.get(i + 1), TokenEnum.SOME)
                             || lookAhead(tokens.get(i + 1), TokenEnum.ALL)
+                            || lookAhead(tokens.get(i + 1), TokenEnum.DISJOINT)
                             || lookAhead(tokens.get(i + 1), TokenEnum.ONLY)
                             || lookAhead(tokens.get(i + 1), TokenEnum.VALUE)
                             || lookAhead(tokens.get(i + 1), TokenEnum.MIN)
@@ -207,6 +188,7 @@ public class ControllerSintatic {
                                 || lookAhead(tokens.get(i + 2), TokenEnum.THAT)
                                 || lookAhead(tokens.get(i + 2), TokenEnum.SOME)
                                 || lookAhead(tokens.get(i + 2), TokenEnum.ALL)
+                                || lookAhead(tokens.get(i + 2), TokenEnum.DISJOINT)
                                 || lookAhead(tokens.get(i + 2), TokenEnum.ONLY)
                                 || lookAhead(tokens.get(i + 2), TokenEnum.VALUE)
                                 || lookAhead(tokens.get(i + 2), TokenEnum.MIN)
@@ -245,6 +227,7 @@ public class ControllerSintatic {
                             || tokens.get(i).type == TokenEnum.THAT
                             || tokens.get(i).type == TokenEnum.SOME
                             || tokens.get(i).type == TokenEnum.ALL
+                            || tokens.get(i).type == TokenEnum.DISJOINT
                             || tokens.get(i).type == TokenEnum.ONLY
                             || tokens.get(i).type == TokenEnum.VALUE
                             || tokens.get(i).type == TokenEnum.MIN
@@ -283,6 +266,8 @@ public class ControllerSintatic {
                         addToStack(new TokenPreProcessamento(TokenEnum.SOME));
                     } else if (tokens.get(i).type == TokenEnum.ALL) {
                         addToStack(new TokenPreProcessamento(TokenEnum.ALL));
+                    } else if (tokens.get(i).type == TokenEnum.DISJOINT) {
+                        addToStack(new TokenPreProcessamento(TokenEnum.DISJOINT));
                     } else if (tokens.get(i).type == TokenEnum.ONLY) {
                         addToStack(new TokenPreProcessamento(TokenEnum.ONLY));
                     } else if (tokens.get(i).type == TokenEnum.VALUE) {
