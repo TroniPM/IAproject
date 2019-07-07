@@ -54,9 +54,15 @@ public class JFramePrincipal extends javax.swing.JFrame {
     private JFramePrincipal(String path, String name) {
         currentDocument = path;
         filename = name;
-        coreApp = new CoreApplication(this, true, path);
+        coreApp = new CoreApplication(this, false, null);
 
-        init(true);
+        init(false);
+        filename = path;
+        currentDocument = path;
+        setDocumentName(name);
+        
+        String aString = carregarArquivo(path);
+        tabCompiler.editor.setText(aString);
 
         coreApp.atualizarTelas();
     }
@@ -674,7 +680,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
         final JFileChooser jfc_save = new JFileChooser();
         jfc_save.setCurrentDirectory(new File(System.getProperty("user.dir") + "\\data\\ontology"));
         //fc.setVisible(true);
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILE or OWL", "txt", "text", "owl");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILE or OWL", "txt", "text", "owl", "orca");
         jfc_save.setFileFilter(filter);
         jfc_save.setApproveButtonText("Open");
         int returnVal = jfc_save.showOpenDialog(this);
@@ -808,6 +814,34 @@ public class JFramePrincipal extends javax.swing.JFrame {
                 e.printStackTrace();
             }
         }
+    }
+
+    private static String carregarArquivoRetornaString(String arquivo) {
+        String linhas = null;
+        try {
+            FileInputStream fin = new FileInputStream(arquivo);
+            byte[] a = new byte[fin.available()];
+            fin.read(a);
+            fin.close();
+            linhas = new String(a);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return linhas;
+    }
+
+    private static String carregarArquivo(String arquivo) {
+        String linhas = null;
+        try {
+            FileInputStream fin = new FileInputStream(arquivo);
+            byte[] a = new byte[fin.available()];
+            fin.read(a);
+            fin.close();
+            linhas = new String(a);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return linhas;
     }
 
 
