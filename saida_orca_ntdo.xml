@@ -139,6 +139,7 @@
 	
     <owl:Class rdf:about="new1.com/#/PATO/PATO_0000383">
         <rdfs:subClassOf rdf:resource="new1.com/#/PATO/PATO_0001894"/>
+        <owl:disjointWith rdf:resource="new1.com/#/PATO/PATO_0000384"/>
     </owl:Class>
 	
     <owl:Class rdf:about="new1.com/#/PATO/PATO_0000384">
