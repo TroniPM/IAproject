@@ -60,7 +60,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
         filename = path;
         currentDocument = path;
         setDocumentName(name);
-        
+
         String aString = carregarArquivo(path);
         tabCompiler.editor.setText(aString);
 
@@ -631,7 +631,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
         JFileChooser jfc_save = new JFileChooser();
         jfc_save.setCurrentDirectory(new File(System.getProperty("user.dir") + "\\data\\ontology"));
         //fc.setVisible(true);
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILE or OWL", "txt", "text", "owl");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILE or OrCA", "txt", "text", "orca");
         jfc_save.setFileFilter(filter);
         jfc_save.setApproveButtonText("Save");
         int returnVal = jfc_save.showOpenDialog(this);
@@ -647,7 +647,13 @@ public class JFramePrincipal extends javax.swing.JFrame {
 
                     escreverEmArquivo(aString, this.tabCompiler.editor.getText(), false);
                     filename = jfc_save.getSelectedFile().getName();
-                    setDocumentName(aString);
+
+                    try {
+                        setDocumentName(new File(aString).getName());
+                    } catch (Exception e) {
+                        setDocumentName(jfc_save.getSelectedFile().getName());
+                    }
+
                 }
 
             } catch (Exception e) {
@@ -680,7 +686,7 @@ public class JFramePrincipal extends javax.swing.JFrame {
         final JFileChooser jfc_save = new JFileChooser();
         jfc_save.setCurrentDirectory(new File(System.getProperty("user.dir") + "\\data\\ontology"));
         //fc.setVisible(true);
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILE or OWL", "txt", "text", "owl", "orca");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILE or OrCA", "txt", "text", "orca");
         jfc_save.setFileFilter(filter);
         jfc_save.setApproveButtonText("Open");
         int returnVal = jfc_save.showOpenDialog(this);
