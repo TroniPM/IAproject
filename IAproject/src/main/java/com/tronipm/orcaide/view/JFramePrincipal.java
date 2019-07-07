@@ -22,6 +22,7 @@ import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
@@ -600,12 +601,18 @@ public class JFramePrincipal extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         //save normal
-
-        if (currentDocument.equals("")) {
+        boolean isNew = true;
+        try {
+            String a = currentDocument.replace("new", "");
+            int test = Integer.valueOf(a);
+        } catch (Exception e) {
+            isNew = false;
+        }
+        if (isNew) {
             choosePathToSaveFile();
         } else {
             try {
-                coreApp.owlRepository.saveOntologyToFile(currentDocument);
+                escreverEmArquivo(currentDocument, this.tabCompiler.editor.getText(), false);
             } catch (Exception ex) {
                 if (Session.isDebbug) {
                     Logger.getLogger(JFramePrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -624,27 +631,19 @@ public class JFramePrincipal extends javax.swing.JFrame {
         int returnVal = jfc_save.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             currentDocument = (jfc_save.getSelectedFile().getPath());
-            if (!currentDocument.endsWith(".owl")) {
-                currentDocument += ".owl";
+            if (!currentDocument.endsWith(".orca")) {
+                currentDocument += ".orca";
             }
 
             try {
                 if (!currentDocument.equals("")) {
                     String aString = currentDocument;
 
-                    coreApp.owlRepository.saveOntologyToFile(aString);
+                    escreverEmArquivo(aString, this.tabCompiler.editor.getText(), false);
                     filename = jfc_save.getSelectedFile().getName();
                     setDocumentName(aString);
                 }
 
-            } catch (FileNotFoundException e) {
-                if (Session.isDebbug) {
-                    Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, e);
-                }
-            } catch (IOException e) {
-                if (Session.isDebbug) {
-                    Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, e);
-                }
             } catch (Exception e) {
                 if (Session.isDebbug) {
                     Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, e);
@@ -780,6 +779,37 @@ public class JFramePrincipal extends javax.swing.JFrame {
 
         return everything;
     }
+
+    public static void escreverEmArquivo(String caminho, String content, boolean isAppend) {
+        FileOutputStream fop = null;
+        File file;
+        try {
+            file = new File(caminho);
+            fop = new FileOutputStream(file, isAppend);
+            //Se arquivo não existe, é criado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            //pega o content em bytes
+            byte[] contentInBytes = content.getBytes();
+            fop.write(contentInBytes);
+            //flush serve para garantir o envio do último lote de bytes
+            fop.flush();
+            fop.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fop != null) {
+                    fop.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
